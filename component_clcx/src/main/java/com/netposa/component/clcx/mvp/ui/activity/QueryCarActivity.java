@@ -1,0 +1,478 @@
+package com.netposa.component.clcx.mvp.ui.activity;
+
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageView;
+import android.widget.TextView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import butterknife.BindView;
+import butterknife.OnClick;
+import com.alibaba.android.arouter.facade.annotation.Route;
+import com.google.android.material.button.MaterialButton;
+import com.jess.arms.base.BaseActivity;
+import com.jess.arms.di.component.AppComponent;
+import com.jess.arms.utils.ArmsUtils;
+import com.netposa.common.utils.TimeUtils;
+import com.netposa.commonres.widget.CaptureTimeHelper;
+import com.netposa.commonres.widget.OneKeyClearEditText;
+import com.netposa.component.clcx.R2;
+import com.netposa.component.clcx.di.component.DaggerQueryCarComponent;
+import com.netposa.component.clcx.di.module.QueryCarModule;
+import com.netposa.component.clcx.mvp.contract.QueryCarContract;
+import com.netposa.component.clcx.mvp.presenter.QueryCarPresenter;
+import com.netposa.component.clcx.R;
+import com.netposa.component.clcx.mvp.ui.widget.BottomSheetDialogFragment;
+import java.util.Calendar;
+import java.util.Timer;
+import java.util.TimerTask;
+import javax.inject.Inject;
+import static android.view.inputmethod.InputMethodManager.RESULT_UNCHANGED_SHOWN;
+import static com.jess.arms.utils.Preconditions.checkNotNull;
+import static com.netposa.common.core.RouterHub.CLCX_QUERY_CAR_ACTIVITY;
+import static com.netposa.commonres.widget.CaptureTimeHelper.FORMAT_PATTERN2;
+import static com.netposa.commonres.widget.CaptureTimeHelper.START_TIME;
+
+@Route(path = CLCX_QUERY_CAR_ACTIVITY)
+public class QueryCarActivity extends BaseActivity<QueryCarPresenter> implements QueryCarContract.View, CaptureTimeHelper.Listener, BottomSheetDialogFragment.BottomSheetDialogListener {
+
+    @BindView(R2.id.title_tv)
+    TextView mTVtTitle;
+    @BindView(R2.id.bt_endtime)
+    MaterialButton mBtEndTime;
+    @BindView(R2.id.bt_begintime)
+    MaterialButton mBtBeginTime;
+    @BindView(R2.id.okcl_search)
+    OneKeyClearEditText mOkclSearch;
+    @BindView(R2.id.tv_plate_select)
+    TextView mTvPlateSelect;
+    @BindView(R2.id.bt_plate_color_all)
+    MaterialButton mBtPlateColorAll;
+    @BindView(R2.id.iv_plate_blue)
+    ImageView mIvPlateBlue;
+    @BindView(R2.id.iv_plate_yellow)
+    ImageView mIvPlateYellow;
+    @BindView(R2.id.iv_plate_black)
+    ImageView mIvPlateBlack;
+    @BindView(R2.id.iv_plate_white)
+    ImageView mIvPlateWhite;
+    @BindView(R2.id.iv_plate_white_green)
+    ImageView mIvPlateWhiteGreen;
+    @BindView(R2.id.iv_plate_green_yellow)
+    ImageView mIvPlateWhiteGreenYellow;
+    @BindView(R2.id.bt_car_color_all)
+    MaterialButton mBtCarColorAll;
+    @BindView(R2.id.iv_car_white)
+    ImageView mIvCarWhite;
+    @BindView(R2.id.iv_car_grey)
+    ImageView mIvCarGrey;
+    @BindView(R2.id.iv_car_yellow)
+    ImageView mIvCarYellow;
+    @BindView(R2.id.iv_car_pink)
+    ImageView mIvCarPink;
+    @BindView(R2.id.iv_car_red)
+    ImageView mIvCarRed;
+    @BindView(R2.id.iv_car_purple)
+    ImageView mIvCarPurple;
+    @BindView(R2.id.iv_car_dark_green)
+    ImageView mIvCarDarkGreen;
+    @BindView(R2.id.iv_car_dark_blue)
+    ImageView mIvCarDarkBlue;
+    @BindView(R2.id.iv_car_dark_red)
+    ImageView mIvCarDarkRed;
+    @BindView(R2.id.iv_car_black)
+    ImageView mIvCarBlack;
+
+    @Inject
+    CaptureTimeHelper mCaptureTimeHelper;
+    @Inject
+    BottomSheetDialogFragment mBottomSheetDialogFragment;
+
+    private Boolean[] mPlateColorSelectStates = new Boolean[7];
+    private Boolean[] mCarColorSelectStates = new Boolean[11];
+
+    @Override
+    public void setupActivityComponent(@NonNull AppComponent appComponent) {
+        DaggerQueryCarComponent //如找不到该类,请编译一下项目
+                .builder()
+                .appComponent(appComponent)
+                .queryCarModule(new QueryCarModule(this, getSupportFragmentManager()))
+                .build()
+                .inject(this);
+    }
+
+    @Override
+    public int initContentLayout(@Nullable Bundle savedInstanceState) {
+        return R.layout.activity_query_car; //如果你不需要框架帮你设置 setContentView(id) 需要自行设置,请返回 0
+    }
+
+    @Override
+    public void initView(@Nullable Bundle savedInstanceState) {
+        mTVtTitle.setText(R.string.clcx);
+        //时间选择有关初始化
+        Calendar beginCalendar = Calendar.getInstance();
+        Calendar endCalendar = Calendar.getInstance();
+        mCaptureTimeHelper.init(beginCalendar, endCalendar, this);
+
+        //对于刚跳到一个新的界面就要弹出软键盘的情况上述代码可能由于界面为加载完全而无法弹出软键盘
+        //此时应该适当的延迟弹出软键盘（保证界面的数据加载完成）
+        new Timer()
+                .schedule(
+                        new TimerTask() {
+                            public void run() {
+                                InputMethodManager inputManager =
+                                        (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                                inputManager.showSoftInput(mOkclSearch, RESULT_UNCHANGED_SHOWN);
+                            }
+
+                        },
+                        200);
+
+        mBottomSheetDialogFragment.setBottomSheetDialogListener(this);
+        //底部弹出框高度
+        mBottomSheetDialogFragment.setHeightPercent(0.82f);
+        //重置车辆和车牌号颜色选择
+        resetPlateAndCarColorSelect();
+    }
+
+    private void resetPlateAndCarColorSelect() {
+        for (int i = 0; i < mPlateColorSelectStates.length; i++) {
+            mPlateColorSelectStates[i] = false;
+        }
+        for (int i = 0; i < mCarColorSelectStates.length; i++) {
+            mCarColorSelectStates[i] = false;
+        }
+    }
+
+
+    @Override
+    public void showLoading(String message) {
+
+    }
+
+    @Override
+    public void hideLoading() {
+
+    }
+
+    @Override
+    public void showMessage(@NonNull String message) {
+        checkNotNull(message);
+        ArmsUtils.snackbarText(message);
+    }
+
+    @Override
+    public void launchActivity(@NonNull Intent intent) {
+        checkNotNull(intent);
+        ArmsUtils.startActivity(intent);
+    }
+
+    @Override
+    public void killMyself() {
+        finish();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mBottomSheetDialogFragment.removeListener();
+    }
+
+    @OnClick({
+            R2.id.head_left_iv,
+            R2.id.bt_begintime,
+            R2.id.bt_endtime,
+            R2.id.tv_plate_select,
+            R2.id.btn_search,
+            R2.id.bt_plate_color_all,
+            R2.id.iv_plate_blue,
+            R2.id.iv_plate_yellow,
+            R2.id.iv_plate_black,
+            R2.id.iv_plate_white,
+            R2.id.iv_plate_white_green,
+            R2.id.iv_plate_green_yellow,
+            R2.id.bt_car_color_all,
+            R2.id.iv_car_white,
+            R2.id.iv_car_grey,
+            R2.id.iv_car_yellow,
+            R2.id.iv_car_pink,
+            R2.id.iv_car_red,
+            R2.id.iv_car_purple,
+            R2.id.iv_car_dark_green,
+            R2.id.iv_car_dark_blue,
+            R2.id.iv_car_dark_red,
+            R2.id.iv_car_black,
+            R2.id.rl_cartype
+    })
+    public void onViewClick(View view) {
+        int id = view.getId();
+        if (id == R.id.head_left_iv) {
+            killMyself();
+        } else if(id==R.id.btn_search){
+            launchActivity(new Intent(this,QueryResultActivity.class));
+        } else if (id == R.id.bt_begintime) {
+            mCaptureTimeHelper.showStartDateDialog();
+        } else if (id == R.id.bt_endtime) {
+            mCaptureTimeHelper.showEndDateDialog();
+        } else if (id == R.id.tv_plate_select) {
+            mBottomSheetDialogFragment.show(getSupportFragmentManager(), "Dialog");
+        } else if (id == R.id.bt_plate_color_all) {
+            mPlateColorSelectStates[0] = true;
+            setPlateColorSelect();
+        } else if (id == R.id.iv_plate_blue) {
+            mPlateColorSelectStates[1] = !mPlateColorSelectStates[1];
+            mPlateColorSelectStates[0] = false;
+            setPlateColorSelect();
+        } else if (id == R.id.iv_plate_yellow) {
+            mPlateColorSelectStates[2] = !mPlateColorSelectStates[2];
+            mPlateColorSelectStates[0] = false;
+            setPlateColorSelect();
+        } else if (id == R.id.iv_plate_black) {
+            mPlateColorSelectStates[3] = !mPlateColorSelectStates[3];
+            mPlateColorSelectStates[0] = false;
+            setPlateColorSelect();
+        } else if (id == R.id.iv_plate_white) {
+            mPlateColorSelectStates[4] = !mPlateColorSelectStates[4];
+            mPlateColorSelectStates[0] = false;
+            setPlateColorSelect();
+        } else if (id == R.id.iv_plate_white_green) {
+            mPlateColorSelectStates[5] = !mPlateColorSelectStates[5];
+            mPlateColorSelectStates[0] = false;
+            setPlateColorSelect();
+        } else if (id == R.id.iv_plate_green_yellow) {
+            mPlateColorSelectStates[6] = !mPlateColorSelectStates[6];
+            mPlateColorSelectStates[0] = false;
+            setPlateColorSelect();
+        } else if (id == R.id.bt_car_color_all) {
+            mCarColorSelectStates[0] = true;
+            setCarColorSelect();
+        } else if (id == R.id.iv_car_white) {
+            mCarColorSelectStates[1] = !mCarColorSelectStates[1];
+            mCarColorSelectStates[0] = false;
+            setCarColorSelect();
+        } else if (id == R.id.iv_car_grey) {
+            mCarColorSelectStates[2] = !mCarColorSelectStates[2];
+            mCarColorSelectStates[0] = false;
+            setCarColorSelect();
+        } else if (id == R.id.iv_car_yellow) {
+            mCarColorSelectStates[3] = !mCarColorSelectStates[3];
+            mCarColorSelectStates[0] = false;
+            setCarColorSelect();
+        } else if (id == R.id.iv_car_pink) {
+            mCarColorSelectStates[4] = !mCarColorSelectStates[4];
+            mCarColorSelectStates[0] = false;
+            setCarColorSelect();
+        } else if (id == R.id.iv_car_red) {
+            mCarColorSelectStates[5] = !mCarColorSelectStates[5];
+            mCarColorSelectStates[0] = false;
+            setCarColorSelect();
+        } else if (id == R.id.iv_car_purple) {
+            mCarColorSelectStates[6] = !mCarColorSelectStates[6];
+            mCarColorSelectStates[0] = false;
+            setCarColorSelect();
+        } else if (id == R.id.iv_car_dark_green) {
+            mCarColorSelectStates[7] = !mCarColorSelectStates[7];
+            mCarColorSelectStates[0] = false;
+            setCarColorSelect();
+        } else if (id == R.id.iv_car_dark_blue) {
+            mCarColorSelectStates[8] = !mCarColorSelectStates[8];
+            mCarColorSelectStates[0] = false;
+            setCarColorSelect();
+        } else if (id == R.id.iv_car_dark_red) {
+            mCarColorSelectStates[9] = !mCarColorSelectStates[9];
+            mCarColorSelectStates[0] = false;
+            setCarColorSelect();
+        } else if (id == R.id.iv_car_black) {
+            mCarColorSelectStates[10] = !mCarColorSelectStates[10];
+            mCarColorSelectStates[0] = false;
+            setCarColorSelect();
+        }else if (id ==R.id.rl_cartype){
+            launchActivity(new Intent(this,CarTypeActivity.class));
+        }
+
+
+    }
+
+    @Override
+    public void setCaptureTime(long time, int selectTag) {
+        if (selectTag == START_TIME) {
+            String startTimeStr = TimeUtils.millis2String(time, FORMAT_PATTERN2);
+            mBtBeginTime.setText(getString(R.string.begin_time) + "\n" + startTimeStr);
+            mBtBeginTime.setSelected(true);
+        } else {
+            String endTimeStr = TimeUtils.millis2String(time, FORMAT_PATTERN2);
+            mBtEndTime.setText(getString(R.string.end_time) + "\n" + endTimeStr);
+            mBtEndTime.setSelected(true);
+        }
+    }
+
+    @Override
+    public void setSelectResult(String name) {
+        mTvPlateSelect.setText(name);
+    }
+
+    //车牌颜色选择
+    private void setPlateColorSelect() {
+        if (mPlateColorSelectStates[0]) {
+            mBtPlateColorAll.setSelected(true);
+            mIvPlateBlue.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_color_choose));
+            mIvPlateYellow.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_color_choose));
+            mIvPlateBlack.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_color_choose));
+            mIvPlateWhite.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_color_choose));
+            mIvPlateWhiteGreen.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_color_choose));
+            mIvPlateWhiteGreen.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_color_choose));
+            mIvPlateWhiteGreenYellow.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_color_choose));
+            for (int i = 0; i < mPlateColorSelectStates.length; i++) {
+                if (i != 0) {
+                    mPlateColorSelectStates[i] = true;
+                }
+            }
+            return;
+        }
+        if (mPlateColorSelectStates[1]) {
+            mIvPlateBlue.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_color_choose));
+        } else {
+            mIvPlateBlue.setImageDrawable(null);
+            mBtPlateColorAll.setSelected(false);
+        }
+        if (mPlateColorSelectStates[2]) {
+            mIvPlateYellow.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_color_choose));
+        } else {
+            mIvPlateYellow.setImageDrawable(null);
+            mBtPlateColorAll.setSelected(false);
+        }
+        if (mPlateColorSelectStates[3]) {
+            mIvPlateBlack.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_color_choose));
+        } else {
+            mIvPlateBlack.setImageDrawable(null);
+            mBtPlateColorAll.setSelected(false);
+        }
+        if (mPlateColorSelectStates[4]) {
+            mIvPlateWhite.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_color_choose));
+        } else {
+            mIvPlateWhite.setImageDrawable(null);
+            mBtPlateColorAll.setSelected(false);
+        }
+        if (mPlateColorSelectStates[5]) {
+            mIvPlateWhiteGreen.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_color_choose));
+        } else {
+            mIvPlateWhiteGreen.setImageDrawable(null);
+            mBtPlateColorAll.setSelected(false);
+        }
+        if (mPlateColorSelectStates[6]) {
+            mIvPlateWhiteGreenYellow.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_color_choose));
+        } else {
+            mIvPlateWhiteGreenYellow.setImageDrawable(null);
+            mBtPlateColorAll.setSelected(false);
+        }
+        if (mPlateColorSelectStates[1]
+                && mPlateColorSelectStates[2]
+                && mPlateColorSelectStates[3]
+                && mPlateColorSelectStates[4]
+                && mPlateColorSelectStates[5]
+                && mPlateColorSelectStates[6]) {
+            mBtPlateColorAll.setSelected(true);
+        }
+    }
+
+    //车辆颜色选择
+    private void setCarColorSelect() {
+        if (mCarColorSelectStates[0]) {
+            mBtCarColorAll.setSelected(true);
+            mIvCarWhite.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_color_choose));
+            mIvCarGrey.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_color_choose));
+            mIvCarYellow.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_color_choose));
+            mIvCarPink.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_color_choose));
+            mIvCarRed.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_color_choose));
+            mIvCarPurple.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_color_choose));
+            mIvCarDarkGreen.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_color_choose));
+            mIvCarDarkBlue.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_color_choose));
+            mIvCarDarkRed.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_color_choose));
+            mIvCarBlack.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_color_choose));
+            for (int i = 0; i < mCarColorSelectStates.length; i++) {
+                if (i != 0) {
+                    mCarColorSelectStates[i] = true;
+                }
+            }
+            return;
+        }
+        if (mCarColorSelectStates[1]) {
+            mIvCarWhite.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_color_choose));
+        } else {
+            mIvCarWhite.setImageDrawable(null);
+            mBtCarColorAll.setSelected(false);
+        }
+        if (mCarColorSelectStates[2]) {
+            mIvCarGrey.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_color_choose));
+        } else {
+            mIvCarGrey.setImageDrawable(null);
+            mBtCarColorAll.setSelected(false);
+        }
+        if (mCarColorSelectStates[3]) {
+            mIvCarYellow.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_color_choose));
+        } else {
+            mIvCarYellow.setImageDrawable(null);
+            mBtCarColorAll.setSelected(false);
+        }
+        if (mCarColorSelectStates[4]) {
+            mIvCarPink.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_color_choose));
+        } else {
+            mIvCarPink.setImageDrawable(null);
+            mBtCarColorAll.setSelected(false);
+        }
+        if (mCarColorSelectStates[5]) {
+            mIvCarRed.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_color_choose));
+        } else {
+            mIvCarRed.setImageDrawable(null);
+            mBtCarColorAll.setSelected(false);
+        }
+        if (mCarColorSelectStates[6]) {
+            mIvCarPurple.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_color_choose));
+        } else {
+            mIvCarPurple.setImageDrawable(null);
+            mBtCarColorAll.setSelected(false);
+        }
+        if (mCarColorSelectStates[7]) {
+            mIvCarDarkGreen.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_color_choose));
+        } else {
+            mIvCarDarkGreen.setImageDrawable(null);
+            mBtCarColorAll.setSelected(false);
+        }
+        if (mCarColorSelectStates[8]) {
+            mIvCarDarkBlue.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_color_choose));
+        } else {
+            mIvCarDarkBlue.setImageDrawable(null);
+            mBtCarColorAll.setSelected(false);
+        }
+        if (mCarColorSelectStates[9]) {
+            mIvCarDarkRed.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_color_choose));
+        } else {
+            mIvCarDarkRed.setImageDrawable(null);
+            mBtCarColorAll.setSelected(false);
+        }
+        if (mCarColorSelectStates[10]) {
+            mIvCarBlack.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_color_choose));
+        } else {
+            mIvCarBlack.setImageDrawable(null);
+            mBtCarColorAll.setSelected(false);
+        }
+
+        if (mCarColorSelectStates[1]
+                && mCarColorSelectStates[2]
+                && mCarColorSelectStates[3]
+                && mCarColorSelectStates[4]
+                && mCarColorSelectStates[5]
+                && mCarColorSelectStates[6]
+                && mCarColorSelectStates[6]
+                && mCarColorSelectStates[7]
+                && mCarColorSelectStates[8]
+                && mCarColorSelectStates[9]
+                && mCarColorSelectStates[10]) {
+            mBtCarColorAll.setSelected(true);
+        }
+    }
+}

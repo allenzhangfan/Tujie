@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/ll_jq_person_details"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size_44dp"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/size_16dp"
+        android:paddingTop="@dimen/size_4dp"
+        android:paddingRight="@dimen/size_16dp">
+
+        <com.netposa.commonres.widget.CircleProgressView
+            android:id="@+id/similar_progresview"
+            android:layout_width="@dimen/size_32dp"
+            android:layout_height="@dimen/size_32dp"
+            app:circle_width="@dimen/size_4dp"
+            app:end_color="@color/progress_front_end"
+            app:head_color="@color/progress_front_head"
+            app:score_color="@color/black_222"
+            app:score_size="0sp" />
+
+        <TextView
+            android:id="@+id/tv_similarity"
+            style="@style/CommonTextItem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/size_8dp"
+            android:layout_weight="1"
+            android:gravity="left"
+            android:text="90%"
+            android:textColor="@color/face_login_color"
+            android:textSize="@dimen/text_size_14sp" />
+
+        <TextView
+            android:id="@+id/tv_detail_type_person"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/alarm_undeal_bg"
+            android:paddingLeft="@dimen/size_8dp"
+            android:paddingTop="@dimen/size_4dp"
+            android:paddingRight="@dimen/size_8dp"
+            android:paddingBottom="@dimen/size_4dp"
+            android:text="@string/wait_deal"
+            android:textColor="@color/jq_suspending"
+            android:textSize="@dimen/text_size_12sp" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size_8dp"
+        android:background="@color/item_view_divider_my" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/size_44dp"
+        android:layout_marginLeft="@dimen/size_16dp"
+        android:layout_marginRight="@dimen/size_16dp"
+        android:gravity="center_vertical">
+
+        <TextView
+            style="@style/Alarm_detail_left_text_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/name" />
+
+        <TextView
+            android:id="@+id/car_ku_type"
+            style="@style/Alarm_detail_right_text_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="李四" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size_0_5dp"
+        android:background="@color/item_view_divider" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/size_44dp"
+        android:layout_marginLeft="@dimen/size_16dp"
+        android:layout_marginRight="@dimen/size_16dp"
+        android:gravity="center_vertical">
+
+        <TextView
+            style="@style/Alarm_detail_left_text_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/gender_text" />
+
+        <TextView
+            android:id="@+id/capture_time"
+            style="@style/Alarm_detail_right_text_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/test_date" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size_0_5dp"
+        android:background="@color/item_view_divider" />
+
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/size_44dp"
+        android:layout_marginLeft="@dimen/size_16dp"
+        android:layout_marginRight="@dimen/size_16dp"
+        android:gravity="center_vertical">
+
+        <TextView
+            style="@style/Alarm_detail_left_text_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/id_number" />
+
+        <TextView
+            android:id="@+id/control_car_type"
+            style="@style/Alarm_detail_right_text_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="42384932214789201" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size_0_5dp"
+        android:background="@color/item_view_divider" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/size_44dp"
+        android:layout_marginLeft="@dimen/size_16dp"
+        android:layout_marginRight="@dimen/size_16dp"
+        android:gravity="center_vertical">
+
+        <TextView
+            style="@style/Alarm_detail_left_text_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/address_text" />
+
+        <TextView
+            style="@style/Alarm_detail_right_text_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/test_address" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size_0_5dp"
+        android:background="@color/item_view_divider" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/size_44dp"
+        android:layout_marginLeft="@dimen/size_16dp"
+        android:layout_marginRight="@dimen/size_16dp"
+        android:gravity="center_vertical">
+
+        <TextView
+            style="@style/Alarm_detail_left_text_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/belong_ku" />
+
+        <TextView
+            android:id="@+id/camera_address"
+            style="@style/Alarm_detail_right_text_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/cars_ku" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size_0_5dp"
+        android:background="@color/item_view_divider" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/size_44dp"
+        android:layout_marginLeft="@dimen/size_16dp"
+        android:layout_marginRight="@dimen/size_16dp"
+        android:gravity="center_vertical">
+
+        <TextView
+            style="@style/Alarm_detail_left_text_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/capture_time" />
+
+        <TextView
+            android:id="@+id/deal_person"
+            style="@style/Alarm_detail_right_text_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/test_date" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size_8dp"
+        android:background="@color/item_view_divider_my" />
+
+    <RelativeLayout
+
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/size_44dp"
+        android:layout_marginLeft="@dimen/size_16dp"
+        android:layout_marginRight="@dimen/size_16dp"
+        android:gravity="center_vertical">
+
+        <TextView
+            style="@style/Alarm_detail_left_text_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/control_task_name" />
+
+        <TextView
+            android:id="@+id/suspect_text"
+            style="@style/Alarm_detail_right_text_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableRight="@drawable/ic_go_greater"
+            android:drawablePadding="@dimen/size_5dp"
+            android:text="@string/suspect_car" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size_0_5dp"
+        android:background="@color/item_view_divider" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/size_44dp"
+        android:layout_marginLeft="@dimen/size_16dp"
+        android:layout_marginRight="@dimen/size_16dp"
+        android:gravity="center_vertical">
+
+        <TextView
+            style="@style/Alarm_detail_left_text_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/camera_name" />
+
+        <TextView
+            android:id="@+id/camera_addr"
+            style="@style/Alarm_detail_right_text_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableRight="@drawable/ic_gps"
+            android:drawablePadding="@dimen/size_5dp"
+            android:text="@string/test_camer_tex" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size_0_5dp"
+        android:background="@color/item_view_divider_my" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_44dp"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/size_16dp"
+            android:paddingTop="@dimen/size_8dp"
+            android:paddingRight="@dimen/size_16dp"
+            android:text="@string/details_inform"
+            android:textColor="@color/face_login_color"
+            android:textSize="@dimen/text_size_14sp" />
+
+        <TextView
+            android:id="@+id/detail_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size_4dp"
+            android:layout_marginBottom="@dimen/size_10dp"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/size_16dp"
+            android:paddingRight="@dimen/size_16dp"
+            android:text="@string/details_content"
+            android:textColor="@color/color_hint_text"
+            android:textSize="@dimen/text_size_15sp" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size_8dp"
+        android:background="@color/item_view_divider_my" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/size_16dp"
+            android:paddingTop="@dimen/size_8dp"
+            android:paddingRight="@dimen/size_16dp"
+            android:text="@string/remarks"
+            android:textColor="@color/face_login_color"
+            android:textSize="@dimen/text_size_14sp" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size_8dp"
+            android:background="@null"
+            android:gravity="center_vertical|top|left"
+            android:hint="@string/remark_hint"
+            android:minLines="3"
+            android:paddingLeft="@dimen/size_16dp"
+            android:paddingRight="@dimen/size_16dp"
+            android:textColorHint="@color/color_hint_text"
+            android:textCursorDrawable="@null"
+            android:textSize="@dimen/text_size_15sp" />
+    </LinearLayout>
+</LinearLayout>

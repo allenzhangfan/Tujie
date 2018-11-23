@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_jq_car_details"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/size_44dp"
+        android:layout_marginLeft="@dimen/size_16dp"
+        android:layout_marginTop="@dimen/size_5dp"
+        android:layout_marginRight="@dimen/size_16dp"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/tv_car_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:gravity="left"
+            android:contentDescription="@string/car_number"
+            android:textColor="@color/black_common"
+            android:textSize="@dimen/text_size_14sp" />
+
+        <TextView
+            android:id="@+id/tv_detail_type_car"
+            android:layout_width="@dimen/size_65dp"
+            android:layout_height="@dimen/size_24dp"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/alarm_effective_bg"
+            android:gravity="center"
+            android:text="@string/in_effect"
+            android:textColor="@color/jq_valid"
+            android:textSize="@dimen/text_size_12sp" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size_8dp"
+        android:background="@color/item_view_divider_my" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/size_44dp"
+            android:layout_marginLeft="@dimen/size_16dp"
+            android:layout_marginRight="@dimen/size_16dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                style="@style/Alarm_detail_left_text_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/belong_ku"
+
+                />
+
+            <TextView
+                android:id="@+id/car_ku_type"
+                style="@style/Alarm_detail_right_text_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/cars_ku" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_0_5dp"
+            android:background="@color/item_view_divider" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/size_44dp"
+            android:layout_marginLeft="@dimen/size_16dp"
+            android:layout_marginRight="@dimen/size_16dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                style="@style/Alarm_detail_left_text_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/capture_time" />
+
+            <TextView
+                android:id="@+id/capture_time"
+                style="@style/Alarm_detail_right_text_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/test_date" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_8dp"
+            android:background="@color/item_view_divider_my" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/size_44dp"
+            android:layout_marginLeft="@dimen/size_16dp"
+            android:layout_marginRight="@dimen/size_16dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                style="@style/Alarm_detail_left_text_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/control_task_name" />
+
+            <TextView
+                android:id="@+id/control_car_type"
+                style="@style/Alarm_detail_right_text_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableRight="@drawable/ic_go_greater"
+                android:drawablePadding="@dimen/size_5dp"
+                android:text="@string/suspect_car" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_0_5dp"
+            android:background="@color/item_view_divider" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/size_44dp"
+            android:layout_marginLeft="@dimen/size_16dp"
+            android:layout_marginRight="@dimen/size_16dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                style="@style/Alarm_detail_left_text_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/camera_name" />
+
+            <TextView
+                android:id="@+id/camera_address"
+                style="@style/Alarm_detail_right_text_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableRight="@drawable/ic_gps"
+                android:drawablePadding="@dimen/size_5dp"
+                android:text="@string/test_camer_tex" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_0_5dp"
+            android:background="@color/item_view_divider" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/size_44dp"
+            android:layout_marginLeft="@dimen/size_16dp"
+            android:layout_marginRight="@dimen/size_16dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                style="@style/Alarm_detail_left_text_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/deal_person" />
+
+            <TextView
+                android:id="@+id/deal_person"
+                style="@style/Alarm_detail_right_text_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/test_deal_person" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_8dp"
+            android:background="@color/item_view_divider_my" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/size_16dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/size_20dp"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/size_16dp"
+                android:paddingRight="@dimen/size_16dp"
+                android:text="@string/remarks"
+                android:textColor="@color/face_login_color"
+                android:textSize="@dimen/text_size_14sp" />
+
+            <TextView
+                android:id="@+id/remark_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/size_8dp"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/size_16dp"
+                android:paddingRight="@dimen/size_16dp"
+                android:text="@string/remarks_text"
+                android:textColor="@color/jq_pic_similarity"
+                android:textSize="@dimen/text_size_15sp" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">component_pic_preview</string>
+    <string name="text_indicator">%1$d/%2$d</string>
+
+    <!--知乎图片选择库-->
+    <string name="error_gif">长宽不小于 %1$dpx，且大小不超过 %2$sM。</string>
+</resources>

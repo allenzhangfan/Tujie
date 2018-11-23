@@ -1,0 +1,7 @@
+apply from:"../common_component_build.gradle"
+
+dependencies {
+    //视频sdk模块
+    implementation project(':component_video')
+    implementation rootProject.ext.dependencies["mapbox"]
+}

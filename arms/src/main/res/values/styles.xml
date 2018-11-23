@@ -1,0 +1,56 @@
+<resources>
+
+    <!--&lt;!&ndash; Base application theme. &ndash;&gt;
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        &lt;!&ndash; Customize your theme here. &ndash;&gt;
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowAnimationStyle">@style/Animation_Activity</item>
+    </style>
+
+    <style name="Animation_Activity">
+        <item name="android:activityOpenEnterAnimation">@anim/translate_right_to_center</item>
+        <item name="android:activityOpenExitAnimation">@anim/translate_center_to_left</item>
+        <item name="android:activityCloseEnterAnimation">@anim/translate_left_to_center</item>
+        <item name="android:activityCloseExitAnimation">@anim/translate_center_to_right</item>
+    </style>
+
+    &lt;!&ndash;无ActionBar的AppTheme&ndash;&gt;
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    &lt;!&ndash;启动页样式及窗口背景&ndash;&gt;
+    &lt;!&ndash;<style name="SplashTheme" parent="TransparentStatusBarTheme">&ndash;&gt;
+    &lt;!&ndash;<item name="android:windowBackground">@drawable/bg_launch</item>&ndash;&gt;
+    &lt;!&ndash;<item name="android:windowFullscreen">false</item>&ndash;&gt;
+    &lt;!&ndash;</style>&ndash;&gt;
+
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="Toolbar" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    &lt;!&ndash;全屏&ndash;&gt;
+    <style name="FullscreenTheme" parent="AppTheme.NoActionBar">
+        <item name="android:windowActionBarOverlay">true</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowBackground">@null</item>
+    </style>
+
+    &lt;!&ndash; 自定义loading dialog &ndash;&gt;
+    <style name="ProgressDialogTheme" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:windowFrame">@null</item>&lt;!&ndash;边框&ndash;&gt;
+        <item name="android:windowNoTitle">true</item>&lt;!&ndash;无标题&ndash;&gt;
+        <item name="android:windowBackground">@android:color/transparent</item>&lt;!&ndash;背景透明&ndash;&gt;
+        <item name="android:windowIsTranslucent">false</item>&lt;!&ndash;半透明&ndash;&gt;
+        <item name="android:windowIsFloating">true</item>&lt;!&ndash;是否浮现在activity之上&ndash;&gt;
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:backgroundDimEnabled">false</item>&lt;!&ndash;模糊&ndash;&gt;
+    </style>-->
+
+</resources>

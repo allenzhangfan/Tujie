@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <item name="design_bottom_navigation_item" type="layout" tools:override="true">
+        @layout/bottom_navigation_item
+    </item>
+    <dimen name="design_bottom_navigation_height" tools:override="true">49dp</dimen>
+    <dimen name="design_bottom_navigation_margin" tools:override="true">5dp</dimen>
+</resources>

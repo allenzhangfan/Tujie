@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/ll_botttom_sheet"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size_96dp"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:behavior_hideable="true"
+        app:behavior_peekHeight="@dimen/size_96dp"
+        app:layout_behavior="@string/bottom_sheet_behavior">
+
+        <LinearLayout
+            android:id="@+id/ll_camera_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/iv_camera"
+                android:layout_width="@dimen/size_32dp"
+                android:layout_height="@dimen/size_32dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/size_20dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_dome_camera_online" />
+
+            <LinearLayout
+                android:id="@+id/ll_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/size_17dp"
+                android:layout_toRightOf="@+id/iv_camera"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_location_gereral"
+                    style="@style/CommonTextItem"
+                    android:layout_width="@dimen/size_200dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="left|center_vertical"
+                    android:text="保利国际中心15F B区办公区"
+                    android:textSize="@dimen/text_size_14sp" />
+
+                <TextView
+                    android:id="@+id/tv_location_detail"
+                    style="@style/CommonTextItem"
+                    android:layout_width="@dimen/size_200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tv_location_gereral"
+                    android:layout_marginTop="@dimen/size_3dp"
+                    android:gravity="left|center_vertical"
+                    android:text="湖北省武汉市洪山区关山街道424号"
+                    android:textSize="@dimen/text_size_12sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <View
+            android:id="@+id/view_divider"
+            android:layout_width="@dimen/size_1dp"
+            android:layout_height="@dimen/size_64dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/size_17dp"
+            android:layout_toRightOf="@+id/ll_location"
+            android:background="@drawable/device_location_divier_bg" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/size_16dp"
+            android:layout_toRightOf="@+id/view_divider">
+
+            <ImageView
+                android:id="@+id/iv_follow"
+                android:layout_width="@dimen/size_24dp"
+                android:layout_height="@dimen/size_24dp"
+                android:layout_centerHorizontal="true"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_cancel_follow" />
+
+            <TextView
+                android:id="@+id/tv_follow"
+                style="@style/CommonTextItem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/iv_follow"
+                android:layout_marginTop="@dimen/size_3dp"
+                android:gravity="left|center_vertical"
+                android:text="@string/subscribe"
+                android:textSize="@dimen/text_size_12sp" />
+        </RelativeLayout>
+    </LinearLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

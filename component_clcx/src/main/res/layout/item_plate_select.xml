@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.button.MaterialButton xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/MaterialTextButton.Clcx"
+    android:layout_marginTop="@dimen/size_8dp"
+    android:layout_marginBottom="@dimen/size_8dp"
+    android:layout_marginStart="@dimen/size_8dp"
+    android:layout_marginEnd="@dimen/size_8dp"
+    android:id="@+id/bt_plate_name"
+    android:layout_width="@dimen/size_74dp"
+    android:layout_height="@dimen/size_36dp"
+    android:text="京"
+    android:textSize="@dimen/text_size_14sp" />

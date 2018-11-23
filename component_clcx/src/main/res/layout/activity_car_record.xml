@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/item_view_divider_my"
+    android:fitsSystemWindows="true">
+
+    <include layout="@layout/include_title_bar" />
+    <include layout="@layout/common_view_divider"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:gravity="center_horizontal">
+        <ImageView
+            android:layout_marginTop="@dimen/size_7dp"
+            android:layout_marginBottom="@dimen/size_16dp"
+            android:layout_width="@dimen/size_164dp"
+            android:layout_height="@dimen/size_164dp" />
+    </LinearLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_car_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        tools:listitem="@layout/item_car_info" />
+</LinearLayout>

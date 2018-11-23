@@ -1,0 +1,45 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="?android:attr/actionBarSize"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
+
+    <com.netposa.commonres.widget.OneKeyClearEditText
+        android:id="@+id/okcl_search"
+        android:layout_width="@dimen/size_0dp"
+        android:layout_height="@dimen/size_32dp"
+        android:layout_marginLeft="@dimen/size_16dp"
+        android:layout_marginRight="@dimen/size_4dp"
+        android:layout_weight="1"
+        android:background="@drawable/search_edit_text_bg"
+        android:drawableLeft="@drawable/ic_search_small"
+        android:drawableRight="@drawable/ic_close_small"
+        android:drawablePadding="@dimen/size_8dp"
+        android:hint="@string/query_hint"
+        android:paddingLeft="@dimen/size_8dp"
+        android:paddingRight="@dimen/size_12dp"
+        android:singleLine="true"
+        android:textColor="@color/black_common"
+        android:textColorHint="@color/color_hint_text2"
+        android:textSize="@dimen/text_size_15sp" />
+
+    <LinearLayout
+        android:id="@+id/ll_search"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/size_32dp"
+        android:layout_marginLeft="@dimen/size_14dp"
+        android:layout_marginRight="@dimen/size_20dp"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_cancel"
+            style="@style/CommonTextItem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:text="@string/cancel"
+            android:textColor="@drawable/common_tv_selector"
+            android:textSize="@dimen/text_size_15sp" />
+    </LinearLayout>
+</LinearLayout>

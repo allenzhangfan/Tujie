@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:ignore="MissingDefaultResource"
+    tools:showIn="@layout/activity_query_car">
+
+    <TextView
+        style="@style/CommonTextItem"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size_40dp"
+        android:layout_marginTop="@dimen/size_24dp"
+        android:gravity="left|center_vertical"
+        android:text="@string/car_color"
+        android:textColor="@color/black_common"
+        android:textSize="@dimen/text_size_15sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size_0_5dp"
+        android:layout_marginTop="@dimen/size_10dp"
+        android:background="@color/item_view_divider" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size_40dp"
+        android:layout_marginTop="@dimen/size_16dp"
+        android:orientation="horizontal">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/bt_car_color_all"
+            style="@style/MaterialTextButton.Clcx"
+            android:layout_width="@dimen/size_74dp"
+            android:layout_height="match_parent"
+            android:text="@string/all"
+            android:textColor="@color/color_697084"
+            android:textSize="@dimen/text_size_14sp" />
+
+        <ImageView
+            android:id="@+id/iv_car_white"
+            android:layout_width="@dimen/size_32dp"
+            android:layout_height="@dimen/size_32dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/size_37dp"
+            android:background="@drawable/plate_color_white_unselect" />
+
+        <ImageView
+            android:id="@+id/iv_car_grey"
+            android:layout_width="@dimen/size_32dp"
+            android:layout_height="@dimen/size_32dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/size_57dp"
+            android:background="@drawable/plate_color_grey_unselect" />
+
+        <ImageView
+            android:id="@+id/iv_car_yellow"
+            android:layout_width="@dimen/size_32dp"
+            android:layout_height="@dimen/size_32dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/size_59dp"
+            android:background="@drawable/plate_color_yellow_unselect" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size_32dp"
+        android:layout_marginTop="@dimen/size_20dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/iv_car_pink"
+            android:layout_width="@dimen/size_32dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/size_21dp"
+            android:background="@drawable/plate_color_pink_unselect" />
+
+        <ImageView
+            android:id="@+id/iv_car_red"
+            android:layout_width="@dimen/size_32dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/size_59dp"
+            android:background="@drawable/plate_color_red_unselect" />
+
+        <ImageView
+            android:id="@+id/iv_car_purple"
+            android:layout_width="@dimen/size_32dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/size_57dp"
+            android:background="@drawable/plate_color_purple_unselect" />
+
+        <ImageView
+            android:id="@+id/iv_car_dark_green"
+            android:layout_width="@dimen/size_32dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/size_57dp"
+            android:background="@drawable/plate_color_dark_green_unselect" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size_32dp"
+        android:layout_marginTop="@dimen/size_20dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/iv_car_dark_blue"
+            android:layout_width="@dimen/size_32dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/size_21dp"
+            android:background="@drawable/plate_color_dark_blue_unselect" />
+
+        <ImageView
+            android:id="@+id/iv_car_dark_red"
+            android:layout_width="@dimen/size_32dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/size_59dp"
+            android:background="@drawable/plate_color_dark_red_unselect" />
+
+        <ImageView
+            android:id="@+id/iv_car_black"
+            android:layout_width="@dimen/size_32dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/size_57dp"
+            android:background="@drawable/plate_color_black_unselect" />
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="SwitchButtonStyle">
+        <item name="android:paddingLeft">10dp</item>
+        <item name="android:paddingRight">10dp</item>
+        <item name="android:paddingTop">4dp</item>
+        <item name="android:paddingBottom">4dp</item>
+    </style>
+
+    <style name="LoginHintTheme">
+        <item name="android:textColor">#707070</item>
+        <item name="android:textSize">13sp</item>
+    </style>
+    <style name="LoginErrorTheme">
+        <item name="android:textColor">#E91919</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:layout_alignParentRight">true</item>
+    </style>
+
+    <style name="TextInputLayoutTheme" >
+        <!-- 底部线 默认颜色 -->
+        <item name="colorControlNormal">#ddd</item>
+        <!-- 底部线 EditText激活时颜色 -->
+        <item name="colorControlActivated">@color/app_theme_color</item>
+        <item name="colorControlHighlight">@color/app_theme_color</item>
+        <item name="android:width">1px</item>
+    </style>
+</resources>

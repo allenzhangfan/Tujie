@@ -1,0 +1,7 @@
+1.项目框架主要参考:MVPArms和ArmsComponent
+https://github.com/JessYanCoding/MVPArms
+https://github.com/JessYanCoding/ArmsComponent
+2.项目组件化主要参考:
+https://blog.csdn.net/guiying712/article/details/55213884
+3.Dagger2学习:
+https://github.com/luxiaoming/dagger2Demo

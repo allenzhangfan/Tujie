@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="car_type_item">
+        <item>全部</item>
+        <item>轿车</item>
+        <item>面包车</item>
+        <item>皮卡</item>
+        <item>商务车</item>
+        <item>越野车</item>
+        <item>中型普通客车</item>
+        <item>大型普通客车</item>
+        <item>小型普通客车</item>
+        <item>中型普通货车</item>
+        <item>重型普通货车</item>
+        <item>轻型普通客车</item>
+        <item>微型普通客车</item>
+    </string-array>
+
+</resources>

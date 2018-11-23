@@ -1,0 +1,45 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_bottom"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/size_49dp"
+    android:background="@color/home_white"
+    android:clipChildren="false"
+    android:gravity="center"
+    android:orientation="horizontal"
+    android:padding="@dimen/size_3dp">
+
+    <TextView
+        android:id="@+id/tv_jq"
+        android:layout_width="@dimen/size_0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:drawableTop="@drawable/home_jq_selector"
+        android:gravity="center"
+        android:text="@string/jq"
+        android:textColor="@color/home_text_selector"
+        android:textSize="@dimen/text_size_10sp" />
+
+    <TextView
+        android:id="@+id/tv_workbench"
+        android:layout_width="@dimen/size_0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:drawableTop="@drawable/home_workbench_selector"
+        android:gravity="center"
+        android:text="@string/workbench"
+        android:textColor="@color/home_text_selector"
+        android:textSize="@dimen/text_size_10sp" />
+
+
+    <TextView
+        android:id="@+id/tv_my"
+        android:layout_width="@dimen/size_0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:drawableTop="@drawable/home_my_selector"
+        android:gravity="center"
+        android:text="@string/my"
+        android:textColor="@color/home_text_selector"
+        android:textSize="@dimen/text_size_10sp" />
+
+</LinearLayout>

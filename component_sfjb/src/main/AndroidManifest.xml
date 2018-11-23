@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.netposa.component.sfjb">
+
+    <application
+        android:theme="@style/AppTheme"
+        tools:replace="android:theme">
+
+        <!-- 在组件集成宿主时, 由于宿主已经声明了 CommonSDK 的公有 ConfigModule, 所以在这里只需要声明业务组件自己的 ConfigModule -->
+        <meta-data
+            android:name="com.netposa.component.sfjb.app.GlobalConfiguration"
+            android:value="ConfigModule" />
+
+        <activity
+            android:name=".mvp.ui.activity.ChoseComparLibActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activity.GetImageActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activity.FaceCropActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activity.FaceComparResultActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".mvp.ui.activity.SearchLibActivity"
+            android:screenOrientation="portrait" />
+    </application>
+
+</manifest>

@@ -1,0 +1,140 @@
+apply plugin: 'com.android.library'
+
+
+android {
+    compileSdkVersion rootProject.ext.android["compileSdkVersion"]
+    buildToolsVersion rootProject.ext.android["buildToolsVersion"]
+    useLibrary 'org.apache.http.legacy'
+
+    compileOptions {
+        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_1_8
+    }
+
+    defaultConfig {
+        minSdkVersion rootProject.ext.android["minSdkVersion"]
+        targetSdkVersion rootProject.ext.android["targetSdkVersion"]
+        versionCode rootProject.ext.android["versionCode"]
+        versionName rootProject.ext.android["versionName"]
+        //ARouter
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [AROUTER_MODULE_NAME: project.getName()]
+            }
+        }
+    }
+
+    buildTypes {
+        debug {
+            minifyEnabled false
+            buildConfigField "boolean", "LOG_DEBUG", "true"
+            buildConfigField "boolean", "LOG_SHOW_HIGH_PRIORITY", "true"
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release {
+            minifyEnabled true
+            buildConfigField "boolean", "LOG_DEBUG", "false"
+            buildConfigField "boolean", "LOG_SHOW_HIGH_PRIORITY", "false"
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    sourceSets {
+        main {
+            jni.srcDirs = []
+            jniLibs.srcDirs = ['src/main/jniLibs']
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    api rootProject.ext.dependencies["annotation"]
+    api rootProject.ext.dependencies["appcompat"]
+    api rootProject.ext.dependencies["asynclayoutinflater"]
+    api rootProject.ext.dependencies["cardview"]
+    api rootProject.ext.dependencies["constraintlayout"]
+    api rootProject.ext.dependencies["coordinatorlayout"]
+    api rootProject.ext.dependencies["drawerlayout"]
+    api rootProject.ext.dependencies["exifinterface"]
+    api rootProject.ext.dependencies["localbroadcastmanager"]
+    api rootProject.ext.dependencies["recyclerview"]
+    api rootProject.ext.dependencies["swiperefreshlayout"]
+    api rootProject.ext.dependencies["viewpager"]
+
+    api rootProject.ext.dependencies["material"]
+    api(rootProject.ext.dependencies["butterknife"]) {
+        exclude group: "com.android.support"
+    }
+    //在业务组件中，需要导入路由的编译期依赖库、以及所有的基础组件
+    api(rootProject.ext.dependencies["arouter-api"]) {
+        exclude module: 'support-v4'
+        exclude module: 'annotation'
+        exclude module: 'core'
+    }
+    annotationProcessor rootProject.ext.dependencies["arouter-compiler"]
+    api rootProject.ext.dependencies["retrofit-url-manager"]
+    //rx
+    api rootProject.ext.dependencies["rxjava2"]
+    api(rootProject.ext.dependencies["rxandroid2"]) {
+        exclude module: 'rxjava'
+    }
+    api(rootProject.ext.dependencies["rxcache2"]) {
+        exclude module: 'rxjava'
+        exclude module: 'dagger'
+    }
+    api(rootProject.ext.dependencies["rxcache-jolyglot-gson"]) {
+        exclude module: 'gson'
+    }
+    api(rootProject.ext.dependencies["rxlifecycle-android"]) {
+        exclude module: 'rxjava'
+        exclude module: 'rxandroid'
+    }
+    api (rootProject.ext.dependencies["rxlifecycle-android-lifecycle"]){
+        exclude module: 'rxandroid'
+        exclude module: 'lifecycle-runtime'
+    }
+    api(rootProject.ext.dependencies["rxpermissions2"]) {
+        exclude module: 'rxjava'
+        exclude module: 'annotation'
+        exclude module: 'support-annotations'
+    }
+    api rootProject.ext.dependencies['rxerrorhandler2']
+    //network
+    api(rootProject.ext.dependencies["retrofit"]) {
+        exclude module: 'okhttp'
+        exclude module: 'okio'
+    }
+    api(rootProject.ext.dependencies["retrofit-converter-gson"]) {
+        exclude module: 'gson'
+        exclude module: 'okhttp'
+        exclude module: 'okio'
+        exclude module: 'retrofit'
+    }
+    api(rootProject.ext.dependencies["retrofit-adapter-rxjava2"]) {
+        exclude module: 'rxjava'
+        exclude module: 'okhttp'
+        exclude module: 'retrofit'
+        exclude module: 'okio'
+    }
+    api rootProject.ext.dependencies["okhttp3"]
+    //glide
+    api(rootProject.ext.dependencies["glide"]) {
+        exclude group: "com.android.support"
+    }
+    annotationProcessor rootProject.ext.dependencies["annotation"]
+    annotationProcessor rootProject.ext.dependencies["glide-compiler"]
+
+    //tools
+    compileOnly rootProject.ext.dependencies["javax.annotation"]
+    api rootProject.ext.dependencies["dagger2"]
+    annotationProcessor rootProject.ext.dependencies["dagger2-compiler"]
+    api rootProject.ext.dependencies["gson"]
+
+    //recyclerViewAdapterHelper
+    api rootProject.ext.dependencies["recyclerViewAdapterHelper"]
+    api(rootProject.ext.dependencies["barlibrary"]) {
+        exclude group: "com.android.support"
+    }
+}

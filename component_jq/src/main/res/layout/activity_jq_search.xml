@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <include layout="@layout/activity_search_head" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size_8dp"
+        android:background="@color/item_view_divider_my" />
+
+    <RelativeLayout
+        android:id="@+id/rl_search_keywords"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size_36dp"
+        android:layout_marginLeft="@dimen/size_16dp"
+        android:layout_marginTop="@dimen/size_8dp"
+        android:layout_marginRight="@dimen/size_24dp">
+
+        <TextView
+            style="@style/CommonTextItem"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/size_20dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:gravity="left"
+            android:text="@string/query_history"
+            android:textColor="@color/color_hint_text2"
+            android:textSize="@dimen/text_size_14sp" />
+
+        <ImageView
+            android:id="@+id/iv_delete_all"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_delete_all_small" />
+    </RelativeLayout>
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/srfl"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_content_keywords"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:listitem="@layout/item_history" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_content_search_result"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/item_view_divider_my"
+                android:visibility="gone"
+                tools:listitem="@layout/item_jq" />
+        </LinearLayout>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+</LinearLayout>

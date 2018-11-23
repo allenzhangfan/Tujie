@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--home-->
+    <item type="id" name="id_sfjb"/>
+    <item type="id" name="id_ytst"/>
+    <item type="id" name="id_clcx"/>
+    <item type="id" name="id_spjk"/>
+    <item type="id" name="id_rltk"/>
+</resources>

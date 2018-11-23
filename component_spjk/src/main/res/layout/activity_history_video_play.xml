@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:keepScreenOn="true"
+    android:orientation="horizontal">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/rl_surface_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center">
+
+            <android.opengl.GLSurfaceView
+                android:id="@+id/surfaceview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <ProgressBar
+                android:id="@+id/progress"
+                style="@android:style/Widget.Holo.ProgressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:visibility="gone" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/size_24dp">
+
+                <TextView
+                    android:id="@+id/tv_organize_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginTop="@dimen/size_9dp"
+                    android:layout_marginLeft="@dimen/size_15dp"
+                    android:drawableLeft="@drawable/ic_back_light"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_size_18sp" />
+
+                <ImageView
+                    android:id="@+id/collect_iv"
+                    android:layout_width="@dimen/size_32dp"
+                    android:layout_height="@dimen/size_32dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="@dimen/size_9dp"
+                    android:layout_marginEnd="@dimen/size_16dp"
+                    android:gravity="center"
+                    android:paddingLeft="@dimen/size_4dp"
+                    android:src="@drawable/ic_attention_up"  />
+                <ImageView
+                    android:id="@+id/iv_screenshot"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginTop="@dimen/size_9dp"
+                    android:layout_marginRight="@dimen/size_16dp"
+                    android:layout_marginEnd="@dimen/size_12dp"
+                    android:layout_toLeftOf="@id/collect_iv"
+                    android:src="@drawable/ic_screenshot" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_network_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="visible">
+
+                <TextView
+                    android:id="@+id/tv_nowifi"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:text="@string/not_connect_wifi"
+                    android:textColor="@color/white" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/stil_play_btn"
+                    style="@style/MaterialLoginButton"
+                    android:layout_width="@dimen/size_126dp"
+                    android:layout_height="@dimen/size_36dp"
+                    android:layout_below="@+id/tv_nowifi"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="@dimen/size_15dp"
+                    android:background="@drawable/common_bt_bg"
+                    android:gravity="center"
+                    android:text="@string/still_play"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_size_14sp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_play_failed"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/play_fail_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:text="@string/error_play_fail"
+                    android:textColor="@color/white" />
+
+                <TextView
+                    android:id="@+id/tv_fail_retry"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/play_fail_tv"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="@dimen/size_15dp"
+                    android:background="@drawable/video_play_failed_bg"
+                    android:drawableLeft="@drawable/play_fail_refresh"
+                    android:drawablePadding="@dimen/size_7dp"
+                    android:gravity="center"
+                    android:paddingLeft="@dimen/size_12dp"
+                    android:paddingTop="@dimen/size_6dp"
+                    android:paddingRight="@dimen/size_12dp"
+                    android:paddingBottom="@dimen/size_6dp"
+                    android:text="@string/still_play"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_size_16sp" />
+            </RelativeLayout>
+        </RelativeLayout>
+    </FrameLayout>
+</LinearLayout>

@@ -1,0 +1,17 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:tools="http://schemas.android.com/tools"
+          package="com.netposa.commonres">
+
+    <application
+        android:theme="@style/AppTheme"
+        tools:replace="android:theme">
+
+        <meta-data
+            android:name="com.netposa.commonres.app.GlobalConfiguration"
+            android:value="ConfigModule"/>
+
+        <activity
+            android:name="com.yalantis.ucrop.UCropActivity"
+            android:screenOrientation="portrait"/>
+    </application>
+</manifest>

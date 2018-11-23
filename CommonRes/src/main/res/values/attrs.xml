@@ -1,0 +1,57 @@
+<resources>
+    <declare-styleable name="base_common_FlowLayout">
+        <attr name="base_common_horizontalSpacing" format="dimension" />
+        <attr name="base_common_verticalSpacing" format="dimension" />
+    </declare-styleable>
+
+    <declare-styleable name="base_common_FlowLayout_LayoutParams">
+        <attr name="base_common_layout_breakLine" format="boolean" />
+        <attr name="base_common_layout_horizontalSpacing" format="dimension" />
+    </declare-styleable>
+
+    <declare-styleable name="ViewAnimatorCompat">
+        <!-- Identifier for the animation to use when a view is shown. -->
+        <attr name="android:inAnimation" />
+        <!-- Identifier for the animation to use when a view is hidden. -->
+        <attr name="android:outAnimation" />
+        <!-- Defines whether to animate the current View when the ViewAnimation
+             is first displayed. -->
+        <attr name="android:animateFirstView" />
+        <!-- Determines whether to measure all children or just those in
+             the VISIBLE or INVISIBLE state when measuring. Defaults to true. -->
+        <attr name="android:measureAllChildren" />
+    </declare-styleable>
+
+    <!--登录EditText动画条-->
+    <declare-styleable name="DashView">
+        <attr name="solid_color" format="color" />
+        <attr name="base_color" format="color" />
+    </declare-styleable>
+
+    <!-- 自定义环形进度条 -->
+    <declare-styleable name="CircleProgressView">
+        <attr name="head_color" format="color" />
+        <attr name="end_color" format="color" />
+        <attr name="circle_width" format="dimension" />
+        <attr name="score_size" format="dimension" />
+        <attr name="score_color" format="color" />
+        <attr name="semblance_size" format="dimension" />
+        <attr name="semblance_color" format="color" />
+    </declare-styleable>
+
+    <!-- 自定义高斯模糊背景 -->
+    <declare-styleable name="RealtimeBlurView">
+        <attr name="realtimeBlurRadius" format="dimension"/>
+        <attr name="realtimeDownsampleFactor" format="float"/>
+        <attr name="realtimeOverlayColor" format="color"/>
+    </declare-styleable>
+
+    <!--圆image-->
+    <declare-styleable name="RoundImageView">
+        <attr name="radius" format="dimension"/>
+        <attr name="left_top_radius" format="dimension"/>
+        <attr name="right_top_radius" format="dimension"/>
+        <attr name="right_bottom_radius" format="dimension"/>
+        <attr name="left_bottom_radius" format="dimension"/>
+    </declare-styleable>
+</resources>

@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">component_jq</string>
+
+    <string name="cars_ku">车辆库</string>
+    <string name="suspect_car">嫌疑车辆布控</string>
+    <string name="test_date"> 2018-10-11 12:31:33</string>
+    <string name="test_camer_tex">西安中心研发南门</string>
+    <string name="test_deal_person">王文军</string>
+    <string name="remarks_text">确认为布控车辆，请尽快处理确认为布控车辆，请尽快处理</string>
+
+    <string name="gender_text">性别</string>
+    <string name="id_number">证件号</string>
+    <string name="address_text">户籍地址</string>
+    <string name="details_inform">详细信息</string>
+    <string name="remark_hint">请输入备注信息</string>.
+    <string name="details_content">该嫌犯在19日下午三点从南大街抢劫流窜，具备攻击性，请注意</string>
+
+    <string name="test_address">西安市雁塔区科技路</string>
+    <string name="gender_type">男</string>
+    <string name="wait_deal">待处理</string>
+
+    <string name="similarity_percent">相似度:%1$d</string>
+    <string name="task_details">任务详情</string>
+
+    <string name="buku_jibie">布控级别</string>
+    <string name="buku_yiji">一级</string>
+
+    <string name="control_aims">布控目标</string>
+
+    <string name="control_reason">布控原因</string>
+</resources>

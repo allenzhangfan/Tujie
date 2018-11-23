@@ -1,0 +1,39 @@
+<resources>
+    <string name="app_name">component_spjk</string>
+
+    <string name="enquipment_name">设备厂商</string>
+    <string name="enquipment_type">设备类型</string>
+
+    <string name="organizational">组织机构</string>
+    <string name="latitude">经纬度</string>
+    <string name="nengli_type">能力类型</string>
+    <string name="enquipment_num">设备编号</string>
+    <string name="monitoring_direction">监控方向</string>
+    <string name="angle">照射角度</string>
+    <string name="unitgroup">维护单位</string>
+    <string name="contact">联系人</string>
+    <string name="contactnumber">联系方式</string>
+    <string name="enquipment_num_123">2546879213235</string>
+    <string name="qiangji">枪机</string>
+    <string name="groupaddress">武汉研发基地</string>
+
+    <string name="jingdu">82.22 133.2331</string>
+    <string name="haikang">海康</string>
+    <string name="control_angle">北</string>
+    <string name="test_angle">西南角30°</string>
+    <string name="contact_name">小普</string>
+
+    <string name="hostity">历史视频</string>
+    <string name="nearby">周边设备</string>
+    <string name="still_play">仍要播放</string>
+    <string name="error_play_fail">播放失败，请重试</string>
+    <string name="load_fail_refresh">刷新重试</string>
+    <string name="video_socket_close">网络连接断开</string>
+    <string name="video_no_stream">没有视频流</string>
+    <string name="connect_server_error">连接服务器失败</string>
+    <string name="connect_server_encoder_error">服务器转码失败</string>
+    <string name="qiu_ji">球机</string>
+    <string name="device_info_do_not_receive_yet">设备信息暂未获取到，请稍后再试!</string>
+    <string name="search_no_result">没有搜索到结果</string>
+    <string name="no_result">未找到结果</string>
+</resources>

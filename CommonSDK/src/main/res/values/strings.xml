@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="token_invalid">登录信息失效，\n请重新登录</string>
+    <string name="common_bad_gateway">服务器错误</string>
+    <string name="common_error_no_permission">操作无权限</string>
+
+    <string name="audio_permission">应用需要获取您的视频权限和地理位置权限</string>
+    <string name="camera_permission">应用需要获取您的摄像头信息</string>
+    <string name="location_permission">应用需要获取您的位置信息</string>
+    <string name="sdcard_write_permission">应用需要获取您SD卡的读写权限</string>
+    <string name="require_several_permission">请先授予相关权限</string>
+    <string name="please_open_gps_first">请先打开GPS开关</string>
+</resources>

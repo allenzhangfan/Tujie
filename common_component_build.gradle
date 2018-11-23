@@ -1,0 +1,105 @@
+if (isModule.toBoolean()) {
+    apply plugin: 'com.android.application'
+} else {
+    apply plugin: 'com.android.library'
+}
+apply plugin: 'com.jakewharton.butterknife'
+
+android {
+    compileSdkVersion rootProject.ext.android["compileSdkVersion"]
+    buildToolsVersion rootProject.ext.android["buildToolsVersion"]
+
+    defaultConfig {
+        minSdkVersion rootProject.ext.android["minSdkVersion"]
+        targetSdkVersion rootProject.ext.android["targetSdkVersion"]
+        versionCode rootProject.ext.android["versionCode"]
+        versionName rootProject.ext.android["versionName"]
+        if (isModule.toBoolean()) {
+            multiDexEnabled true
+        }
+        //ARouter
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [AROUTER_MODULE_NAME: project.getName()]
+                includeCompileClasspath true
+            }
+        }
+
+    }
+
+    buildTypes {
+        debug {
+            buildConfigField "boolean", "LOG_DEBUG", "true"
+            buildConfigField "boolean", "USE_CANARY", "true"
+            buildConfigField "boolean", "IS_BUILD_MODULE", "${isModule}"
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release {
+            buildConfigField "boolean", "LOG_DEBUG", "false"
+            buildConfigField "boolean", "USE_CANARY", "false"
+            buildConfigField "boolean", "IS_BUILD_MODULE", "${isModule}"
+            minifyEnabled true
+            if (isModule.toBoolean()) {
+                shrinkResources true
+            }
+            zipAlignEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    lintOptions {
+        disable 'InvalidPackage'
+        disable "ResourceType"
+        abortOnError false
+    }
+
+    sourceSets {
+        main {
+            if (isModule.toBoolean()) {
+                manifest.srcFile 'src/main/module/AndroidManifest.xml'
+            } else {
+                manifest.srcFile 'src/main/AndroidManifest.xml'
+            }
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+}
+
+dependencies {
+    if (isModule.toBoolean()) {
+        //在host组件和component组件中都需要加入以下编译框架
+        //view
+        annotationProcessor(rootProject.ext.dependencies["butterknife-compiler"]) {
+            exclude module: 'support-annotations'
+        }
+        //tools
+        annotationProcessor rootProject.ext.dependencies["dagger2-compiler"]
+        annotationProcessor rootProject.ext.dependencies["arouter-compiler"]
+        //room数据库
+        annotationProcessor rootProject.ext.dependencies["room-compiler"]
+        //test
+        debugImplementation rootProject.ext.dependencies["canary-debug"]
+        releaseImplementation rootProject.ext.dependencies["canary-release"]
+        testImplementation rootProject.ext.dependencies["canary-release"]
+    } else {
+        compileOnly rootProject.ext.dependencies["butterknife-compiler"]
+        compileOnly rootProject.ext.dependencies["dagger2-compiler"]
+        compileOnly rootProject.ext.dependencies["arouter-compiler"]
+        compileOnly rootProject.ext.dependencies["canary-debug"]
+        compileOnly rootProject.ext.dependencies["canary-release"]
+        compileOnly rootProject.ext.dependencies["room-compiler"]
+    }
+    api project(":CommonRes")
+    api project(":CommonService")
+    //图片预览lib库
+    implementation project(':component_pic')
+    implementation fileTree(include: ['*.jar','*.aar'],dir: 'libs')
+}

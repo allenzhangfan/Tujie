@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AppTheme" parent="BaseAppTheme">
+        <item name="selectableItemBackground">@drawable/item_background_material</item>
+        <item name="selectableItemBackgroundBorderless">
+            @drawable/item_background_borderless_material
+        </item>
+        <item name="snackbarStyle">
+            @style/Widget.Design.Snackbar
+        </item>
+    </style>
+
+    <style name="ButtonTextAppearance" parent="TextAppearance.MaterialComponents.Button">
+        <item name="android:letterSpacing">0</item>
+        <item name="fontFamily">sans-serif</item>
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+
+</resources>
