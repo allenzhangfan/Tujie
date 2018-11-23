@@ -1,3 +1,2 @@
 # Tujie
-Step 1
-please run release apk,since it's network request is open network ,debug version is local network
+Notice:please run release apk,since it's network request is open network ,debug version is local network
