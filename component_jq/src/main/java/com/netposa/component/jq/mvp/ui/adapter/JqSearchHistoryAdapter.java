@@ -6,7 +6,9 @@ import com.netposa.component.jq.R;
 import com.netposa.component.room.entity.JqSearchHistoryEntity;
 
 import java.util.List;
+
 import javax.inject.Inject;
+
 import androidx.annotation.Nullable;
 
 /**
@@ -23,7 +25,7 @@ public class JqSearchHistoryAdapter extends BaseQuickAdapter<JqSearchHistoryEnti
     @Override
     protected void convert(BaseViewHolder helper, JqSearchHistoryEntity item) {
         String name = item.getName();
-        helper.setText(R.id.tv_name,name);
+        helper.setText(R.id.tv_name, name);
         helper.addOnClickListener(R.id.iv_delete);
     }
 }

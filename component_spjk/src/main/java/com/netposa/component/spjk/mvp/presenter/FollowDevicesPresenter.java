@@ -17,9 +17,8 @@ import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 import javax.inject.Inject;
 
 import com.netposa.common.log.Log;
-import com.netposa.component.room.dao.DbHelper;
-import com.netposa.component.room.entity.SpjkCollectionDeviceEntiry;
-import com.netposa.component.room.entity.SpjkSearchHistoryEntity;
+import com.netposa.component.room.DbHelper;
+import com.netposa.component.room.entity.SpjkCollectionDeviceEntity;
 import com.netposa.component.spjk.mvp.contract.FollowDevicesContract;
 import com.trello.lifecycle2.android.lifecycle.AndroidLifecycle;
 
@@ -66,9 +65,9 @@ public class FollowDevicesPresenter extends BasePresenter<FollowDevicesContract.
                     mRootView.hideLoading();//隐藏下拉刷新的进度条
                 })
                 .compose(AndroidLifecycle.createLifecycleProvider((LifecycleOwner) mRootView).bindToLifecycle())
-                .subscribe(new ErrorHandleSubscriber<List<SpjkCollectionDeviceEntiry>>(mErrorHandler) {
+                .subscribe(new ErrorHandleSubscriber<List<SpjkCollectionDeviceEntity>>(mErrorHandler) {
                     @Override
-                    public void onNext(List<SpjkCollectionDeviceEntiry> response) {
+                    public void onNext(List<SpjkCollectionDeviceEntity> response) {
                         Log.e(TAG, "getAll :" + response.toString());
                         mRootView.loadDataSuccess(response);
                     }

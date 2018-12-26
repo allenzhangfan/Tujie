@@ -6,9 +6,11 @@ package com.netposa.common.interceptor;
 import com.netposa.common.constant.GlobalConstants;
 import com.netposa.common.log.Log;
 import com.netposa.common.utils.SPUtils;
+
 import java.io.IOException;
 import java.util.Map;
 import java.util.Set;
+
 import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -22,13 +24,9 @@ import okhttp3.Response;
 
 public class HeaderInterceptor implements Interceptor {
 
-    private static final String TAG = "ImageHeaderInterceptor";
+    private static final String TAG = "HeaderInterceptor";
 
     private Map<String, String> headers;
-    private static final String COOKIE = "Cookie";
-    private static final String DATE = "Date";
-    private static final String AUTHORIZATION = "Authorization";
-    private static final String TOKEN = "token";
 
     public HeaderInterceptor(Map<String, String> headers) {
         this.headers = headers;
@@ -41,8 +39,8 @@ public class HeaderInterceptor implements Interceptor {
         String token = SPUtils.getInstance().getString(GlobalConstants.TOKEN);
         headers.put("user-agent", "Android");
         if (headers != null) {
-            Log.d(TAG, "token:"+token);
-            headers.put(TOKEN, token);
+            Log.d(TAG, "token:" + token);
+            headers.put(GlobalConstants.TOKEN, token);
         }
         if (headers != null && headers.size() > 0) {
             Set<String> keys = headers.keySet();

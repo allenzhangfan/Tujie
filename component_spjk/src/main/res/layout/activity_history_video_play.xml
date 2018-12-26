@@ -57,7 +57,8 @@
                     android:layout_marginEnd="@dimen/size_16dp"
                     android:gravity="center"
                     android:paddingLeft="@dimen/size_4dp"
-                    android:src="@drawable/ic_attention_up"  />
+                    android:src="@drawable/ic_attention_up" />
+
                 <ImageView
                     android:id="@+id/iv_screenshot"
                     android:layout_width="wrap_content"

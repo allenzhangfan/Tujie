@@ -3,6 +3,7 @@ package com.netposa.common.entity;
 import androidx.annotation.Keep;
 
 import static com.netposa.common.net.HttpConstant.IS_INVALID;
+import static com.netposa.common.net.HttpConstant.IS_KICK_OFF;
 import static com.netposa.common.net.HttpConstant.IS_OUT_OF_DATE;
 import static com.netposa.common.net.HttpConstant.IS_PERMISSION_DENIED;
 import static com.netposa.common.net.HttpConstant.IS_SUCCESS;
@@ -29,6 +30,10 @@ public class HttpResponseEntity<T> {
 
     public boolean isOutOfDate() {
         return code == IS_OUT_OF_DATE;
+    }
+
+    public boolean isKickOff() {
+        return code == IS_KICK_OFF;
     }
 
     @Override

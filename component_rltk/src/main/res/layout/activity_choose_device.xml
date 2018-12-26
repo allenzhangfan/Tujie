@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <include layout="@layout/common_title_delete_bar" />
+
+    <include
+        android:id="@+id/divider_line"
+        layout="@layout/item_view_divider" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/color_E5E6EB"
+        android:orientation="vertical">
+
+        <HorizontalScrollView
+            android:id="@+id/parent_main_hz_scrollview"
+            android:layout_width="match_parent"
+            android:layout_height="45dip"
+            android:background="@color/white"
+            android:paddingLeft="18dip"
+            android:paddingRight="8dip"
+            android:scrollbars="none"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:id="@+id/ll_org_main"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+            </LinearLayout>
+        </HorizontalScrollView>
+
+        <View
+            android:id="@+id/view_divider"
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/color_EEEEEE"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ly_all_chose"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size_48dp"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/size_16dp">
+
+        <RadioButton
+            android:id="@+id/iv_all_single"
+            android:layout_width="@dimen/size_20dp"
+            android:layout_height="@dimen/size_20dp"
+            android:layout_marginRight="@dimen/size_16dp"
+            android:background="@drawable/single_chose"
+            android:button="@null"
+            android:checked="false"
+            android:clickable="false"
+            android:paddingTop="@dimen/size_14dp"
+            android:paddingBottom="@dimen/size_14dp"
+            android:scaleType="centerCrop" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/sfjb_all_chose"
+            android:textSize="@dimen/text_size_14sp"
+            android:textColor="@color/color_44485A" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/org_content_layout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size_0dp"
+        android:layout_weight="1"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/srl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/org_recyview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_no_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/iv_no_content"
+                android:layout_width="@dimen/size_240dp"
+                android:layout_height="@dimen/size_240dp"
+                android:src="@drawable/ic_no_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.132" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/size_12dp"
+                android:text="@string/no_result"
+                android:textColor="@color/color_697084"
+                android:textSize="@dimen/text_size_16sp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/iv_no_content" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/bt_compare"
+        style="@style/MaterialTextButton.Search"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size_49dp"
+        android:layout_marginStart="@dimen/size_24dp"
+        android:layout_marginEnd="@dimen/size_24dp"
+        android:layout_marginBottom="@dimen/size_16dp"
+        android:background="@drawable/common_bt_bg"
+        android:gravity="center"
+        android:text="@string/confirm"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_size_16sp" />
+
+</LinearLayout>

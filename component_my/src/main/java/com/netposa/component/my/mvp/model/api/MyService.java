@@ -1,6 +1,8 @@
 package com.netposa.component.my.mvp.model.api;
 
 import com.netposa.common.entity.HttpResponseEntity;
+import com.netposa.component.my.mvp.model.entity.LogOutResponseEntity;
+import com.netposa.component.my.mvp.model.entity.UpdateInfoEntity;
 import io.reactivex.Observable;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
@@ -16,6 +18,10 @@ public interface MyService {
 
     @Headers({HEADER_CONTENT_TYPE, HEADER_ACCEPT_CONTENT})
     @GET("ia/user/logout")
-    Observable<HttpResponseEntity<String>> logOut();
+    Observable<HttpResponseEntity<LogOutResponseEntity>> logOut();
+
+    @Headers({HEADER_CONTENT_TYPE, HEADER_ACCEPT_CONTENT})
+    @GET("ia/app/getUpdateJson")
+    Observable<HttpResponseEntity<UpdateInfoEntity>> getUpdateJson();
 
 }

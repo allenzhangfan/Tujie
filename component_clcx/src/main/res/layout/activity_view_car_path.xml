@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:mapbox="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <include layout="@layout/include_title_bar" />
+
+    <include layout="@layout/common_view_divider" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+            <com.mapbox.mapboxsdk.maps.MapView
+                android:id="@+id/mapView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                mapbox:mapbox_cameraTargetLat="30.4920980180"
+                mapbox:mapbox_cameraTargetLng="114.4104945660"
+                mapbox:mapbox_cameraZoom="14"
+                mapbox:mapbox_maxZoom="18"
+                mapbox:mapbox_minZoom="5"
+                mapbox:mapbox_uiAttribution="false"
+                mapbox:mapbox_uiCompass="false"
+                mapbox:mapbox_uiLogo="false"
+                mapbox:mapbox_uiZoomControls="false" />
+
+            <include layout="@layout/car_path_detail" />
+        </RelativeLayout>
+    </FrameLayout>
+</LinearLayout>

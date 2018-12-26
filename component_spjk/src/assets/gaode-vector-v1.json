@@ -1,0 +1,17 @@
+{
+  "center": "105.22757357171984,36.28002287498697",
+  "description": "gaode vector tile source",
+  "format": "pbf",
+  "maxzoom": 17,
+  "minzoom": 5,
+  "name": "gaodeVectorTileSource",
+  "bounds": [-180.0, -85.05112877980659, 180.0, 85.0511287798066],
+  "basename": "gaodeVectorTileSource",
+  "profile": "mercator",
+  "scale": 1,
+  "tiles": [
+    "http://map.netposa.com:9500/netposa/NPGIS/services/china/MapServer/getMapboxVectorTile?&L={z}&Y={y}&X={x}"
+  ],
+  "tilejson": "2.0.0",
+  "scheme": "xyz"
+}

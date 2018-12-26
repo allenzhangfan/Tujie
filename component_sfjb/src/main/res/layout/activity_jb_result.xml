@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_F5F6FA"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <include layout="@layout/include_title_bar" />
+
+    <include layout="@layout/common_view_divider" />
+
+    <LinearLayout
+        android:id="@+id/ll_detail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <com.netposa.commonres.widget.RoundImageView
+            android:id="@+id/iv_car"
+            android:layout_width="@dimen/size_164dp"
+            android:layout_height="@dimen/size_164dp"
+            android:layout_marginTop="@dimen/size_7dp"
+            android:layout_marginBottom="@dimen/size_16dp"
+            android:background="@drawable/common_image_bg"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_image_default"
+            app:radius="@dimen/size_2dp" />
+
+        <include
+            layout="@layout/common_view_divider"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_0_5dp"
+            android:layout_marginLeft="@dimen/size_16dp"
+            android:layout_marginRight="@dimen/size_16dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size_52dp"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/size_16dp"
+        android:paddingRight="@dimen/size_16dp">
+
+        <com.netposa.commonres.widget.CircleProgressView
+            android:id="@+id/similar_progresview"
+            android:layout_width="@dimen/size_30dp"
+            android:layout_height="@dimen/size_30dp"
+            android:layout_gravity="center_vertical|center"
+            android:layout_marginLeft="@dimen/size_9dp"
+            app:circle_width="@dimen/size_4dp"
+            app:end_color="@color/color_2D87F9"
+            app:head_color="@color/color_63BBFF"
+            app:score_size="@dimen/text_size_0sp" />
+
+        <TextView
+            android:id="@+id/simil_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|center"
+            android:layout_marginLeft="@dimen/size_9dp"
+            android:gravity="center|center_vertical"
+            android:text="@string/similarity"
+            android:textColor="@color/color_989FB0"
+            android:textSize="@dimen/sp_16" />
+
+    </LinearLayout>
+
+    <include layout="@layout/item_view_divider" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_car_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        tools:listitem="@layout/item_car_person_info" />
+</LinearLayout>
+

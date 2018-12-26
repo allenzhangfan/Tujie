@@ -21,9 +21,9 @@
             android:layout_width="@dimen/size_32dp"
             android:layout_height="@dimen/size_32dp"
             app:circle_width="@dimen/size_4dp"
-            app:end_color="@color/progress_front_end"
-            app:head_color="@color/progress_front_head"
-            app:score_color="@color/black_222"
+            app:end_color="@color/color_2D87F9"
+            app:head_color="@color/color_63BBFF"
+            app:score_color="@color/color_222222"
             app:score_size="0sp" />
 
         <TextView
@@ -35,7 +35,7 @@
             android:layout_weight="1"
             android:gravity="left"
             android:text="90%"
-            android:textColor="@color/face_login_color"
+            android:textColor="@color/color_697084"
             android:textSize="@dimen/text_size_14sp" />
 
         <TextView
@@ -47,15 +47,14 @@
             android:paddingTop="@dimen/size_4dp"
             android:paddingRight="@dimen/size_8dp"
             android:paddingBottom="@dimen/size_4dp"
-            android:text="@string/wait_deal"
-            android:textColor="@color/jq_suspending"
+            android:textColor="@color/color_FF503A"
             android:textSize="@dimen/text_size_12sp" />
     </LinearLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/size_8dp"
-        android:background="@color/item_view_divider_my" />
+        android:background="@color/color_F5F6FA" />
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -68,20 +67,23 @@
             style="@style/Alarm_detail_left_text_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/name" />
+            android:text="@string/name"
+            android:textColor="@color/color_697084"
+            android:textSize="@dimen/text_size_14sp" />
 
         <TextView
-            android:id="@+id/car_ku_type"
+            android:id="@+id/capture_name"
             style="@style/Alarm_detail_right_text_style"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="李四" />
+            android:layout_height="wrap_content" />
     </RelativeLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/size_0_5dp"
-        android:background="@color/item_view_divider" />
+        android:layout_marginStart="@dimen/size_16dp"
+        android:layout_marginEnd="@dimen/size_16dp"
+        android:background="@color/color_E5E6EB" />
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -94,124 +96,138 @@
             style="@style/Alarm_detail_left_text_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/gender_text" />
+            android:text="@string/gender_text"
+            android:textColor="@color/color_697084"
+            android:textSize="@dimen/text_size_14sp" />
+
+        <TextView
+            android:id="@+id/capture_gender"
+            style="@style/Alarm_detail_right_text_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size_0_5dp"
+        android:layout_marginStart="@dimen/size_16dp"
+        android:layout_marginEnd="@dimen/size_16dp"
+        android:background="@color/color_E5E6EB" />
+
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/size_44dp"
+        android:layout_marginLeft="@dimen/size_16dp"
+        android:layout_marginRight="@dimen/size_16dp"
+        android:gravity="center_vertical">
+
+        <TextView
+            style="@style/Alarm_detail_left_text_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/id_number"
+            android:textColor="@color/color_697084"
+            android:textSize="@dimen/text_size_14sp" />
+
+        <TextView
+            android:id="@+id/captute_id_card"
+            style="@style/Alarm_detail_right_text_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size_0_5dp"
+        android:layout_marginStart="@dimen/size_16dp"
+        android:layout_marginEnd="@dimen/size_16dp"
+        android:background="@color/color_E5E6EB" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/size_44dp"
+        android:layout_marginLeft="@dimen/size_16dp"
+        android:layout_marginRight="@dimen/size_16dp"
+        android:gravity="center_vertical">
+
+        <TextView
+            style="@style/Alarm_detail_left_text_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/address_text"
+            android:textColor="@color/color_697084"
+            android:textSize="@dimen/text_size_14sp" />
+
+        <TextView
+            android:id="@+id/capture_address"
+            style="@style/Alarm_detail_right_text_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size_0_5dp"
+        android:layout_marginStart="@dimen/size_16dp"
+        android:layout_marginEnd="@dimen/size_16dp"
+        android:background="@color/color_E5E6EB" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/size_44dp"
+        android:layout_marginLeft="@dimen/size_16dp"
+        android:layout_marginRight="@dimen/size_16dp"
+        android:gravity="center_vertical">
+
+        <TextView
+            style="@style/Alarm_detail_left_text_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/belong_ku"
+            android:textColor="@color/color_697084"
+            android:textSize="@dimen/text_size_14sp" />
+
+        <TextView
+            android:id="@+id/capture_lib"
+            style="@style/Alarm_detail_right_text_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size_0_5dp"
+        android:layout_marginStart="@dimen/size_16dp"
+        android:layout_marginEnd="@dimen/size_16dp"
+        android:background="@color/color_E5E6EB" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/size_44dp"
+        android:layout_marginLeft="@dimen/size_16dp"
+        android:layout_marginRight="@dimen/size_16dp"
+        android:gravity="center_vertical">
+
+        <TextView
+            style="@style/Alarm_detail_left_text_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/capture_time"
+            android:textColor="@color/color_697084"
+            android:textSize="@dimen/text_size_14sp" />
 
         <TextView
             android:id="@+id/capture_time"
             style="@style/Alarm_detail_right_text_style"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/test_date" />
-    </RelativeLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/size_0_5dp"
-        android:background="@color/item_view_divider" />
-
-
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/size_44dp"
-        android:layout_marginLeft="@dimen/size_16dp"
-        android:layout_marginRight="@dimen/size_16dp"
-        android:gravity="center_vertical">
-
-        <TextView
-            style="@style/Alarm_detail_left_text_style"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/id_number" />
-
-        <TextView
-            android:id="@+id/control_car_type"
-            style="@style/Alarm_detail_right_text_style"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="42384932214789201" />
-    </RelativeLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/size_0_5dp"
-        android:background="@color/item_view_divider" />
-
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/size_44dp"
-        android:layout_marginLeft="@dimen/size_16dp"
-        android:layout_marginRight="@dimen/size_16dp"
-        android:gravity="center_vertical">
-
-        <TextView
-            style="@style/Alarm_detail_left_text_style"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/address_text" />
-
-        <TextView
-            style="@style/Alarm_detail_right_text_style"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/test_address" />
-    </RelativeLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/size_0_5dp"
-        android:background="@color/item_view_divider" />
-
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/size_44dp"
-        android:layout_marginLeft="@dimen/size_16dp"
-        android:layout_marginRight="@dimen/size_16dp"
-        android:gravity="center_vertical">
-
-        <TextView
-            style="@style/Alarm_detail_left_text_style"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/belong_ku" />
-
-        <TextView
-            android:id="@+id/camera_address"
-            style="@style/Alarm_detail_right_text_style"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/cars_ku" />
-    </RelativeLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/size_0_5dp"
-        android:background="@color/item_view_divider" />
-
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/size_44dp"
-        android:layout_marginLeft="@dimen/size_16dp"
-        android:layout_marginRight="@dimen/size_16dp"
-        android:gravity="center_vertical">
-
-        <TextView
-            style="@style/Alarm_detail_left_text_style"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/capture_time" />
-
-        <TextView
-            android:id="@+id/deal_person"
-            style="@style/Alarm_detail_right_text_style"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/test_date" />
+            android:layout_height="wrap_content" />
     </RelativeLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/size_8dp"
-        android:background="@color/item_view_divider_my" />
+        android:background="@color/color_F5F6FA" />
 
     <RelativeLayout
 
@@ -225,22 +241,25 @@
             style="@style/Alarm_detail_left_text_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/control_task_name" />
+            android:text="@string/control_task_name"
+            android:textColor="@color/color_697084"
+            android:textSize="@dimen/text_size_14sp" />
 
         <TextView
-            android:id="@+id/suspect_text"
+            android:id="@+id/capture_lib_name"
             style="@style/Alarm_detail_right_text_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:drawableRight="@drawable/ic_go_greater"
-            android:drawablePadding="@dimen/size_5dp"
-            android:text="@string/suspect_car" />
+            android:drawablePadding="@dimen/size_5dp" />
     </RelativeLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/size_0_5dp"
-        android:background="@color/item_view_divider" />
+        android:layout_marginStart="@dimen/size_16dp"
+        android:layout_marginEnd="@dimen/size_16dp"
+        android:background="@color/color_E5E6EB" />
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -253,7 +272,9 @@
             style="@style/Alarm_detail_left_text_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/camera_name" />
+            android:text="@string/camera_name"
+            android:textColor="@color/color_697084"
+            android:textSize="@dimen/text_size_14sp" />
 
         <TextView
             android:id="@+id/camera_addr"
@@ -261,14 +282,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:drawableRight="@drawable/ic_gps"
-            android:drawablePadding="@dimen/size_5dp"
-            android:text="@string/test_camer_tex" />
+            android:drawablePadding="@dimen/size_5dp" />
     </RelativeLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/size_0_5dp"
-        android:background="@color/item_view_divider_my" />
+        android:layout_marginStart="@dimen/size_16dp"
+        android:layout_marginEnd="@dimen/size_16dp"
+        android:background="@color/color_F5F6FA" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -284,7 +306,7 @@
             android:paddingTop="@dimen/size_8dp"
             android:paddingRight="@dimen/size_16dp"
             android:text="@string/details_inform"
-            android:textColor="@color/face_login_color"
+            android:textColor="@color/color_697084"
             android:textSize="@dimen/text_size_14sp" />
 
         <TextView
@@ -296,8 +318,7 @@
             android:gravity="center_vertical"
             android:paddingLeft="@dimen/size_16dp"
             android:paddingRight="@dimen/size_16dp"
-            android:text="@string/details_content"
-            android:textColor="@color/color_hint_text"
+            android:textColor="@color/color_C0C5D1"
             android:textSize="@dimen/text_size_15sp" />
 
     </LinearLayout>
@@ -305,7 +326,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/size_8dp"
-        android:background="@color/item_view_divider_my" />
+        android:background="@color/color_F5F6FA" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -321,10 +342,11 @@
             android:paddingTop="@dimen/size_8dp"
             android:paddingRight="@dimen/size_16dp"
             android:text="@string/remarks"
-            android:textColor="@color/face_login_color"
+            android:textColor="@color/color_697084"
             android:textSize="@dimen/text_size_14sp" />
 
         <EditText
+            android:id="@+id/tips_msg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/size_8dp"
@@ -334,8 +356,22 @@
             android:minLines="3"
             android:paddingLeft="@dimen/size_16dp"
             android:paddingRight="@dimen/size_16dp"
-            android:textColorHint="@color/color_hint_text"
+            android:textColorHint="@color/color_C0C5D1"
             android:textCursorDrawable="@null"
             android:textSize="@dimen/text_size_15sp" />
+
+        <TextView
+            android:id="@+id/tv_tips_msg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical|top|left"
+            android:paddingLeft="@dimen/size_16dp"
+            android:paddingTop="@dimen/size_8dp"
+            android:paddingRight="@dimen/size_16dp"
+            android:paddingBottom="@dimen/size_8dp"
+            android:textColor="@color/color_989FB0"
+            android:maxEms="250"
+            android:textSize="@dimen/text_size_15sp"
+            android:visibility="gone" />
     </LinearLayout>
 </LinearLayout>

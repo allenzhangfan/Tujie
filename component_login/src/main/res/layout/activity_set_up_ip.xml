@@ -7,6 +7,7 @@
     android:focusable="true"
     android:focusableInTouchMode="true"
     android:orientation="vertical"
+    android:fitsSystemWindows="false"
     tools:ignore="ResourceName">
 
     <LinearLayout
@@ -21,7 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/size_0_5dp"
             android:layout_marginTop="@dimen/_5dp"
-            android:background="@color/color_line" />
+            android:background="@color/color_E5E6EB" />
 
         <EditText
             android:id="@+id/input_editText"
@@ -31,9 +32,10 @@
             android:layout_marginTop="@dimen/size_100dp"
             android:layout_marginRight="@dimen/size_16dp"
             android:background="@drawable/setip_edittext_bg"
-            android:text="@string/edit_ip_local"
-            android:paddingLeft="@dimen/size_16dp"
-            android:textColor="@color/black_common"
+            android:text="@string/edit_url_local"
+            android:paddingLeft="@dimen/size_6dp"
+            android:textSize="@dimen/text_size_14sp"
+            android:textColor="@color/color_44485A"
             android:textCursorDrawable="@null" />
 
         <com.google.android.material.button.MaterialButton

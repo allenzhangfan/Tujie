@@ -32,8 +32,9 @@ public class FragmentChangeManager {
 
     /**
      * discription:添加fragment类
-     * @param tag Fragragment 的tag
-     * @param clss  Fragment类
+     *
+     * @param tag  Fragragment 的tag
+     * @param clss Fragment类
      * @param args 参数
      */
     public void addFragment(String tag, Class<?> clss, Bundle args) {
@@ -63,6 +64,7 @@ public class FragmentChangeManager {
 
     /**
      * discription： Fragment切换
+     *
      * @param tabId 存入Map里的key
      */
     public void onFragmentChanged(String tabId) {

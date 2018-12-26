@@ -10,9 +10,10 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.jess.arms.http.imageloader.ImageLoader;
 import com.jess.arms.http.imageloader.glide.ImageConfigImpl;
 import com.jess.arms.utils.ArmsUtils;
+import com.netposa.common.constant.UrlConstant;
 import com.netposa.commonres.widget.CircleProgressView;
 import com.netposa.component.jq.R;
-import com.netposa.component.jq.mvp.model.entity.JqItemEntity;
+import com.netposa.common.entity.push.JqItemEntity;
 
 import java.util.List;
 
@@ -21,10 +22,10 @@ import javax.inject.Inject;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
-import static com.netposa.component.jq.mvp.model.entity.JqItemEntity.TYPE_INVALID;
-import static com.netposa.component.jq.mvp.model.entity.JqItemEntity.TYPE_PEOPLE;
-import static com.netposa.component.jq.mvp.model.entity.JqItemEntity.TYPE_SUSPENDING;
-import static com.netposa.component.jq.mvp.model.entity.JqItemEntity.TYPE_VALID;
+import static com.netposa.common.constant.GlobalConstants.TYPE_INVALID;
+import static com.netposa.common.constant.GlobalConstants.TYPE_FACE_DEPLOY;
+import static com.netposa.common.constant.GlobalConstants.TYPE_SUSPENDING;
+import static com.netposa.common.constant.GlobalConstants.TYPE_VALID;
 
 /**
  * Author：yeguoqiang
@@ -49,41 +50,42 @@ public class JqAdapter extends BaseQuickAdapter<JqItemEntity, BaseViewHolder> {
         int itemHandleTAG = item.getItemHandleType();
         if (itemHandleTAG == TYPE_VALID) {
             helper.setText(R.id.tv_jq_tag, R.string.valid);
-            helper.setTextColor(R.id.tv_jq_tag, mContext.getResources().getColor(R.color.jq_valid));
+            helper.setTextColor(R.id.tv_jq_tag, mContext.getResources().getColor(R.color.color_2CCE9A));
         } else if (itemHandleTAG == TYPE_INVALID) {
             helper.setText(R.id.tv_jq_tag, R.string.invalid);
-            helper.setTextColor(R.id.tv_jq_tag, mContext.getResources().getColor(R.color.jq_invalid));
+            helper.setTextColor(R.id.tv_jq_tag, mContext.getResources().getColor(R.color.color_C0C5D1));
         } else if (itemHandleTAG == TYPE_SUSPENDING) {
             helper.setText(R.id.tv_jq_tag, R.string.suspending);
-            helper.setTextColor(R.id.tv_jq_tag, mContext.getResources().getColor(R.color.jq_suspending));
+            helper.setTextColor(R.id.tv_jq_tag, mContext.getResources().getColor(R.color.color_FF503A));
         }
         helper.setText(R.id.tv_camera_location, item.getCameraLocation());
-        helper.setText(R.id.tv_address, item.getAddress());
-        helper.setText(R.id.tv_time, item.getTime());
+        helper.setText(R.id.tv_capture_info, item.getCaptureLibName());
+        helper.setText(R.id.tv_alarm_time, item.getAlarmTime());
         ImageView ivCapture = helper.getView(R.id.iv_capture);
         ImageView ivDeploy = helper.getView(R.id.iv_deploy);
         mImageLoader.loadImage(mContext, ImageConfigImpl
                 .builder()
                 .cacheStrategy(0)
                 .placeholder(R.drawable.ic_image_default)
-                .url(item.getCaptureImgUrl())
+                .errorPic(R.drawable.ic_image_load_failed)
+                .url(UrlConstant.parseImageUrl(item.getCaptureImgUrl()))
                 .imageView(ivCapture)
                 .build());
         mImageLoader.loadImage(mContext, ImageConfigImpl
                 .builder()
                 .cacheStrategy(0)
                 .placeholder(R.drawable.ic_image_default)
-                .url(item.getDeployImgUrl())
+                .errorPic(R.drawable.ic_image_load_failed)
+                .url(UrlConstant.parseImageUrl(item.getDeployImgUrl()))
                 .imageView(ivDeploy)
                 .build());
 
-        if (item.getItemType() == TYPE_PEOPLE) {//人
+        if (item.getItemType() == TYPE_FACE_DEPLOY) {//人
             cpvSimilarity.setVisibility(View.VISIBLE);
             tvCarNumber.setVisibility(View.GONE);
             helper.setImageDrawable(R.id.iv_jq, ContextCompat.getDrawable(mContext, R.drawable.ic_people));
             helper.setText(R.id.tv_detail, R.string.similarity);
-
-            cpvSimilarity.setScore((float) item.getSimilarity(), false,"%");
+            cpvSimilarity.setScore((float) item.getSimilarity(), false, "%");
         } else {//车
             cpvSimilarity.setVisibility(View.GONE);
             tvCarNumber.setVisibility(View.VISIBLE);

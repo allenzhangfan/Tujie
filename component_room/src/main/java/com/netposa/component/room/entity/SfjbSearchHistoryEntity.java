@@ -1,6 +1,7 @@
 package com.netposa.component.room.entity;
 
 import java.util.Objects;
+import java.util.UUID;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
@@ -15,9 +16,9 @@ import androidx.room.PrimaryKey;
 public class SfjbSearchHistoryEntity {
 
     @NonNull
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "uid")
-    private int uid;
+    @PrimaryKey
+    @ColumnInfo(name = "uuid")
+    private String uuid;
 
     @ColumnInfo(name = "name")
     private String name;
@@ -30,13 +31,17 @@ public class SfjbSearchHistoryEntity {
         this.name = name;
     }
 
-    @NonNull
-    public int getUid() {
-        return uid;
+    public SfjbSearchHistoryEntity() {
+        uuid = UUID.randomUUID().toString();
     }
 
-    public void setUid(@NonNull int uid) {
-        this.uid = uid;
+    @NonNull
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(@NonNull String uuid) {
+        this.uuid = uuid;
     }
 
     @Override
@@ -44,20 +49,20 @@ public class SfjbSearchHistoryEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         SfjbSearchHistoryEntity that = (SfjbSearchHistoryEntity) o;
-        return uid == that.uid &&
+        return uuid == that.uuid &&
                 Objects.equals(name, that.name);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(uid, name);
+        return Objects.hash(uuid, name);
     }
 
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("SfjbSearchHistoryEntity{");
-        sb.append("uid=").append(uid);
+        sb.append("uuid=").append(uuid);
         sb.append(", name='").append(name).append('\'');
         sb.append('}');
         return sb.toString();

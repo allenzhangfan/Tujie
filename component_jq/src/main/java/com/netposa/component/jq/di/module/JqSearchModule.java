@@ -1,22 +1,26 @@
 package com.netposa.component.jq.di.module;
 
 import android.content.Context;
+
 import com.chad.library.adapter.base.loadmore.LoadMoreView;
 import com.jess.arms.di.scope.ActivityScope;
+
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import dagger.Module;
 import dagger.Provides;
+
 import com.netposa.commonres.widget.CustomerLoadMoreView;
 import com.netposa.component.jq.mvp.contract.JqSearchContract;
 import com.netposa.component.jq.mvp.model.JqSearchModel;
-import com.netposa.component.jq.mvp.model.entity.JqItemEntity;
+import com.netposa.common.entity.push.JqItemEntity;
 import com.netposa.component.room.entity.JqSearchHistoryEntity;
 import com.netposa.component.jq.mvp.ui.adapter.JqSearchHistoryAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.inject.Named;
 
 @Module
@@ -88,7 +92,7 @@ public class JqSearchModule {
 
     @ActivityScope
     @Provides
-    Context provideContext(){
+    Context provideContext() {
         return mContext;
     }
 

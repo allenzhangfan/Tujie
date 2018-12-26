@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.netposa.commonres.widget.bottomsheet.BaseBottomSheetDialogFragment;
@@ -11,9 +12,11 @@ import com.netposa.component.clcx.R;
 import com.netposa.component.clcx.R2;
 import com.netposa.component.clcx.mvp.model.entity.PlateSelectEntity;
 import com.netposa.component.clcx.mvp.ui.adapter.PlateSelectAdapter;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.DefaultItemAnimator;

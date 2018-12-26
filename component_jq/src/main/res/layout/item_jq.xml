@@ -33,21 +33,19 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/tv_address"
+                android:id="@+id/tv_capture_info"
                 style="@style/CommonTextItem"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="武汉市2月6日城市人脸布控"
-                android:textColor="@color/black_common"
+                android:textColor="@color/color_44485A"
                 android:textSize="@dimen/text_size_14sp" />
 
             <TextView
-                android:id="@+id/tv_time"
+                android:id="@+id/tv_alarm_time"
                 style="@style/CommonTextItem"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="2018-10-11 12:31:33"
-                android:textColor="@color/jq_pic_similarity"
+                android:textColor="@color/color_989FB0"
                 android:textSize="@dimen/text_size_12sp" />
         </LinearLayout>
 
@@ -58,21 +56,18 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:text="@string/suspending"
-            android:textColor="@color/jq_suspending"
+            android:textColor="@color/color_FF503A"
             android:textSize="@dimen/text_size_12sp" />
     </RelativeLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/size_0_5dp"
-        android:layout_marginStart="@dimen/size_16dp"
-        android:layout_marginEnd="@dimen/size_16dp"
-        android:background="@color/item_view_divider" />
+        android:background="@color/color_E5E6EB" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/size_140dp"
         android:layout_marginStart="@dimen/size_16dp"
         android:layout_marginEnd="@dimen/size_16dp"
         android:gravity="center_vertical"
@@ -84,12 +79,13 @@
             android:gravity="center_horizontal"
             android:orientation="vertical">
 
-            <ImageView
+            <com.netposa.commonres.widget.RoundImageView
                 android:id="@+id/iv_capture"
                 android:layout_width="@dimen/size_96dp"
                 android:layout_height="@dimen/size_96dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/ic_image_default" />
+                android:src="@drawable/ic_image_default"
+                app:radius="@dimen/size_2dp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -97,7 +93,7 @@
                 android:layout_marginTop="@dimen/size_4dp"
                 android:layout_marginBottom="@dimen/size_8dp"
                 android:text="@string/capture_image"
-                android:textColor="@color/jq_pic_text"
+                android:textColor="@color/color_697084"
                 android:textSize="@dimen/text_size_11sp" />
         </LinearLayout>
 
@@ -113,9 +109,9 @@
                 android:layout_width="@dimen/size_70dp"
                 android:layout_height="@dimen/size_70dp"
                 app:circle_width="@dimen/size_6dp"
-                app:end_color="@color/progress_front_end"
-                app:head_color="@color/progress_front_head"
-                app:score_color="@color/black_222"
+                app:end_color="@color/color_2D87F9"
+                app:head_color="@color/color_63BBFF"
+                app:score_color="@color/color_222222"
                 app:score_size="@dimen/text_size_20sp" />
 
             <TextView
@@ -124,7 +120,6 @@
                 android:layout_width="@dimen/size_96dp"
                 android:layout_height="@dimen/size_28dp"
                 android:background="@drawable/jq_handle_state_text_bg"
-                android:text="陕A 11LO90"
                 android:textColor="@color/app_theme_color"
                 android:textSize="@dimen/text_size_14sp"
                 android:visibility="gone" />
@@ -135,7 +130,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/size_8dp"
                 android:text="@string/deploy_car_number"
-                android:textColor="@color/jq_pic_text"
+                android:textColor="@color/color_697084"
                 android:textSize="@dimen/text_size_11sp" />
 
         </LinearLayout>
@@ -146,12 +141,13 @@
             android:gravity="center_horizontal"
             android:orientation="vertical">
 
-            <ImageView
+            <com.netposa.commonres.widget.RoundImageView
                 android:id="@+id/iv_deploy"
                 android:layout_width="@dimen/size_96dp"
                 android:layout_height="@dimen/size_96dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/ic_image_default" />
+                android:src="@drawable/ic_image_default"
+                app:radius="@dimen/size_2dp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -159,7 +155,7 @@
                 android:layout_marginTop="@dimen/size_4dp"
                 android:layout_marginBottom="@dimen/size_8dp"
                 android:text="@string/deploy_image"
-                android:textColor="@color/jq_pic_text"
+                android:textColor="@color/color_697084"
                 android:textSize="@dimen/text_size_11sp" />
         </LinearLayout>
     </LinearLayout>
@@ -167,9 +163,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/size_0_5dp"
-        android:layout_marginStart="@dimen/size_16dp"
-        android:layout_marginEnd="@dimen/size_16dp"
-        android:background="@color/item_view_divider" />
+        android:background="@color/color_E5E6EB" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -195,8 +189,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/size_12dp"
             android:layout_toRightOf="@+id/iv_video"
-            android:text="保利国际中心1楼正门摄像机"
-            android:textColor="@color/black_common"
+            android:textColor="@color/color_44485A"
             android:textSize="@dimen/text_size_14sp" />
     </RelativeLayout>
 </LinearLayout>

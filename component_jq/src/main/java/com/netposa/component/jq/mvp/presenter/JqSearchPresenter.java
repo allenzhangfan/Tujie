@@ -3,20 +3,25 @@ package com.netposa.component.jq.mvp.presenter;
 import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
+
 import com.jess.arms.integration.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.http.imageloader.ImageLoader;
+
 import androidx.lifecycle.LifecycleOwner;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
+
 import javax.inject.Inject;
+
 import com.netposa.common.log.Log;
 import com.netposa.component.jq.mvp.contract.JqSearchContract;
-import com.netposa.component.room.dao.DbHelper;
+import com.netposa.component.room.DbHelper;
 import com.netposa.component.room.entity.JqSearchHistoryEntity;
 import com.trello.lifecycle2.android.lifecycle.AndroidLifecycle;
+
 import java.util.List;
 
 @ActivityScope

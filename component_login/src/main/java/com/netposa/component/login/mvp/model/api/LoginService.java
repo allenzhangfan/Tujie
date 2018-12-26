@@ -2,7 +2,7 @@ package com.netposa.component.login.mvp.model.api;
 
 import com.netposa.common.entity.HttpResponseEntity;
 import com.netposa.component.login.mvp.model.entity.LoginRequestEntity;
-import com.netposa.component.login.mvp.model.entity.LoginResponseEntity;
+import com.netposa.common.entity.login.LoginResponseEntity;
 import io.reactivex.Observable;
 import retrofit2.http.Body;
 import retrofit2.http.Headers;

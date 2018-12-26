@@ -9,13 +9,11 @@ import androidx.fragment.app.FragmentManager;
 import dagger.Module;
 import dagger.Provides;
 
-import com.netposa.component.room.entity.SpjkCollectionDeviceEntiry;
+import com.netposa.common.utils.SystemUtil;
+import com.netposa.component.room.entity.SpjkCollectionDeviceEntity;
 import com.netposa.component.spjk.mvp.contract.NeighbouringDevicesContract;
 import com.netposa.component.spjk.mvp.model.NeighbouringDevicesModel;
 import com.netposa.component.spjk.mvp.model.entity.OneKilometerCamerasRequestEntity;
-import com.netposa.component.spjk.mvp.ui.activity.NeighbouringDevicesActivity;
-import com.tbruyelle.rxpermissions2.RxPermissions;
-
 
 @Module
 public class NeighbouringDevicesModule {
@@ -50,31 +48,31 @@ public class NeighbouringDevicesModule {
 
     @ActivityScope
     @Provides
-    Context provideContext(){
+    Context provideContext() {
         return mContext;
     }
 
     @ActivityScope
     @Provides
-    OneKilometerCamerasRequestEntity provideOneKilometerCamerasRequestEntity(){
+    OneKilometerCamerasRequestEntity provideOneKilometerCamerasRequestEntity() {
         return new OneKilometerCamerasRequestEntity();
     }
 
     @ActivityScope
     @Provides
-    RxPermissions provideRxPermissions() {
-        return new RxPermissions((FragmentActivity) view);
-    }
-
-    @ActivityScope
-    @Provides
-    FragmentManager provideFragmentManager(){
+    FragmentManager provideFragmentManager() {
         return mFm;
     }
 
     @ActivityScope
     @Provides
-    SpjkCollectionDeviceEntiry provideSpjkCollectionDevice(){
-        return new SpjkCollectionDeviceEntiry();
+    SpjkCollectionDeviceEntity provideSpjkCollectionDevice() {
+        return new SpjkCollectionDeviceEntity();
+    }
+
+    @ActivityScope
+    @Provides
+    SystemUtil provideSystemUtil(){
+        return new SystemUtil();
     }
 }

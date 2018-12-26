@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:keepScreenOn="true"
+    android:fitsSystemWindows="false"
     android:orientation="vertical">
 
     <FrameLayout
@@ -207,17 +208,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="西安研发中心"
-                android:textColor="@color/black_common"
+                android:textColor="@color/color_44485A"
                 android:textSize="@dimen/text_size_18sp" />
 
             <TextView
-                android:id="@+id/tv_shebei_adrress"
+                android:id="@+id/tv_device_adrress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/size_5dp"
-                android:drawableRight="@drawable/ic_go_greater"
+                android:drawableRight="@drawable/ic_list_go"
                 android:text="查看设备点位"
-                android:textColor="@color/progress_front_end"
+                android:textColor="@color/color_2D87F9"
                 android:textSize="@dimen/text_size_12sp" />
         </LinearLayout>
 
@@ -245,6 +246,7 @@
                 android:layout_below="@+id/iv_follow"
                 android:layout_marginTop="@dimen/size_3dp"
                 android:gravity="left|center_vertical"
+                android:textColor="@color/color_989FB0"
                 android:text="@string/subscribe"
                 android:textSize="@dimen/text_size_12sp" />
         </RelativeLayout>
@@ -254,7 +256,7 @@
         android:id="@+id/lineview"
         android:layout_width="match_parent"
         android:layout_height="@dimen/size_8dp"
-        android:background="@color/item_view_divider_my" />
+        android:background="@color/color_F5F6FA" />
 
     <ScrollView
         android:id="@+id/scroll_layout"
@@ -316,7 +318,7 @@
                             android:drawableRight="@drawable/ic_list_go"
                             android:drawablePadding="@dimen/size_3dp"
                             android:text="@string/hostity"
-                            android:textColor="@color/black_common"
+                            android:textColor="@color/color_44485A"
                             android:textSize="@dimen/text_size_16sp" />
                     </androidx.cardview.widget.CardView>
                 </RelativeLayout>
@@ -327,7 +329,7 @@
                     android:layout_gravity="center_horizontal|center"
                     android:layout_marginTop="@dimen/size_10dp"
                     android:layout_marginBottom="@dimen/size_10dp"
-                    android:background="@color/color_line" />
+                    android:background="@color/color_E5E6EB" />
 
                 <RelativeLayout
                     android:id="@+id/rl_nearby_layout"
@@ -366,7 +368,7 @@
                             android:drawableRight="@drawable/ic_list_go"
                             android:drawablePadding="@dimen/size_3dp"
                             android:text="@string/nearby"
-                            android:textColor="@color/black_common"
+                            android:textColor="@color/color_44485A"
                             android:textSize="@dimen/text_size_16sp" />
                     </androidx.cardview.widget.CardView>
                 </RelativeLayout>
@@ -375,7 +377,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/size_8dp"
-                android:background="@color/item_view_divider_my" />
+                android:background="@color/color_F5F6FA" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -410,7 +412,7 @@
                     android:layout_height="@dimen/size_0_5dp"
                     android:layout_marginLeft="@dimen/size_18dp"
                     android:layout_marginRight="@dimen/size_18dp"
-                    android:background="@color/color_line" />
+                    android:background="@color/color_E5E6EB" />
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
@@ -440,7 +442,7 @@
                     android:layout_height="@dimen/size_0_5dp"
                     android:layout_marginLeft="@dimen/size_18dp"
                     android:layout_marginRight="@dimen/size_18dp"
-                    android:background="@color/color_line" />
+                    android:background="@color/color_E5E6EB" />
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
@@ -470,7 +472,7 @@
                     android:layout_height="@dimen/size_0_5dp"
                     android:layout_marginLeft="@dimen/size_18dp"
                     android:layout_marginRight="@dimen/size_18dp"
-                    android:background="@color/color_line" />
+                    android:background="@color/color_E5E6EB" />
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
@@ -497,7 +499,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/size_8dp"
-                    android:background="@color/item_view_divider_my" />
+                    android:background="@color/color_F5F6FA" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -572,7 +574,7 @@
                     android:layout_height="@dimen/size_0_5dp"
                     android:layout_marginLeft="@dimen/size_18dp"
                     android:layout_marginRight="@dimen/size_18dp"
-                    android:background="@color/color_line" />
+                    android:background="@color/color_E5E6EB" />
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
@@ -602,7 +604,7 @@
                     android:layout_height="@dimen/size_0_5dp"
                     android:layout_marginLeft="@dimen/size_18dp"
                     android:layout_marginRight="@dimen/size_18dp"
-                    android:background="@color/color_line" />
+                    android:background="@color/color_E5E6EB" />
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
@@ -632,7 +634,7 @@
                     android:layout_height="@dimen/size_0_5dp"
                     android:layout_marginLeft="@dimen/size_18dp"
                     android:layout_marginRight="@dimen/size_18dp"
-                    android:background="@color/color_line" />
+                    android:background="@color/color_E5E6EB" />
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
@@ -662,7 +664,7 @@
                     android:layout_height="@dimen/size_0_5dp"
                     android:layout_marginLeft="@dimen/size_18dp"
                     android:layout_marginRight="@dimen/size_18dp"
-                    android:background="@color/color_line" />
+                    android:background="@color/color_E5E6EB" />
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
@@ -692,7 +694,7 @@
                     android:layout_height="@dimen/size_0_5dp"
                     android:layout_marginLeft="@dimen/size_18dp"
                     android:layout_marginRight="@dimen/size_18dp"
-                    android:background="@color/color_line" />
+                    android:background="@color/color_E5E6EB" />
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
@@ -721,7 +723,7 @@
                     android:layout_height="@dimen/size_0_5dp"
                     android:layout_marginLeft="@dimen/size_18dp"
                     android:layout_marginRight="@dimen/size_18dp"
-                    android:background="@color/color_line" />
+                    android:background="@color/color_E5E6EB" />
 
                 <RelativeLayout
                     android:layout_width="wrap_content"

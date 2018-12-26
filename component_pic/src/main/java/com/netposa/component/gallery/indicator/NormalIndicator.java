@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+
 import com.netposa.component.gallery.bean.PageBean;
 import com.netposa.component.pic.R;
 

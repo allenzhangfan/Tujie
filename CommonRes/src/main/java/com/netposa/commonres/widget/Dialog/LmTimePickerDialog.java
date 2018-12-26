@@ -90,7 +90,7 @@ public class LmTimePickerDialog extends AlertDialog implements View.OnClickListe
                 Field dividerField = number_picker.getClass().getDeclaredField("mSelectionDivider");
                 dividerField.setAccessible(true);
                 ColorDrawable colorDrawable = new ColorDrawable(getContext().getResources().getColor(R.color
-                        .color_date_pick));
+                        .color_ff9800));
                 dividerField.set(number_picker, colorDrawable);
 
                 number_picker.invalidate();

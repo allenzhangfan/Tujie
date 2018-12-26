@@ -24,7 +24,6 @@ package com.netposa.component.login.app;
  */
 public interface LoginConstants {
     int NUMBER_OF_PAGE = 10;
-    String FACE_CAPTURE_PIC = "face_capture.jpg";
     String KEY_LOGIN_IP = "key_login_ip";
     int REQUEST_CODE_LOGIN_IP = 0x1;
 }

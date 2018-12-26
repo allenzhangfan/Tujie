@@ -41,17 +41,17 @@
 
     <!-- 自定义高斯模糊背景 -->
     <declare-styleable name="RealtimeBlurView">
-        <attr name="realtimeBlurRadius" format="dimension"/>
-        <attr name="realtimeDownsampleFactor" format="float"/>
-        <attr name="realtimeOverlayColor" format="color"/>
+        <attr name="realtimeBlurRadius" format="dimension" />
+        <attr name="realtimeDownsampleFactor" format="float" />
+        <attr name="realtimeOverlayColor" format="color" />
     </declare-styleable>
 
     <!--圆image-->
     <declare-styleable name="RoundImageView">
-        <attr name="radius" format="dimension"/>
-        <attr name="left_top_radius" format="dimension"/>
-        <attr name="right_top_radius" format="dimension"/>
-        <attr name="right_bottom_radius" format="dimension"/>
-        <attr name="left_bottom_radius" format="dimension"/>
+        <attr name="radius" format="dimension" />
+        <attr name="left_top_radius" format="dimension" />
+        <attr name="right_top_radius" format="dimension" />
+        <attr name="right_bottom_radius" format="dimension" />
+        <attr name="left_bottom_radius" format="dimension" />
     </declare-styleable>
 </resources>

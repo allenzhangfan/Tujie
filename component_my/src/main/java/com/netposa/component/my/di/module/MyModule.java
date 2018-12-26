@@ -1,5 +1,8 @@
 package com.netposa.component.my.di.module;
 
+import android.content.Context;
+
+import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.di.scope.FragmentScope;
 
 import dagger.Module;
@@ -16,6 +19,7 @@ import java.util.List;
 
 @Module
 public class MyModule {
+    private Context mContext;
     private MyContract.View view;
 
     /**
@@ -23,7 +27,8 @@ public class MyModule {
      *
      * @param view
      */
-    public MyModule(MyContract.View view) {
+    public MyModule(Context context,MyContract.View view) {
+        this.mContext=context;
         this.view = view;
     }
 
@@ -41,13 +46,19 @@ public class MyModule {
 
     @FragmentScope
     @Provides
-    List<MenuEntity> provideBeanList(){
+    List<MenuEntity> provideBeanList() {
         return new ArrayList<>();
     }
 
     @FragmentScope
     @Provides
-    MyMenuAdapter provideAdapter(List<MenuEntity> beanList){
+    MyMenuAdapter provideAdapter(List<MenuEntity> beanList) {
         return new MyMenuAdapter(beanList);
+    }
+
+    @FragmentScope
+    @Provides
+    Context provideContext(){
+        return mContext;
     }
 }

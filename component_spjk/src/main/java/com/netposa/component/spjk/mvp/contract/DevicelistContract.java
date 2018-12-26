@@ -14,6 +14,7 @@ public interface DevicelistContract {
         void refreshData();
 
         void getListSuccess(SpjkListDeviceResponseEntity responseEntity);
+
         void getListFailed();
     }
 

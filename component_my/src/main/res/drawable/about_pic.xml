@@ -4,7 +4,7 @@
     <solid android:color="#EEF5FF" />
     <stroke
         android:width="@dimen/size_0_5dp"
-        android:color="@color/item_view_divider" />
+        android:color="@color/color_E5E6EB" />
     <size
         android:width="120dp"
         android:height="120dp" />

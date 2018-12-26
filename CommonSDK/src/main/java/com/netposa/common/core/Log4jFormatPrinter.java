@@ -17,11 +17,14 @@ package com.netposa.common.core;
 
 import android.text.TextUtils;
 import android.util.Log;
+
 import com.jess.arms.di.module.GlobalConfigModule;
 import com.jess.arms.http.log.FormatPrinter;
 import com.jess.arms.http.log.RequestInterceptor;
 import com.jess.arms.utils.CharacterHandler;
+
 import java.util.List;
+
 import okhttp3.MediaType;
 import okhttp3.Request;
 
@@ -40,7 +43,7 @@ import okhttp3.Request;
 
 public class Log4jFormatPrinter implements FormatPrinter {
     private static final String TAG = "ArmsHttpLog";
-//    private static final Logger LOGGER = LoggerFactory.getLogger(TAG);
+    //    private static final Logger LOGGER = LoggerFactory.getLogger(TAG);
     private static final String LINE_SEPARATOR = System.getProperty("line.separator");
     private static final String DOUBLE_SEPARATOR = LINE_SEPARATOR + LINE_SEPARATOR;
 

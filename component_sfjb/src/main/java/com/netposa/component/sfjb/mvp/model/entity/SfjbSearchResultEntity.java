@@ -1,8 +1,17 @@
 package com.netposa.component.sfjb.mvp.model.entity;
 
 public class SfjbSearchResultEntity {
+    String matchName;//匹配标记
     String name;
     String id;
+
+    public String getMatchName() {
+        return matchName;
+    }
+
+    public void setMatchName(String matchName) {
+        this.matchName = matchName;
+    }
 
     public String getName() {
         return name;

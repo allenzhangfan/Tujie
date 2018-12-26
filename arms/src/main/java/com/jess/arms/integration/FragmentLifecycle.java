@@ -47,13 +47,15 @@ import androidx.fragment.app.FragmentManager;
 @Singleton
 public class FragmentLifecycle extends FragmentManager.FragmentLifecycleCallbacks {
 
+    private static final String TAG = FragmentLifecycle.class.getSimpleName();
+    
     @Inject
     public FragmentLifecycle() {
     }
 
     @Override
     public void onFragmentAttached(FragmentManager fm, Fragment f, Context context) {
-        Log.w("FragmentLifecycle",f.getClass().getSimpleName() + " - onFragmentAttached");
+        Log.w(TAG, f.getClass().getSimpleName() + " - onFragmentAttached");
         if (f instanceof IFragment) {
             FragmentDelegate fragmentDelegate = fetchFragmentDelegate(f);
             if (fragmentDelegate == null || !fragmentDelegate.isAdded()) {
@@ -69,7 +71,7 @@ public class FragmentLifecycle extends FragmentManager.FragmentLifecycleCallback
 
     @Override
     public void onFragmentCreated(FragmentManager fm, Fragment f, Bundle savedInstanceState) {
-        Log.w("FragmentLifecycle",f.getClass().getSimpleName() + " - onFragmentCreated");
+        Log.w(TAG, f.getClass().getSimpleName() + " - onFragmentCreated");
         FragmentDelegate fragmentDelegate = fetchFragmentDelegate(f);
         if (fragmentDelegate != null) {
             fragmentDelegate.onCreate(savedInstanceState);
@@ -78,7 +80,7 @@ public class FragmentLifecycle extends FragmentManager.FragmentLifecycleCallback
 
     @Override
     public void onFragmentViewCreated(FragmentManager fm, Fragment f, View v, Bundle savedInstanceState) {
-        Log.w("FragmentLifecycle",f.getClass().getSimpleName() + " - onFragmentViewCreated");
+        Log.w(TAG, f.getClass().getSimpleName() + " - onFragmentViewCreated");
         FragmentDelegate fragmentDelegate = fetchFragmentDelegate(f);
         if (fragmentDelegate != null) {
             fragmentDelegate.onCreateView(v, savedInstanceState);
@@ -87,7 +89,7 @@ public class FragmentLifecycle extends FragmentManager.FragmentLifecycleCallback
 
     @Override
     public void onFragmentActivityCreated(FragmentManager fm, Fragment f, Bundle savedInstanceState) {
-        Log.w("FragmentLifecycle",f.getClass().getSimpleName() + " - onFragmentActivityCreated");
+        Log.w(TAG, f.getClass().getSimpleName() + " - onFragmentActivityCreated");
         FragmentDelegate fragmentDelegate = fetchFragmentDelegate(f);
         if (fragmentDelegate != null) {
             fragmentDelegate.onActivityCreate(savedInstanceState);
@@ -96,7 +98,7 @@ public class FragmentLifecycle extends FragmentManager.FragmentLifecycleCallback
 
     @Override
     public void onFragmentStarted(FragmentManager fm, Fragment f) {
-        Log.w("FragmentLifecycle",f.getClass().getSimpleName() + " - onFragmentStarted");
+        Log.w(TAG, f.getClass().getSimpleName() + " - onFragmentStarted");
         FragmentDelegate fragmentDelegate = fetchFragmentDelegate(f);
         if (fragmentDelegate != null) {
             fragmentDelegate.onStart();
@@ -105,7 +107,7 @@ public class FragmentLifecycle extends FragmentManager.FragmentLifecycleCallback
 
     @Override
     public void onFragmentResumed(FragmentManager fm, Fragment f) {
-        Log.w("FragmentLifecycle",f.getClass().getSimpleName() + " - onFragmentResumed");
+        Log.w(TAG, f.getClass().getSimpleName() + " - onFragmentResumed");
         FragmentDelegate fragmentDelegate = fetchFragmentDelegate(f);
         if (fragmentDelegate != null) {
             fragmentDelegate.onResume();
@@ -114,7 +116,7 @@ public class FragmentLifecycle extends FragmentManager.FragmentLifecycleCallback
 
     @Override
     public void onFragmentPaused(FragmentManager fm, Fragment f) {
-        Log.w("FragmentLifecycle",f.getClass().getSimpleName() + " - onFragmentPaused");
+        Log.w(TAG, f.getClass().getSimpleName() + " - onFragmentPaused");
         FragmentDelegate fragmentDelegate = fetchFragmentDelegate(f);
         if (fragmentDelegate != null) {
             fragmentDelegate.onPause();
@@ -123,7 +125,7 @@ public class FragmentLifecycle extends FragmentManager.FragmentLifecycleCallback
 
     @Override
     public void onFragmentStopped(FragmentManager fm, Fragment f) {
-        Log.w("FragmentLifecycle",f.getClass().getSimpleName() + " - onFragmentStopped");
+        Log.w(TAG, f.getClass().getSimpleName() + " - onFragmentStopped");
         FragmentDelegate fragmentDelegate = fetchFragmentDelegate(f);
         if (fragmentDelegate != null) {
             fragmentDelegate.onStop();
@@ -132,7 +134,7 @@ public class FragmentLifecycle extends FragmentManager.FragmentLifecycleCallback
 
     @Override
     public void onFragmentSaveInstanceState(FragmentManager fm, Fragment f, Bundle outState) {
-        Log.w("FragmentLifecycle",f.getClass().getSimpleName() + " - onFragmentSaveInstanceState");
+        Log.w(TAG, f.getClass().getSimpleName() + " - onFragmentSaveInstanceState");
         FragmentDelegate fragmentDelegate = fetchFragmentDelegate(f);
         if (fragmentDelegate != null) {
             fragmentDelegate.onSaveInstanceState(outState);
@@ -141,7 +143,7 @@ public class FragmentLifecycle extends FragmentManager.FragmentLifecycleCallback
 
     @Override
     public void onFragmentViewDestroyed(FragmentManager fm, Fragment f) {
-        Log.w("FragmentLifecycle",f.getClass().getSimpleName() + " - onFragmentViewDestroyed");
+        Log.w(TAG, f.getClass().getSimpleName() + " - onFragmentViewDestroyed");
         FragmentDelegate fragmentDelegate = fetchFragmentDelegate(f);
         if (fragmentDelegate != null) {
             fragmentDelegate.onDestroyView();
@@ -150,7 +152,7 @@ public class FragmentLifecycle extends FragmentManager.FragmentLifecycleCallback
 
     @Override
     public void onFragmentDestroyed(FragmentManager fm, Fragment f) {
-        Log.w("FragmentLifecycle",f.getClass().getSimpleName() + " - onFragmentDestroyed");
+        Log.w(TAG, f.getClass().getSimpleName() + " - onFragmentDestroyed");
         FragmentDelegate fragmentDelegate = fetchFragmentDelegate(f);
         if (fragmentDelegate != null) {
             fragmentDelegate.onDestroy();
@@ -159,7 +161,7 @@ public class FragmentLifecycle extends FragmentManager.FragmentLifecycleCallback
 
     @Override
     public void onFragmentDetached(FragmentManager fm, Fragment f) {
-        Log.w("FragmentLifecycle",f.getClass().getSimpleName() + " - onFragmentDetached");
+        Log.w(TAG, f.getClass().getSimpleName() + " - onFragmentDetached");
         FragmentDelegate fragmentDelegate = fetchFragmentDelegate(f);
         if (fragmentDelegate != null) {
             fragmentDelegate.onDetach();

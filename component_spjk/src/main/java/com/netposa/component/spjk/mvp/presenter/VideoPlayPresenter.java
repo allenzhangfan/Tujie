@@ -3,32 +3,38 @@ package com.netposa.component.spjk.mvp.presenter;
 import android.app.Application;
 import android.content.Context;
 import android.text.format.DateFormat;
+
 import com.jess.arms.integration.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.http.imageloader.ImageLoader;
+
 import androidx.lifecycle.LifecycleOwner;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
+
 import javax.inject.Inject;
-import com.netposa.common.constant.CommonConstant;
+
+import com.netposa.common.constant.GlobalConstants;
 import com.netposa.common.log.Log;
 import com.netposa.common.utils.DeviceUtil;
 import com.netposa.common.utils.NetworkUtils;
 import com.netposa.common.utils.ToastUtils;
-import com.netposa.component.room.dao.DbHelper;
-import com.netposa.component.room.entity.SpjkCollectionDeviceEntiry;
+import com.netposa.component.room.DbHelper;
+import com.netposa.component.room.entity.SpjkCollectionDeviceEntity;
 import com.netposa.component.spjk.R;
 import com.netposa.component.spjk.mvp.contract.VideoPlayContract;
 import com.netposa.component.spjk.mvp.model.entity.DeviceInfoResponseEntity;
 import com.netposa.component.spjk.mvp.model.entity.PtzDirectionRequestEntity;
 import com.trello.lifecycle2.android.lifecycle.AndroidLifecycle;
+
 import java.io.File;
 import java.util.Calendar;
 import java.util.concurrent.ArrayBlockingQueue;
+
 import static com.netposa.component.spjk.app.SpjkConstants.DATA_STRING;
 import static com.netposa.component.spjk.app.SpjkConstants.JPG;
 import static com.netposa.component.spjk.app.SpjkConstants.MIN_CLICK_DELAY_TIME;
@@ -75,7 +81,7 @@ public class VideoPlayPresenter extends BasePresenter<VideoPlayContract.Model, V
             mLastClickTime = currentTime;
             Calendar calendar = Calendar.getInstance();
             String format = DATA_STRING;
-            File dir = new File(CommonConstant.PICTURE_PATH);
+            File dir = new File(GlobalConstants.PICTURE_PATH);
             if (!dir.exists()) {
                 dir.mkdirs();
             }
@@ -96,6 +102,7 @@ public class VideoPlayPresenter extends BasePresenter<VideoPlayContract.Model, V
     public void getDeviceInfo(String cameraId) {
         if (!NetworkUtils.isConnected()) {
             mRootView.showMessage(mContext.getString(R.string.network_disconnect));
+            mRootView.hideLoading();
             return;
         }
         mModel.getDeviceInfo(cameraId)
@@ -133,6 +140,7 @@ public class VideoPlayPresenter extends BasePresenter<VideoPlayContract.Model, V
 
         if (!NetworkUtils.isConnected()) {
             mRootView.showMessage(mContext.getString(R.string.network_disconnect));
+            mRootView.hideLoading();
             return;
         }
         mModel.setPtzDirection(ptzDirection)
@@ -163,6 +171,7 @@ public class VideoPlayPresenter extends BasePresenter<VideoPlayContract.Model, V
 
     /**
      * 根据id 删除存在数据库的一条数据 即取消关注
+     *
      * @param cameraId
      */
     public void deleteDevice(String cameraId) {
@@ -173,11 +182,11 @@ public class VideoPlayPresenter extends BasePresenter<VideoPlayContract.Model, V
     }
 
     /**
-     *插入一条关注数据
+     * 插入一条关注数据
      *
      * @param deviceEntiry
      */
-    public void insterDevice(SpjkCollectionDeviceEntiry deviceEntiry) {
+    public void insterDevice(SpjkCollectionDeviceEntity deviceEntiry) {
         mDbHelper.insterOneDevice(deviceEntiry)
                 .subscribeOn(Schedulers.io())
                 .compose(AndroidLifecycle.createLifecycleProvider((LifecycleOwner) mRootView).bindToLifecycle())
@@ -186,6 +195,7 @@ public class VideoPlayPresenter extends BasePresenter<VideoPlayContract.Model, V
 
     /**
      * 查看当前的设备是否被关注
+     *
      * @param cameraId
      */
     public void checkDevice(String cameraId) {
@@ -203,14 +213,14 @@ public class VideoPlayPresenter extends BasePresenter<VideoPlayContract.Model, V
                 .subscribe(new ErrorHandleSubscriber<Integer>(mErrorHandler) {
                     @Override
                     public void onNext(Integer count) {
-                        Log.i(TAG, "Neighbouring ckeckDevice :" + count);
+                        Log.i(TAG, "check collect device count:" + count);
                         mRootView.checkDeviceSuccess(count);
                     }
 
                     @Override
                     public void onError(Throwable t) {
                         super.onError(t);
-                        Log.i(TAG, "Neighbouring ckeckDeviceFail");
+                        Log.i(TAG, "ckeck follow device count fail");
                         mRootView.checkDeviceFailed();
                     }
                 });

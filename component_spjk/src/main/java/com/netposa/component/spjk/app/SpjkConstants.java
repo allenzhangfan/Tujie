@@ -23,20 +23,17 @@ package com.netposa.component.spjk.app;
  * ================================================
  */
 public interface SpjkConstants {
-    int NUMBER_OF_PAGE = 10;
-    int PAGE_SIZE = 1;
     String MONITOR = "monitor";
     String CAMERA = "camera";
     String ORG = "org";
     int CHILD_COUNT = 0;
     double DEFAULT_LATITUDE = 30.4920980180;
     double DEFAULT_LONGITUDE = 114.4104945660;
-    float DEFAULT_MAPBOX_CAMERAZOOM = 13;
     String KEY_SINGLE_CAMERA_ID = "key_single_camera_id";
-    String KEY_SINGLE_CAMERA_LOCATION = "key_single_camera_location";
     String KEY_SINGLE_CAMERA_HISTORY_VIDEO = "key_single_camera_history_video";
     String KEY_HISTORY_PLAY_VIDEO = "key_history_play_video";
     String KEY_HISTORY_VIDEO_ORG_NAME = "key_history_video_org_name";
+    String KEY_HISTORY_VIDEO_DEVICES_NAME="key_history_video_devices_name";
     String KEY_NEIGHBOURING_DEVICES = "key_neighbouring_devices";
     int MSG_OPENVIDEO_SUC = 30001;
     int MSG_SHOWLOADING = 30002;
@@ -55,7 +52,7 @@ public interface SpjkConstants {
     String FACE_TYPE = "face";
     String BODY_TYPE = "body";
     String KEY_CAMERA_ATTENTION_FLAG = "is_collection";
-    String RESUME_CAMERA_ID="resumeCameraId";
+    String RESUME_CAMERA_ID = "resumeCameraId";
     String KEY_VIDEO_TYPE = "cameratype";
     String KEY_HIDE_VIEW = "hide";
 }

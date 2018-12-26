@@ -22,6 +22,7 @@ import com.jess.arms.di.module.GlobalConfigModule;
 import com.jess.arms.utils.CharacterHandler;
 
 import java.util.List;
+
 import okhttp3.MediaType;
 import okhttp3.Request;
 
@@ -193,11 +194,11 @@ public class DefaultFormatPrinter implements FormatPrinter {
         final String requestBody = LINE_SEPARATOR + BODY_TAG + LINE_SEPARATOR + bodyString;
         final String tag = getTag(true);
 
-        Log.i(TAG,REQUEST_UP_LINE);
+        Log.i(TAG, REQUEST_UP_LINE);
         logLines(tag, new String[]{URL_TAG + request.url()}, false);
         logLines(tag, getRequest(request), true);
         logLines(tag, requestBody.split(LINE_SEPARATOR), true);
-        Log.i(TAG,END_LINE);
+        Log.i(TAG, END_LINE);
     }
 
     /**
@@ -209,11 +210,11 @@ public class DefaultFormatPrinter implements FormatPrinter {
     public void printFileRequest(Request request) {
         final String tag = getTag(true);
 
-        Log.i(TAG,REQUEST_UP_LINE);
+        Log.i(TAG, REQUEST_UP_LINE);
         logLines(tag, new String[]{URL_TAG + request.url()}, false);
         logLines(tag, getRequest(request), true);
         logLines(tag, OMITTED_REQUEST, true);
-        Log.i(TAG,END_LINE);
+        Log.i(TAG, END_LINE);
     }
 
     /**
@@ -239,11 +240,11 @@ public class DefaultFormatPrinter implements FormatPrinter {
         final String tag = getTag(false);
         final String[] urlLine = {URL_TAG + responseUrl, N};
 
-        Log.i(TAG,RESPONSE_UP_LINE);
+        Log.i(TAG, RESPONSE_UP_LINE);
         logLines(tag, urlLine, true);
         logLines(tag, getResponse(headers, chainMs, code, isSuccessful, segments, message), true);
         logLines(tag, responseBody.split(LINE_SEPARATOR), true);
-        Log.i(TAG,END_LINE);
+        Log.i(TAG, END_LINE);
     }
 
     /**
@@ -263,11 +264,11 @@ public class DefaultFormatPrinter implements FormatPrinter {
         final String tag = getTag(false);
         final String[] urlLine = {URL_TAG + responseUrl, N};
 
-        Log.i(TAG,RESPONSE_UP_LINE);
+        Log.i(TAG, RESPONSE_UP_LINE);
         logLines(tag, urlLine, true);
         logLines(tag, getResponse(headers, chainMs, code, isSuccessful, segments, message), true);
         logLines(tag, OMITTED_RESPONSE, true);
-        Log.i(TAG,END_LINE);
+        Log.i(TAG, END_LINE);
     }
 
 }

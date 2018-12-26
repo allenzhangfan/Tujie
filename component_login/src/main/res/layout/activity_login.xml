@@ -60,24 +60,24 @@
             android:layout_marginLeft="@dimen/size_16dp"
             android:layout_marginTop="@dimen/size_50dp"
             android:layout_marginRight="@dimen/size_16dp"
-            android:theme="@style/TextInputLayoutTheme"
-            android:textColorHint="@color/face_login_color"
+            android:textColorHint="@color/color_697084"
+            style="@style/TextInputLayout"
             app:errorTextAppearance="@style/LoginErrorTheme"
             app:hintTextAppearance="@style/LoginHintTheme">
 
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_account"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/shape_et_bg"
-                android:hint="@string/account_phone"
-                android:maxLines="1"
+                android:hint="@string/login_plz_input_username"
+                android:importantForAutofill="noExcludeDescendants"
                 android:maxLength="20"
+                android:maxLines="1"
                 android:paddingTop="@dimen/size_10dp"
                 android:paddingBottom="@dimen/size_10dp"
-                android:singleLine="true"
-                android:textColor="@color/service_title_color"
-                android:textColorHint="@color/color_hint_text2"
+                android:textColor="@color/color_19233C"
+                android:textColorHint="@color/color_989FB0"
                 android:textCursorDrawable="@drawable/edittext_cursor"
                 android:textSize="@dimen/text_size_16sp" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -90,7 +90,7 @@
             android:layout_marginLeft="@dimen/size_16dp"
             android:layout_marginTop="-1dp"
             android:layout_marginRight="@dimen/size_16dp"
-            app:base_color="@color/gray_ccc"
+            app:base_color="@color/color_E5E6EB"
             app:solid_color="@color/app_theme_color" />
 
         <TextView
@@ -102,7 +102,7 @@
             android:layout_marginTop="@dimen/size_16dp"
             android:layout_marginRight="@dimen/size_24dp"
             android:text="@string/prompt_input_text"
-            android:textColor="@color/red_E91919"
+            android:textColor="@color/color_e91919"
             android:textSize="@dimen/text_size_12sp"
             android:visibility="gone" />
 
@@ -114,27 +114,27 @@
             android:layout_marginLeft="@dimen/size_16dp"
             android:layout_marginTop="@dimen/size_16dp"
             android:layout_marginRight="@dimen/size_16dp"
-            android:theme="@style/TextInputLayoutTheme"
-            android:textColorHint="@color/face_login_color"
+            android:textColorHint="@color/color_697084"
+            style="@style/TextInputLayout"
             app:errorTextAppearance="@style/LoginErrorTheme"
             app:hintTextAppearance="@style/LoginHintTheme"
             app:passwordToggleDrawable="@drawable/eye_psw_selector"
             app:passwordToggleEnabled="true">
 
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/shape_et_bg"
                 android:hint="@string/login_plz_input_pwd"
+                android:importantForAutofill="noExcludeDescendants"
                 android:inputType="textPassword"
                 android:maxLength="30"
                 android:maxLines="1"
                 android:paddingTop="@dimen/size_10dp"
                 android:paddingBottom="@dimen/size_10dp"
-                android:singleLine="true"
-                android:textColor="@color/service_title_color"
-                android:textColorHint="@color/color_hint_text2"
+                android:textColor="@color/color_19233C"
+                android:textColorHint="@color/color_989FB0"
                 android:textCursorDrawable="@drawable/edittext_cursor"
                 android:textSize="@dimen/text_size_16sp" />
 
@@ -148,7 +148,7 @@
             android:layout_marginLeft="@dimen/size_16dp"
             android:layout_marginTop="-1dp"
             android:layout_marginRight="@dimen/size_16dp"
-            app:base_color="@color/gray_ccc"
+            app:base_color="@color/color_E5E6EB"
             app:solid_color="@color/app_theme_color" />
 
         <TextView
@@ -160,7 +160,7 @@
             android:layout_marginTop="@dimen/size_16dp"
             android:layout_marginRight="@dimen/size_24dp"
             android:text="@string/prompt_input_text"
-            android:textColor="@color/red_E91919"
+            android:textColor="@color/color_e91919"
             android:textSize="@dimen/text_size_12sp"
             android:visibility="gone" />
 
@@ -174,7 +174,7 @@
             android:layout_marginTop="@dimen/size_44dp"
             android:layout_marginRight="@dimen/size_16dp"
             android:text="@string/forget_pwd"
-            android:textColor="@color/black_common"
+            android:textColor="@color/color_44485A"
             android:textSize="@dimen/text_size_14sp" />
 
         <com.google.android.material.button.MaterialButton
@@ -215,7 +215,7 @@
                     android:layout_gravity="center"
                     android:layout_marginRight="@dimen/size_10dp"
                     android:layout_weight="2"
-                    android:background="@color/color_line"
+                    android:background="@color/color_E5E6EB"
                     android:gravity="center" />
 
                 <TextView
@@ -224,7 +224,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="@string/other_login"
-                    android:textColor="@color/setup_ip_edit_color"
+                    android:textColor="@color/color_C0C5D1"
                     android:textSize="@dimen/text_size_12sp" />
 
                 <TextView
@@ -233,7 +233,7 @@
                     android:layout_gravity="center"
                     android:layout_marginLeft="@dimen/size_10dp"
                     android:layout_weight="2"
-                    android:background="@color/color_line"
+                    android:background="@color/color_E5E6EB"
                     android:gravity="center" />
             </LinearLayout>
 
@@ -252,7 +252,7 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/size_5dp"
                 android:text="@string/face_login"
-                android:textColor="@color/face_login_color"
+                android:textColor="@color/color_697084"
                 android:textSize="@dimen/text_size_14sp" />
         </LinearLayout>
 

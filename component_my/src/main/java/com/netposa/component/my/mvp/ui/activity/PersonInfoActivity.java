@@ -2,6 +2,7 @@ package com.netposa.component.my.mvp.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
@@ -18,7 +19,8 @@ import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.integration.AppManager;
 import com.jess.arms.utils.ArmsUtils;
 import com.netposa.common.core.RouterHub;
-import com.netposa.commonres.modle.LoadingDialog;
+import com.netposa.common.utils.SPUtils;
+import com.netposa.commonres.widget.Dialog.LottieDialogFragment;
 import com.netposa.commonres.widget.Dialog.SweetDialog;
 import com.netposa.component.my.R2;
 import com.netposa.component.my.di.component.DaggerPersonInfoComponent;
@@ -35,6 +37,14 @@ import java.util.List;
 import javax.inject.Inject;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
+import static com.netposa.common.constant.GlobalConstants.CONFIG_LAST_USER_GENDER;
+import static com.netposa.common.constant.GlobalConstants.CONFIG_LAST_USER_GROUP;
+import static com.netposa.common.constant.GlobalConstants.CONFIG_LAST_USER_LOGIN_NAME;
+import static com.netposa.common.constant.GlobalConstants.CONFIG_LAST_USER_NICKNAME;
+import static com.netposa.common.constant.GlobalConstants.CONFIG_LAST_USER_POLICE_NO;
+import static com.netposa.common.constant.GlobalConstants.CONFIG_LAST_USER_TEL_NO;
+import static com.netposa.common.constant.GlobalConstants.TYPE_FAMALE;
+import static com.netposa.common.constant.GlobalConstants.TYPE_MALE;
 
 public class PersonInfoActivity extends BaseActivity<PersonInfoPresenter> implements PersonInfoContract.View {
 
@@ -44,7 +54,7 @@ public class PersonInfoActivity extends BaseActivity<PersonInfoPresenter> implem
     RecyclerView mRvPersonInfo;
 
     @Inject
-    LoadingDialog mLoadingDialog;
+    LottieDialogFragment mLoadingDialogFragment;
     @Inject
     SweetDialog mSweetDialog;
     @Inject
@@ -61,7 +71,7 @@ public class PersonInfoActivity extends BaseActivity<PersonInfoPresenter> implem
         DaggerPersonInfoComponent //如找不到该类,请编译一下项目
                 .builder()
                 .appComponent(appComponent)
-                .personInfoModule(new PersonInfoModule(this,this))
+                .personInfoModule(new PersonInfoModule(this, this))
                 .build()
                 .inject(this);
     }
@@ -78,32 +88,31 @@ public class PersonInfoActivity extends BaseActivity<PersonInfoPresenter> implem
         mRvPersonInfo.setItemAnimator(mItemAnimator);
         mRvPersonInfo.setAdapter(mPersonInfoAdapter);
 
-        //TODO test data here
         PersonInfoDividerEntity entity1 = new PersonInfoDividerEntity();
         mBeanList.add(entity1);
 
         PersonInfoEntity entity2 = new PersonInfoEntity();
         entity2.setDividerVisable(true);
         entity2.setTitle(getString(R.string.user_name));
-        entity2.setDescription("jingyuan2018");
+        entity2.setDescription(SPUtils.getInstance().getString(CONFIG_LAST_USER_LOGIN_NAME));
         mBeanList.add(entity2);
 
         PersonInfoEntity entity3 = new PersonInfoEntity();
         entity3.setDividerVisable(true);
         entity3.setTitle(getString(R.string.name));
-        entity3.setDescription("屈宏盛");
+        entity3.setDescription(SPUtils.getInstance().getString(CONFIG_LAST_USER_NICKNAME));
         mBeanList.add(entity3);
 
         PersonInfoEntity entity4 = new PersonInfoEntity();
         entity4.setDividerVisable(true);
         entity4.setTitle(getString(R.string.sex));
-        entity4.setDescription("男");
+        setGender(entity4);
         mBeanList.add(entity4);
 
         PersonInfoEntity entity5 = new PersonInfoEntity();
         entity5.setDividerVisable(false);
         entity5.setTitle(getString(R.string.organization_related));
-        entity5.setDescription("南昌市青山区派出所");
+        entity5.setDescription(SPUtils.getInstance().getString(CONFIG_LAST_USER_GROUP));
         mBeanList.add(entity5);
 
         PersonInfoDividerEntity entity6 = new PersonInfoDividerEntity();
@@ -112,24 +121,41 @@ public class PersonInfoActivity extends BaseActivity<PersonInfoPresenter> implem
         PersonInfoEntity entity7 = new PersonInfoEntity();
         entity7.setDividerVisable(true);
         entity7.setTitle(getString(R.string.police_number));
-        entity7.setDescription("232313411113");
+        entity7.setDescription(SPUtils.getInstance().getString(CONFIG_LAST_USER_POLICE_NO));
         mBeanList.add(entity7);
 
         PersonInfoEntity entity8 = new PersonInfoEntity();
         entity8.setDividerVisable(false);
         entity8.setTitle(getString(R.string.phone_number));
-        entity8.setDescription("154122414515");
+        entity8.setDescription(SPUtils.getInstance().getString(CONFIG_LAST_USER_TEL_NO));
         mBeanList.add(entity8);
+    }
+
+    private void setGender(PersonInfoEntity entity4) {
+        int gender = SPUtils.getInstance().getInt(CONFIG_LAST_USER_GENDER);
+        String typeGender = gender + "";
+        if (TextUtils.isEmpty(typeGender)) {
+            entity4.setDescription(getString(R.string.clcx_unknow));
+        } else {
+            if (typeGender.equals(TYPE_MALE)) {
+                entity4.setDescription(getString(R.string.male));
+            } else if (typeGender.equals(TYPE_FAMALE)) {
+                entity4.setDescription(getString(R.string.famale));
+            } else {
+                entity4.setDescription(getString(R.string.clcx_unknow));
+            }
+        }
+
     }
 
     @Override
     public void showLoading(String message) {
-        mLoadingDialog.show();
+        mLoadingDialogFragment.show(getSupportFragmentManager(), "LoadingDialog");
     }
 
     @Override
     public void hideLoading() {
-        mLoadingDialog.dismiss();
+        mLoadingDialogFragment.dismissAllowingStateLoss();
     }
 
     @Override
@@ -149,7 +175,7 @@ public class PersonInfoActivity extends BaseActivity<PersonInfoPresenter> implem
         finish();
     }
 
-    @OnClick({R2.id.head_left_iv,R2.id.btn_logout})
+    @OnClick({R2.id.head_left_iv, R2.id.btn_logout})
     public void onViewClick(View view) {
         int id = view.getId();
         if (id == R.id.head_left_iv) {
@@ -175,17 +201,13 @@ public class PersonInfoActivity extends BaseActivity<PersonInfoPresenter> implem
 
     @Override
     public void logOutSuccess() {
-        exitToLogin();
+        // 退出登录时，下次不再自动登录
+        AppManager.getAppManager().killAll("LoginActivity");
+        ARouter.getInstance().build(RouterHub.LOGIN_ACTIVITY).navigation(this);
     }
 
     @Override
     public void logOutFail() {
-        exitToLogin();
-    }
 
-    private void exitToLogin(){
-        // 退出登录时，下次不再自动登录
-        AppManager.getAppManager().killAll("LoginActivity");
-        ARouter.getInstance().build(RouterHub.LOGIN_LOGIN_ACTIVITY).navigation(this);
     }
 }

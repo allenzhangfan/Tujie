@@ -1,4 +1,5 @@
 package com.netposa.component.room.dao;
+
 import com.netposa.component.room.entity.SfjbSearchHistoryEntity;
 
 import java.util.List;

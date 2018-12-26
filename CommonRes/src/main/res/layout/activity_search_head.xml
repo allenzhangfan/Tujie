@@ -19,8 +19,8 @@
         android:paddingLeft="@dimen/size_8dp"
         android:paddingRight="@dimen/size_12dp"
         android:singleLine="true"
-        android:textColor="@color/black_common"
-        android:textColorHint="@color/color_hint_text2"
+        android:textColor="@color/color_44485A"
+        android:textColorHint="@color/color_989FB0"
         android:textSize="@dimen/text_size_15sp" />
 
     <LinearLayout

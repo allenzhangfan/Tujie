@@ -13,7 +13,9 @@
         tools:replace="android:theme"
         tools:ignore="GoogleAppIndexingWarning">
 
-        <activity android:name="com.netposa.component.spjk.mvp.ui.activity.SpjkActivity" android:screenOrientation="portrait">
+        <activity
+            android:name="com.netposa.component.spjk.mvp.ui.activity.SpjkActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -21,7 +23,9 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".mvp.ui.activity.VideoPlayActivity" android:screenOrientation="portrait"/>
+        <activity
+            android:name=".mvp.ui.activity.VideoPlayActivity"
+            android:screenOrientation="portrait" />
 
         <!-- 每个业务组件需要声明两个 ConfigModule, CommonSDK 的 ConfigModule 和 业务组件自己的 ConfigModule
         CommonSDK 的 ConfigModule 含有有每个组件都可共用的配置信息, 业务组件自己的 ConfigModule 含有自己独有的配置
@@ -29,10 +33,10 @@
         声明 CommonSDK 的 ConfigModule -->
         <meta-data
             android:name="com.netposa.common.core.GlobalConfiguration"
-            android:value="ConfigModule"/>
+            android:value="ConfigModule" />
         <meta-data
             android:name="com.netposa.component.spjk.app.GlobalConfiguration"
-            android:value="ConfigModule"/>
+            android:value="ConfigModule" />
     </application>
 
 </manifest>

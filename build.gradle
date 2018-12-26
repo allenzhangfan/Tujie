@@ -32,9 +32,14 @@ allprojects {
     subprojects {
         project.configurations.all {
             resolutionStrategy.eachDependency { details ->
-                if (details.requested.group == 'androidx.appcompat'
-                        || details.requested.group == 'androidx.annotation') {
+                if (details.requested.group == 'androidx.annotation') {
                     details.useVersion rootProject.ext.version["androidx"]
+                } else if (details.requested.group == 'androidx.appcompat') {
+                    details.useVersion rootProject.ext.version["appcompat"]
+                } else if (details.requested.group == 'androidx.core') {
+                    details.useVersion rootProject.ext.version["core"]
+                } else if (details.requested.name == 'vectordrawable') {
+                    details.useVersion rootProject.ext.version["vectordrawable"]
                 }
             }
         }

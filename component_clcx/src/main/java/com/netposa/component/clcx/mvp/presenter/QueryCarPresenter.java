@@ -1,16 +1,13 @@
 package com.netposa.component.clcx.mvp.presenter;
 
 import android.app.Application;
-
+import android.content.Context;
 import com.jess.arms.integration.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.http.imageloader.ImageLoader;
-
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
-
 import javax.inject.Inject;
-
 import com.netposa.component.clcx.mvp.contract.QueryCarContract;
 
 
@@ -24,6 +21,8 @@ public class QueryCarPresenter extends BasePresenter<QueryCarContract.Model, Que
     ImageLoader mImageLoader;
     @Inject
     AppManager mAppManager;
+    @Inject
+    Context mContext;
 
     @Inject
     public QueryCarPresenter(QueryCarContract.Model model, QueryCarContract.View rootView) {

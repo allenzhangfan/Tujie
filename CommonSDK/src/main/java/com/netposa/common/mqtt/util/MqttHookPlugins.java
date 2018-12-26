@@ -13,13 +13,13 @@ import java.lang.reflect.Method;
  */
 public final class MqttHookPlugins {
 
-    private static volatile String sServerUri = "tcp://127.0.0.1:61613";
+    private static volatile String sServerUri = "tcp://192.168.101.10:1883";
 
-    private static volatile String sClientId = "123456789";
+    private static volatile String sClientId = "mqttId";
 
     private static volatile String sUserName = "admin";
 
-    private static volatile String sPassword = "password";
+    private static volatile String sPassword = "public";
 
     public static String getServerUri() {
         return sServerUri;

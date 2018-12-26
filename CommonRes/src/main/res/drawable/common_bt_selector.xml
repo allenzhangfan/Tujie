@@ -2,14 +2,14 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_pressed="true">
         <shape>
-            <solid android:color="@color/common_bt_fill_color" />
+            <solid android:color="@color/color_FFFDF9F2" />
             <stroke android:width="0.5dp" android:color="@color/app_theme_color" />
         </shape>
     </item>
     <item android:state_pressed="false">
         <shape>
-            <solid android:color="@color/dialog_divide_line" />
-            <stroke android:width="0.5dp" android:color="@color/item_view_divider" />
+            <solid android:color="@color/color_EEEEEE" />
+            <stroke android:width="0.5dp" android:color="@color/color_E5E6EB" />
         </shape>
     </item>
 </selector>

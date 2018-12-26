@@ -1,13 +1,16 @@
 package com.netposa.tujie.di.module;
 
 import com.jess.arms.di.scope.ActivityScope;
+
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import dagger.Module;
 import dagger.Provides;
+
 import com.netposa.tujie.mvp.contract.HomeContract;
 import com.netposa.tujie.mvp.model.HomeModel;
 import com.netposa.tujie.mvp.ui.adapter.HomeFragmentAdapter;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +25,7 @@ public class HomeModule {
      *
      * @param view
      */
-    public HomeModule(FragmentManager fm,HomeContract.View view) {
+    public HomeModule(FragmentManager fm, HomeContract.View view) {
         mFm = fm;
         mView = view;
     }
@@ -41,13 +44,13 @@ public class HomeModule {
 
     @ActivityScope
     @Provides
-    List<Fragment> provideFragments(){
+    List<Fragment> provideFragments() {
         return new ArrayList<>();
     }
 
     @ActivityScope
     @Provides
-    HomeFragmentAdapter provideFragmentAdapter(List<Fragment> fragmentList){
+    HomeFragmentAdapter provideFragmentAdapter(List<Fragment> fragmentList) {
         return new HomeFragmentAdapter(mFm, fragmentList);
     }
 

@@ -5,17 +5,17 @@
         android:enabled="true"
         android:icon="@drawable/home_jq_selector"
         android:orderInCategory="0"
-        android:title="@string/jq"/>
+        android:title="@string/jq" />
     <item
         android:id="@+id/action_workbench"
         android:enabled="true"
         android:icon="@drawable/home_workbench_selector"
         android:orderInCategory="1"
-        android:title="@string/workbench"/>
+        android:title="@string/workbench" />
     <item
         android:id="@+id/action_my"
         android:enabled="true"
         android:icon="@drawable/home_my_selector"
         android:orderInCategory="2"
-        android:title="@string/my"/>
+        android:title="@string/my" />
 </menu>

@@ -16,6 +16,8 @@ import com.netposa.component.room.entity.SpjkSearchHistoryEntity;
 import com.netposa.component.sfjb.mvp.contract.SearchLibContract;
 import com.netposa.component.sfjb.mvp.model.SearchLibModel;
 import com.netposa.component.room.entity.SfjbSearchHistoryEntity;
+import com.netposa.component.sfjb.mvp.model.entity.SearchFaceLibRequestEntity;
+import com.netposa.component.sfjb.mvp.model.entity.SearchFaceLibResponseEntity;
 import com.netposa.component.sfjb.mvp.model.entity.SfjbSearchResultEntity;
 import com.netposa.component.sfjb.mvp.ui.adapter.SfjbSearchHistoryAdapter;
 import com.netposa.component.sfjb.mvp.ui.adapter.SfjbSearchResulthAdapter;
@@ -37,15 +39,16 @@ public class SearchLibModule {
      * @param view
      */
     public SearchLibModule(Context context, SearchLibContract.View view) {
-        this.mContext=context;
+        this.mContext = context;
         this.view = view;
     }
 
     @ActivityScope
     @Provides
-    Context provideContext(){
+    Context provideContext() {
         return mContext;
     }
+
     @ActivityScope
     @Provides
     SearchLibContract.View provideSearchLibView() {
@@ -71,6 +74,7 @@ public class SearchLibModule {
     RecyclerView.LayoutManager provideSearchResultLayoutManager() {
         return new LinearLayoutManager(mContext);
     }
+
     @ActivityScope
     @Provides
     @Named("SearchSfjbHistory")
@@ -90,9 +94,10 @@ public class SearchLibModule {
     SfjbSearchHistoryAdapter provideHomeAdapter(List<SfjbSearchHistoryEntity> beanList) {
         return new SfjbSearchHistoryAdapter(beanList);
     }
+
     @ActivityScope
     @Provides
-    SfjbSearchResulthAdapter provideResultAdapter(List<SfjbSearchResultEntity> list){
+    SfjbSearchResulthAdapter provideResultAdapter(List<SearchFaceLibResponseEntity.ListBean> list) {
         return new SfjbSearchResulthAdapter(list);
     }
 
@@ -110,7 +115,13 @@ public class SearchLibModule {
 
     @ActivityScope
     @Provides
-    List<SfjbSearchResultEntity> provideSearchResultBeanList() {
+    List<SearchFaceLibResponseEntity.ListBean> provideLibResponseBeanList() {
         return new ArrayList<>();
+    }
+
+    @ActivityScope
+    @Provides
+    SearchFaceLibRequestEntity provideRequestEntity() {
+        return new SearchFaceLibRequestEntity();
     }
 }

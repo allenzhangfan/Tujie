@@ -10,22 +10,19 @@
         <!-- 在组件集成宿主时, 由于宿主已经声明了 CommonSDK 的公有 ConfigModule, 所以在这里只需要声明业务组件自己的 ConfigModule -->
         <meta-data
             android:name="com.netposa.component.sfjb.app.GlobalConfiguration"
-            android:value="ConfigModule" />
+            android:value="ConfigModule"/>
 
         <activity
-            android:name=".mvp.ui.activity.ChoseComparLibActivity"
-            android:screenOrientation="portrait" />
+            android:name=".mvp.ui.activity.ChooseCompareLibActivity"
+            android:screenOrientation="portrait"/>
         <activity
-            android:name=".mvp.ui.activity.GetImageActivity"
-            android:screenOrientation="portrait" />
+            android:name=".mvp.ui.activity.FaceCompareResultActivity"
+            android:screenOrientation="portrait"/>
         <activity
-            android:name=".mvp.ui.activity.FaceCropActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".mvp.ui.activity.FaceComparResultActivity"
-            android:screenOrientation="portrait" />
-        <activity android:name=".mvp.ui.activity.SearchLibActivity"
-            android:screenOrientation="portrait" />
+            android:name=".mvp.ui.activity.SearchLibActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".mvp.ui.activity.JbResultActivity"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

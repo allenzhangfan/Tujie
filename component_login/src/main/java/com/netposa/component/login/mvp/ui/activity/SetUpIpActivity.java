@@ -15,7 +15,6 @@ import butterknife.OnClick;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
-import com.netposa.common.log.Log;
 import com.netposa.common.utils.KeyboardUtils;
 import com.netposa.common.utils.ToastUtils;
 import com.netposa.component.login.BuildConfig;
@@ -37,7 +36,7 @@ public class SetUpIpActivity extends BaseActivity<SetUpIpPresenter> implements S
     TextView mTitle_txt;
     @BindView(R2.id.input_editText)
     EditText mInputEt;
-    private String mLoginIp;
+    private String mBaseUrl;
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -58,11 +57,11 @@ public class SetUpIpActivity extends BaseActivity<SetUpIpPresenter> implements S
     public void initView(@Nullable Bundle savedInstanceState) {
         mTitle_txt.setText(this.getString(R.string.service_address));
         mTitle_txt.getPaint().setFakeBoldText(true);
-        mLoginIp = mInputEt.getText().toString().trim();
+        mBaseUrl = mInputEt.getText().toString().trim();
         if (BuildConfig.DEBUG) {
-            mInputEt.setText(R.string.edit_ip_open);
+            mInputEt.setText(R.string.edit_url_open);
         } else {
-            mInputEt.setText(R.string.edit_ip_local);
+            mInputEt.setText(R.string.edit_url_local);
         }
     }
 
@@ -82,14 +81,14 @@ public class SetUpIpActivity extends BaseActivity<SetUpIpPresenter> implements S
         if (id == R.id.head_left_iv) {
             killMyself();
         } else if (id == R.id.btn_login) {
-            mLoginIp = mInputEt.getText().toString().trim();
-            if (TextUtils.isEmpty(mLoginIp)) {
-                ToastUtils.showShort(R.string.login_plz_input_ip);
+            mBaseUrl = mInputEt.getText().toString().trim();
+            if (TextUtils.isEmpty(mBaseUrl)) {
+                showMessage(getString(R.string.login_plz_input_ip));
                 KeyboardUtils.hideSoftInput(this, mInputEt);
                 return;
             }
             Intent data = new Intent();
-            data.putExtra(KEY_LOGIN_IP, mLoginIp);
+            data.putExtra(KEY_LOGIN_IP, mBaseUrl);
             setResult(REQUEST_CODE_LOGIN_IP, data);
             killMyself();
         }

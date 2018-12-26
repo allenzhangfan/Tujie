@@ -49,10 +49,13 @@ public interface RouterHub {
     String MY = "/my";//我的组件
     String SPJK = "/spjk";//视频监控组件
     String PIC = "/pic";//图片预览组件
+    String CAMERA = "/camera";//照片组件
     String MQTT = "/mqtt";//消息推送组件
     String LOCATION = "/location";//定位组件
     String SFJB = "/sfjb";//身份鉴别
     String CLCX = "/clcx";//车辆查询
+    String RLTK = "/rltk";//人脸图库
+    String YTST = "/ytst";//以图搜图
 
     /**
      * 服务组件, 用于给每个组件暴露特有的服务
@@ -69,17 +72,12 @@ public interface RouterHub {
     /**
      * 登录分组
      */
-    String LOGIN_LOGIN_ACTIVITY = LOGIN + "/LoginActivity";
+    String LOGIN_ACTIVITY = LOGIN + "/LoginActivity";
 
     /**
      * 警情组件
      */
-    String PIC_CAPTURE_PICTURE_ACTIVITY = JQ + "/CapturePictureActivity";
 
-    /**
-     * 身份鉴别 拍照和图库获取图片
-     */
-    String SFJB_GET_IMAGE_ACTIVITY = SFJB + "/GetImageActivity";
 
     /**
      * 车辆查询
@@ -87,19 +85,58 @@ public interface RouterHub {
     String CLCX_QUERY_CAR_ACTIVITY = CLCX + "/QueryCarActivity";
 
     /**
+     * 查看车辆轨迹
+     */
+    String CLCX_VIEW_CAR_PATH_ACTIVITY = CLCX + "/ViewCarPathActivity";
+
+    /**
      * 视频监控组件
      */
     String SPJK_ACTIVITY = SPJK + "/SpjkActivity";
 
     /**
+     * 单个摄像头根据经纬度的定位显示
+     */
+    String SPJK_SINGLE_CAMERA_LOCATION_ACTIVITY = SPJK + "/SingleCameraLocationActivity";
+
+    /**
      * 图片组件
      */
     String PIC_PREVIEW_ACTIVITY = PIC + "/PicPreViewActivity";
+    String PIC_SINGLE_PIC_PREVIEW_ACTIVITY = PIC + "/SinglePicPreviewActivity";
+
+    /**
+     * 照片组件
+     */
+    String CAMERA_CROP_PICTURE_ACTIVITY = CAMERA + "/CropPictureActivity";
+    String CAMERA_FACE_LOGIN_ACTIVITY = CAMERA + "/FaceLoginActivity";
+
+    /**
+     * 身份鉴别 拍照和图库获取图片
+     */
+    String SFJB_GET_IMAGE_ACTIVITY = SFJB + "/GetImageActivity";
 
     /**
      * 身份鉴别组件
      */
     String SFJB_CHOSE_LIB_ACTIVITY = SFJB + "/ChoseComparlibActivity";
+
+    String SFJB_JB_RESULT_ACTIVITY = SFJB + "/JbResultActivity";
+
+    /**
+     * 人脸图库主界面
+     */
+    String RLTK_FACE_LIBRARY_ACTIVITY = RLTK + "/FaceLibraryActivity";
+
+    /**
+     *以图搜图选择目标界面
+     */
+    String YTST_SELECT_TARGET_ACTIVITY = YTST + "/SelectTargetActivity";
+
+    /**
+     * 以图搜图组件
+     */
+    String YTST_PICTURE_SEARCH_ACTIVITY = YTST + "/PictureSearchActivity";
 
     /**
      * 登陆服务
@@ -115,4 +152,7 @@ public interface RouterHub {
      * 定位服务
      */
     String LOCATION_LOCATION_SERVICE = LOCATION + SERVICE + "/LocationService";
+
+
 }
+

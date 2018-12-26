@@ -7,28 +7,37 @@
     android:background="@color/white"
     android:fitsSystemWindows="true"
     android:orientation="vertical">
+
     <include layout="@layout/include_title_bar" />
+
     <View
         android:id="@+id/line_view"
         android:layout_width="match_parent"
         android:layout_height="@dimen/size_1dp"
-        android:background="@color/item_view_divider_my" />
+        android:background="@color/color_F5F6FA" />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/srfl"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/line_view"
-        android:layout_alignParentStart="true">
+        android:layout_below="@+id/line_view">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_content"
+        <LinearLayout
+            android:id="@+id/ll_filter_result"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/size_9_5dp"
-            android:layout_marginBottom="@dimen/size_9_5dp"
-            tools:listitem="@layout/item_query_result" />
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                app:spanCount="2"
+                tools:listitem="@layout/item_query_result" />
+        </LinearLayout>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_no_content"
         android:layout_width="match_parent"
@@ -52,7 +61,7 @@
             android:layout_below="@+id/iv_nocontent"
             android:layout_marginTop="@dimen/size_12dp"
             android:text="@string/no_result"
-            android:textColor="@color/jq_pic_text"
+            android:textColor="@color/color_697084"
             android:textSize="@dimen/text_size_16sp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"

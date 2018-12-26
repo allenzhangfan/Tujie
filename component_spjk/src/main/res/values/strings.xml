@@ -14,7 +14,6 @@
     <string name="contact">联系人</string>
     <string name="contactnumber">联系方式</string>
     <string name="enquipment_num_123">2546879213235</string>
-    <string name="qiangji">枪机</string>
     <string name="groupaddress">武汉研发基地</string>
 
     <string name="jingdu">82.22 133.2331</string>
@@ -32,8 +31,6 @@
     <string name="video_no_stream">没有视频流</string>
     <string name="connect_server_error">连接服务器失败</string>
     <string name="connect_server_encoder_error">服务器转码失败</string>
-    <string name="qiu_ji">球机</string>
-    <string name="device_info_do_not_receive_yet">设备信息暂未获取到，请稍后再试!</string>
     <string name="search_no_result">没有搜索到结果</string>
     <string name="no_result">未找到结果</string>
 </resources>

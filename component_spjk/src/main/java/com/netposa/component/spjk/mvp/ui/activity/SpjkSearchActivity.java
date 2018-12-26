@@ -14,17 +14,17 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.loadmore.LoadMoreView;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
-import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.netposa.common.log.Log;
 import com.netposa.common.utils.KeyboardUtils;
 import com.netposa.common.utils.ToastUtils;
 import com.netposa.commonres.widget.OneKeyClearEditText;
-import com.netposa.component.room.dao.DbHelper;
+import com.netposa.component.room.DbHelper;
 import com.netposa.component.room.entity.SpjkSearchHistoryEntity;
 import com.netposa.component.spjk.R;
 import com.netposa.component.spjk.R2;
@@ -55,9 +55,9 @@ import io.reactivex.schedulers.Schedulers;
 
 import static android.view.inputmethod.InputMethodManager.RESULT_UNCHANGED_SHOWN;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
+import static com.netposa.common.constant.GlobalConstants.KEY_SINGLE_CAMERA_LOCATION_LATITUDE;
+import static com.netposa.common.constant.GlobalConstants.KEY_SINGLE_CAMERA_LOCATION_LONGITUDE;
 import static com.netposa.component.spjk.app.SpjkConstants.KEY_SINGLE_CAMERA_ID;
-import static com.netposa.component.spjk.app.SpjkConstants.KEY_SINGLE_CAMERA_LOCATION;
-import static com.netposa.component.spjk.app.SpjkConstants.PAGE_SIZE;
 
 public class SpjkSearchActivity extends BaseActivity<SpjkSearchPresenter> implements SpjkSearchContract.View, TextWatcher, TextView.OnEditorActionListener, SwipeRefreshLayout.OnRefreshListener, BaseQuickAdapter.RequestLoadMoreListener {
 
@@ -105,7 +105,7 @@ public class SpjkSearchActivity extends BaseActivity<SpjkSearchPresenter> implem
     private String mOrganizeId;
     private String mQuery;
     List<SpjkSearchHistoryEntity> historyEntityList = new ArrayList<>();
-    private int mCurrentPage = PAGE_SIZE;
+    private int mCurrentPage = 1;
     private boolean mkeyword = true;  //历史搜索的可见状态
     private boolean mResult = false;  //搜索结果的可见状态
 
@@ -178,7 +178,7 @@ public class SpjkSearchActivity extends BaseActivity<SpjkSearchPresenter> implem
         mSearchHistoryAdapter.setOnItemClickListener((adapter, view, position) -> {
             SpjkSearchHistoryEntity mHistory = (SpjkSearchHistoryEntity) adapter.getItem(position);
             mOkclSearch.setText(mHistory.getName());
-            mCurrentPage = PAGE_SIZE;
+            mCurrentPage = 1;
             mPresenter.getMatchData(mHistory.getName(), mCurrentPage, mOrganizeId);
         });
         mSearchResultAdapter.setOnItemClickListener((adapter, view, position) -> {
@@ -191,8 +191,10 @@ public class SpjkSearchActivity extends BaseActivity<SpjkSearchPresenter> implem
         mSearchResultAdapter.setOnItemChildClickListener((adapter, view, position) -> {
             SpjkSearchResponseEntity.ListBean item = (SpjkSearchResponseEntity.ListBean) adapter.getItem(position);
             Intent dataIntent = new Intent(this, SingleCameraLocationActivity.class);
-            LatLng latLng = new LatLng(item.getLatitude(), item.getLongitude());
-            dataIntent.putExtra(KEY_SINGLE_CAMERA_LOCATION, latLng);
+            String latitude = String.valueOf(item.getLatitude());
+            String longitude = String.valueOf(item.getLongitude());
+            dataIntent.putExtra(KEY_SINGLE_CAMERA_LOCATION_LATITUDE, latitude);
+            dataIntent.putExtra(KEY_SINGLE_CAMERA_LOCATION_LONGITUDE, longitude);
             launchActivity(dataIntent);
         });
     }
@@ -222,15 +224,20 @@ public class SpjkSearchActivity extends BaseActivity<SpjkSearchPresenter> implem
     @Override
     public void getListSuccess(SpjkSearchResponseEntity responseEntity) {
         if (responseEntity.getList().size() > 0) {
+            mSearchResultBeanList.clear();
             mSrfl.setEnabled(true);
             mSrfl.setRefreshing(false);
             showAndHideSearchHistoryLayout(false);
             mSearchResultBeanList.addAll(responseEntity.getList());
-            mSearchResultAdapter.setMatchName(mQuery);
+            for (int i = 0; i < mSearchResultBeanList.size(); i++) {
+                responseEntity.getList().get(i).setMatchName(mQuery);
+            }
+//            mSearchResultAdapter.setMatchName(mQuery);
             //默认第一次加载会回调onLoadMoreRequested()加载更多这个方法,如果不需要可以配置如下:
             if (mSearchResultBeanList.size() < 10 && mSearchResultBeanList.size() > 0) {
                 mSearchResultAdapter.disableLoadMoreIfNotFullPage();
             }
+            contentShow();
             mSrfl.setEnabled(false);
         } else {
             noContentShow();
@@ -290,7 +297,7 @@ public class SpjkSearchActivity extends BaseActivity<SpjkSearchPresenter> implem
     @Override
     public void onRefresh() {
         if (mResult) {
-            mCurrentPage = PAGE_SIZE;
+            mCurrentPage = 1;
             mPresenter.getMatchData(mQuery, mCurrentPage, mOrganizeId);
             mSearchResultAdapter.loadMoreEnd(true);
         } else if (mkeyword) {
@@ -322,7 +329,7 @@ public class SpjkSearchActivity extends BaseActivity<SpjkSearchPresenter> implem
         if (i == EditorInfo.IME_ACTION_SEARCH) {
             mQuery = mOkclSearch.getText().toString().trim();
             if (TextUtils.isEmpty(mQuery)) {
-                ToastUtils.showShort(R.string.query_hint);
+                showMessage(getString(R.string.query_hint));
                 return false;
             }
             KeyboardUtils.hideSoftInput(this);
@@ -337,6 +344,11 @@ public class SpjkSearchActivity extends BaseActivity<SpjkSearchPresenter> implem
         mQuery = charSequence.toString();
         if (TextUtils.isEmpty(mQuery)) {
             showAndHideSearchHistoryLayout(true);
+            mSearchHistoryBeanList.clear();
+            mPresenter.getAll();
+            mClNoContent.setVisibility(View.GONE);
+            mRlSearchKeywords.setVisibility(View.VISIBLE);
+            mSrfl.setVisibility(View.VISIBLE);
             return;
         }
     }
@@ -384,5 +396,11 @@ public class SpjkSearchActivity extends BaseActivity<SpjkSearchPresenter> implem
         mClNoContent.setVisibility(View.VISIBLE);
         mRlSearchKeywords.setVisibility(View.GONE);
         mSrfl.setVisibility(View.GONE);
+    }
+
+    private void contentShow() {
+        mClNoContent.setVisibility(View.GONE);
+        mRlSearchKeywords.setVisibility(View.GONE);
+        mSrfl.setVisibility(View.VISIBLE);
     }
 }

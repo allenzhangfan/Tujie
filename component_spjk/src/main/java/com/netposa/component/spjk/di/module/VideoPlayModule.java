@@ -7,7 +7,8 @@ import com.jess.arms.di.scope.ActivityScope;
 import dagger.Module;
 import dagger.Provides;
 
-import com.netposa.component.room.entity.SpjkCollectionDeviceEntiry;
+import com.netposa.common.utils.SystemUtil;
+import com.netposa.component.room.entity.SpjkCollectionDeviceEntity;
 import com.netposa.component.spjk.mvp.contract.VideoPlayContract;
 import com.netposa.component.spjk.mvp.model.VideoPlayModel;
 import com.netposa.component.spjk.mvp.model.entity.PtzDirectionRequestEntity;
@@ -42,23 +43,29 @@ public class VideoPlayModule {
 
     @ActivityScope
     @Provides
-    Context provideContext(){
+    Context provideContext() {
         return (Context) view;
     }
 
     @ActivityScope
     @Provides
-    ArrayBlockingQueue<String> provideBlockingQueueList(){
+    ArrayBlockingQueue<String> provideBlockingQueueList() {
         return new ArrayBlockingQueue<>(30);
     }
 
     @ActivityScope
     @Provides
-    PtzDirectionRequestEntity providePtzDirectionRequestEntity(){ return new PtzDirectionRequestEntity();}
+    PtzDirectionRequestEntity providePtzDirectionRequestEntity() {
+        return new PtzDirectionRequestEntity();
+    }
 
     @ActivityScope
     @Provides
-    SpjkCollectionDeviceEntiry provideSpjkCollectionDevice(){
-        return new SpjkCollectionDeviceEntiry();
+    SpjkCollectionDeviceEntity provideSpjkCollectionDevice() {
+        return new SpjkCollectionDeviceEntity();
     }
+
+    @ActivityScope
+    @Provides
+    SystemUtil providerSystemutil(){ return new SystemUtil(); }
 }

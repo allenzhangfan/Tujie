@@ -2,12 +2,14 @@ package com.netposa.component.spjk.mvp.ui.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
@@ -26,17 +28,18 @@ import com.mapbox.mapboxsdk.annotations.MarkerOptions;
 import com.mapbox.mapboxsdk.annotations.PolygonOptions;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
-import com.mapbox.mapboxsdk.constants.MapboxConstants;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.netposa.common.constant.GlobalConstants;
 import com.netposa.common.log.Log;
+import com.netposa.common.service.location.IntegratedLocation;
 import com.netposa.common.service.location.LocationService;
 import com.netposa.common.utils.KeyboardUtils;
-import com.netposa.common.utils.SPUtils;
-import com.netposa.component.room.entity.SpjkCollectionDeviceEntiry;
+import com.netposa.common.utils.SizeUtils;
+import com.netposa.common.utils.SystemUtil;
+import com.netposa.component.room.entity.SpjkCollectionDeviceEntity;
 import com.netposa.component.spjk.R;
 import com.netposa.component.spjk.R2;
 import com.netposa.component.spjk.di.component.DaggerSpjkComponent;
@@ -55,6 +58,7 @@ import javax.inject.Inject;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -62,15 +66,19 @@ import butterknife.OnClick;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 import static com.netposa.common.constant.GlobalConstants.CAMERA_QIANG_JI;
+import static com.netposa.common.constant.GlobalConstants.DEFAULT_MAPBOX_CAMERAZOOM;
+import static com.netposa.common.constant.GlobalConstants.ZOOM_IN_MAX;
+import static com.netposa.common.constant.GlobalConstants.ZOOM_OUT_MIN;
 import static com.netposa.common.core.RouterHub.SPJK_ACTIVITY;
 import static com.netposa.component.spjk.app.SpjkConstants.DEFAULT_LATITUDE;
 import static com.netposa.component.spjk.app.SpjkConstants.DEFAULT_LONGITUDE;
-import static com.netposa.component.spjk.app.SpjkConstants.DEFAULT_MAPBOX_CAMERAZOOM;
 import static com.netposa.component.spjk.app.SpjkConstants.KEY_SINGLE_CAMERA_ID;
 import static com.netposa.component.spjk.app.SpjkConstants.RESUME_CAMERA_ID;
 
 /**
- * 参考:https://www.mapbox.com/help/first-steps-android-sdk/
+ * 参考:
+ * https://www.mapbox.com/help/first-steps-android-sdk/
+ * http://map.netposa.com:9500/netposa/NPGIS/services/china/MapServer
  */
 @Route(path = SPJK_ACTIVITY, name = "视频监控")
 public class SpjkActivity extends BaseActivity<SpjkPresenter> implements SpjkContract.View, OnMapReadyCallback, MapboxMap.OnMapClickListener, MapboxMap.OnMarkerClickListener {
@@ -95,12 +103,17 @@ public class SpjkActivity extends BaseActivity<SpjkPresenter> implements SpjkCon
     MapView mMapView;
     @BindView(R2.id.tv_notice)
     TextView mTvNotice;
+    @BindView(R2.id.iv_location)
+    ImageView mIvLocation;
+    @BindView(R2.id.ll_zoom)
+    LinearLayout mLlZoom;
+
+    @Inject
+    SystemUtil mSystemUtil;
 
     /**************************MAPBOX**************************/
     //IntRange函数限定参数范围
-    private static final float ZOOM_IN_MAX = MapboxConstants.MAXIMUM_ZOOM;//缩小范围
-    private static final float ZOOM_OUT_MIN = MapboxConstants.MINIMUM_ZOOM;//放大范围
-    private float mCurrentZoomValue = DEFAULT_MAPBOX_CAMERAZOOM;//xml中默认大小(mapbox_cameraZoom)
+    private float mCurrentZoomValue = DEFAULT_MAPBOX_CAMERAZOOM;
     private LatLng mCurrentLatlng;
     private MapboxMap mMapboxMap;
     //地图上被选中的camera
@@ -109,6 +122,10 @@ public class SpjkActivity extends BaseActivity<SpjkPresenter> implements SpjkCon
     List<Map<LatLng, OneKilometerCamerasResponseEntity>> mCamerasAttrCache = null;
     //一公里范围圈内获取到的camera
     List<OneKilometerCamerasResponseEntity> mCamerasCache;
+    //代码设置陀螺仪、logo等icon的显示与否
+    //mapboxMap.getUiSettings().setCompassEnabled(false);
+    //mapboxMap.getUiSettings().setLogoEnabled(false);
+    //mapboxMap.getUiSettings().setAttributionEnabled(false);
     /**************************MAPBOX**************************/
     //底部弹出框
     private BottomSheetBehavior<LinearLayout> mBottomSheetBehavior;
@@ -116,12 +133,16 @@ public class SpjkActivity extends BaseActivity<SpjkPresenter> implements SpjkCon
     private boolean mIsFollow = false;
     private LocationService mLocationService;
     private OneKilometerCamerasResponseEntity mActiveCamera;
-    private Icon mBoxOnline, mDomeOnline, mDomeActive, mBoxActive;
+    private Icon mBoxOnline, mDomeOnline, mDomeActive, mBoxActive, mCurrentPointIcon;
     private String mCarmeraName;
     private int mCameraTypeInt;
-
-    @Inject
-    SpjkCollectionDeviceEntiry mSpjkCollectionDeviceEntiry;
+    private boolean mCansroll;//bottomsheet能否滑动
+    private List<Marker> mMarkers;
+    private LatLng mCenterPoint;
+    private int mIvLocationLeftMargin, mIvLocationTopMargin, mIvLocationRightMargin, mIvLocationBottomMargin;
+    private int mLlZoomLeftMargin, mLlZoomTopMargin, mLlZoomRightMargin, mLlZoomBottomMargin;
+    private RelativeLayout.LayoutParams mIvLocationLayoutParams, mLlZoomLayoutParams;
+    SpjkCollectionDeviceEntity mSpjkCollectionDeviceEntity;
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -139,17 +160,16 @@ public class SpjkActivity extends BaseActivity<SpjkPresenter> implements SpjkCon
         Mapbox.getInstance(this, GlobalConstants.MAP_KEY);
         setContentView(R.layout.activity_spjk);
         mImmersionBar = ImmersionBar.with(this);
-        mImmersionBar.statusBarColor(com.jess.arms.R.color.white)
+        mImmersionBar.statusBarColor(R.color.white)
                 .statusBarDarkFont(true, 0.2f)
                 .init();
         //绑定到butterknife
         ButterKnife.bind(this);
-
-        if(null!=savedInstanceState){
-            mActiveCameraId=savedInstanceState.getString(RESUME_CAMERA_ID);
+        if (null != savedInstanceState) {
+            mActiveCameraId = savedInstanceState.getString(RESUME_CAMERA_ID);
         }
         KeyboardUtils.hideSoftInput(this);
-        mPresenter.requestPermission();
+        mMapView.setStyleUrl("asset://gaode-vector-bright-local.json");
         mMapView.onCreate(savedInstanceState);
         mMapView.getMapAsync(this);
 
@@ -159,8 +179,62 @@ public class SpjkActivity extends BaseActivity<SpjkPresenter> implements SpjkCon
         mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
         mBottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
-            public void onStateChanged(@NonNull View view, int i) {
+            public void onStateChanged(@NonNull View view, int state) {
+                switch (state) {
+                    case BottomSheetBehavior.STATE_DRAGGING:
+                        mCansroll = false;
+                        Log.d(TAG, "STATE_DRAGGING");
+                        break;
+                    case BottomSheetBehavior.STATE_SETTLING:
+                        mCansroll = true;
+                        Log.d(TAG, "STATE_SETTLING");
+                        break;
+                    case BottomSheetBehavior.STATE_EXPANDED:
+                        if (mCansroll) {
+                            mIvLocationTopMargin = mIvLocationTopMargin - SizeUtils.dp2px(48);
+                            mIvLocationBottomMargin = mIvLocationBottomMargin + SizeUtils.dp2px(48);
+                            mLlZoomTopMargin = mLlZoomTopMargin - SizeUtils.dp2px(48);
+                            mLlZoomBottomMargin = mLlZoomBottomMargin + SizeUtils.dp2px(48);
+                            Log.d(TAG, "STATE_EXPANDED t:" + mIvLocationTopMargin + ",b:" + mIvLocationBottomMargin);
+                            mIvLocationLayoutParams.setMargins(
+                                    mIvLocationLeftMargin,
+                                    mIvLocationTopMargin,
+                                    mIvLocationRightMargin,
+                                    mIvLocationBottomMargin);
+                            mIvLocation.setLayoutParams(mIvLocationLayoutParams);
+                            mLlZoomLayoutParams.setMargins(
+                                    mLlZoomLeftMargin,
+                                    mLlZoomTopMargin,
+                                    mLlZoomRightMargin,
+                                    mLlZoomBottomMargin);
 
+                        }
+                        break;
+                    case BottomSheetBehavior.STATE_COLLAPSED:
+                        Log.d(TAG, "STATE_COLLAPSED");
+                        break;
+                    case BottomSheetBehavior.STATE_HIDDEN:
+                        mIvLocationTopMargin = mIvLocationTopMargin + SizeUtils.dp2px(48);
+                        mIvLocationBottomMargin = mIvLocationBottomMargin - SizeUtils.dp2px(48);
+                        mLlZoomTopMargin = mLlZoomTopMargin + SizeUtils.dp2px(48);
+                        mLlZoomBottomMargin = mLlZoomBottomMargin - SizeUtils.dp2px(48);
+                        Log.d(TAG, "STATE_HIDDEN t:" + mIvLocationTopMargin + ",b:" + mIvLocationBottomMargin);
+                        mIvLocationLayoutParams.setMargins(
+                                mIvLocationLeftMargin,
+                                mIvLocationTopMargin,
+                                mIvLocationRightMargin,
+                                mIvLocationBottomMargin);
+                        mIvLocation.setLayoutParams(mIvLocationLayoutParams);
+                        mLlZoomLayoutParams.setMargins(
+                                mLlZoomLeftMargin,
+                                mLlZoomTopMargin,
+                                mLlZoomRightMargin,
+                                mLlZoomBottomMargin);
+                        break;
+                    case BottomSheetBehavior.STATE_HALF_EXPANDED:
+                        Log.d(TAG, "STATE_HALF_EXPANDED");
+                        break;
+                }
             }
 
             @Override
@@ -180,8 +254,8 @@ public class SpjkActivity extends BaseActivity<SpjkPresenter> implements SpjkCon
     protected void onResume() {
         super.onResume();
         mMapView.onResume();
-        if (!TextUtils.isEmpty(mActiveCameraId)){
-            mIsFollow=false;
+        if (!TextUtils.isEmpty(mActiveCameraId)) {
+            mIsFollow = false;
             mPresenter.checkDevice(mActiveCameraId);
         }
     }
@@ -219,9 +293,25 @@ public class SpjkActivity extends BaseActivity<SpjkPresenter> implements SpjkCon
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         mMapView.onSaveInstanceState(outState);
-        if (!TextUtils.isEmpty(mActiveCameraId)){
+        if (!TextUtils.isEmpty(mActiveCameraId)) {
             outState.putString(RESUME_CAMERA_ID, mActiveCameraId);
         }
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        mIvLocationLayoutParams = (RelativeLayout.LayoutParams) mIvLocation.getLayoutParams();
+        mIvLocationLeftMargin = mIvLocationLayoutParams.leftMargin;
+        mIvLocationTopMargin = mIvLocationLayoutParams.topMargin;
+        mIvLocationRightMargin = mIvLocationLayoutParams.rightMargin;
+        mIvLocationBottomMargin = mIvLocationLayoutParams.bottomMargin;
+
+        mLlZoomLayoutParams = (RelativeLayout.LayoutParams) mLlZoom.getLayoutParams();
+        mLlZoomLeftMargin = mLlZoomLayoutParams.leftMargin;
+        mLlZoomTopMargin = mLlZoomLayoutParams.topMargin;
+        mLlZoomRightMargin = mLlZoomLayoutParams.rightMargin;
+        mLlZoomBottomMargin = mLlZoomLayoutParams.bottomMargin;
     }
 
     @Override
@@ -286,9 +376,9 @@ public class SpjkActivity extends BaseActivity<SpjkPresenter> implements SpjkCon
                 zoomInAndOut();
             }
         } else if (id == R.id.iv_location) {
-            if (!isFastDoubleClick()) {
+            if (!mSystemUtil.isFastDoubleClick()) {
                 doLocation();
-                focusToCenterInMap();
+                focusToCenterInMap(false);
             }
         } else if (id == R.id.iv_collection) {
             launchActivity(new Intent(this, FollowDevicesActivity.class));
@@ -297,21 +387,23 @@ public class SpjkActivity extends BaseActivity<SpjkPresenter> implements SpjkCon
         } else if (id == R.id.iv_device_list) {
             launchActivity(new Intent(this, DevicelistActivity.class));
         } else if (id == R.id.iv_follow) {
-            mSpjkCollectionDeviceEntiry.setCamerid(mActiveCameraId);
-            mSpjkCollectionDeviceEntiry.setCamername(mCarmeraName);
+            mSpjkCollectionDeviceEntity = new SpjkCollectionDeviceEntity();
+            mSpjkCollectionDeviceEntity.setCamerid(mActiveCameraId);
+            mSpjkCollectionDeviceEntity.setCamername(mCarmeraName);
             String camerType = String.valueOf(mCameraTypeInt);
             if (TextUtils.isEmpty(camerType)) {//默认枪机
-                mSpjkCollectionDeviceEntiry.setCamertype(CAMERA_QIANG_JI);
+                mSpjkCollectionDeviceEntity.setCamertype(CAMERA_QIANG_JI);
             } else {
-                mSpjkCollectionDeviceEntiry.setCamertype(mCameraTypeInt);
+                mSpjkCollectionDeviceEntity.setCamertype(mCameraTypeInt);
             }
+            Log.d(TAG, "CarmeraName:" + mCarmeraName + ",IsFollow:" + mIsFollow);
             if (mIsFollow) {// 已经关注了 做删除操作
                 mPresenter.deleteDevice(mActiveCameraId);
                 setFollowImageResource(false);
                 mIsFollow = false;
                 showToast(false);
             } else {// 关注操作
-                mPresenter.insterDevice(mSpjkCollectionDeviceEntiry);
+                mPresenter.insterDevice(mSpjkCollectionDeviceEntity);
                 setFollowImageResource(true);
                 showToast(true);
                 mIsFollow = true;
@@ -341,25 +433,30 @@ public class SpjkActivity extends BaseActivity<SpjkPresenter> implements SpjkCon
         mMapboxMap = mapboxMap;
         mapboxMap.addOnMapClickListener(this);
         mapboxMap.setOnMarkerClickListener(this);
-        //获取到系统的经纬度以后再上传至后台请求一公里范围内的摄像头
-        mPresenter.getNeighbouringDevice(getCircleGeometryPoints());
         IconFactory iconFactory = IconFactory.getInstance(this);
         mBoxOnline = iconFactory.fromResource(R.drawable.ic_box_camera_online);
         mDomeOnline = iconFactory.fromResource(R.drawable.ic_dome_camera_online);
         mDomeActive = iconFactory.fromResource(R.drawable.ic_dome_camera_active);
         mBoxActive = iconFactory.fromResource(R.drawable.ic_box_camera_active);
-        focusToCenterInMap();
+        mCurrentPointIcon = iconFactory.fromResource(R.drawable.ic_me_gps);
+        focusToCenterInMap(true);
+        //获取到系统的经纬度以后再上传至后台请求一公里范围内的摄像头
+        mPresenter.getNeighbouringDevice(getCircleGeometryPoints());
     }
 
     /**
      * 锁定当前mobile定位的位置
      */
-    private void focusToCenterInMap() {
+    private void focusToCenterInMap(boolean automatic) {
         CameraPosition position = new CameraPosition.Builder()
                 .target(mCurrentLatlng) // Sets the new camera position
                 .build(); // Creates a CameraPosition from the builder
         mMapboxMap.animateCamera(CameraUpdateFactory
                 .newCameraPosition(position), 500);
+        // oneKilometer bounds area
+        if (automatic) {
+            showOneKilometerBoundsArea();
+        }
     }
 
     //展示一公里范围圈
@@ -375,17 +472,22 @@ public class SpjkActivity extends BaseActivity<SpjkPresenter> implements SpjkCon
         boundsArea.alpha(0.15f);
         boundsArea.fillColor(ContextCompat.getColor(this, R.color.app_theme_color));
         mMapboxMap.addPolygon(boundsArea);
+        //添加中心点位
+        mMapboxMap.addMarker(
+                new MarkerOptions()
+                        .icon(mCurrentPointIcon)
+                        .position(mCenterPoint));
+        Log.i(TAG, "onMapReady add center Marker:" + mMapboxMap.getMarkers());
     }
 
     private List<Point> getCircleGeometryPoints() {
-        LatLng centerPoint;
         if (mCurrentLatlng != null) {
-            centerPoint = mCurrentLatlng;
+            mCenterPoint = mCurrentLatlng;
         } else {
-            centerPoint = new LatLng(DEFAULT_LATITUDE, DEFAULT_LONGITUDE);
+            mCenterPoint = new LatLng(DEFAULT_LATITUDE, DEFAULT_LONGITUDE);
         }
-        Log.d(TAG, centerPoint == mCurrentLatlng ? "定位成功" : "定位失败");
-        return MapBoxUtil.getInstance().createCircleGeometry(centerPoint, 1000);
+        //默认一公里范围圈
+        return MapBoxUtil.getInstance().createCircleGeometry(mCenterPoint, 1000);
     }
 
     @Override
@@ -397,21 +499,20 @@ public class SpjkActivity extends BaseActivity<SpjkPresenter> implements SpjkCon
 
     private void doLocation() {
         mLocationService = ARouter.getInstance().navigation(LocationService.class);
-        Location location = getLocation();
-        Log.e(TAG, "getLocation :" + location);
-        if (location != null) {
-            mCurrentLatlng = new LatLng(location.getLatitude(), location.getLongitude());
-            Log.i(TAG, "location latitude: " + location.getLatitude() + ",longitude:" + location.getLongitude());
-        } else {
-            Log.e(TAG, "location is null");
-        }
-    }
-
-    private Location getLocation() {
-        if (mLocationService != null) {
-            return mLocationService.getLocation();
-        }
-        return null;
+        mLocationService.addLocationListenerBoundLifecycle(new LocationService.LocationListener() {
+            @Override
+            public void onLocationChanged(@NonNull IntegratedLocation location) {
+                if (location != null) {
+                    mCurrentLatlng = new LatLng(location.getLatitude(), location.getLongitude());
+                    Log.i(TAG, "doLocation success for " + location.getLocateMethod()
+                            + " !!\ncurrentLatlng: " + mCurrentLatlng
+                            + "\naddress:" + location.getAddress());
+                } else {
+                    Log.e(TAG, "doLocation failed !!");
+                }
+            }
+        }, this);
+        mLocationService.requestOnceLocation();
     }
 
     @Override
@@ -444,8 +545,8 @@ public class SpjkActivity extends BaseActivity<SpjkPresenter> implements SpjkCon
             markerOptions.position(point);
             mMapboxMap.addMarker(markerOptions);
         }
-        // oneKilometer bounds area
-        showOneKilometerBoundsArea();
+        mMarkers = mMapboxMap.getMarkers();
+        Log.i(TAG, "add all Markers:" + mMapboxMap.getMarkers().get(0));
     }
 
     @Override
@@ -460,6 +561,7 @@ public class SpjkActivity extends BaseActivity<SpjkPresenter> implements SpjkCon
             mIsFollow = true;//已经关注了
             setFollowImageResource(true);
         } else {
+            mIsFollow = false;
             setFollowImageResource(false);
         }
     }
@@ -469,38 +571,27 @@ public class SpjkActivity extends BaseActivity<SpjkPresenter> implements SpjkCon
 
     }
 
-    //判断是否是快速点击(双击)，保证多次点击只响应一次点击事件
-    private long lastClickTime = 0L; //上一次点击的时间
-
-    public boolean isFastDoubleClick() {
-        long time = System.currentTimeMillis();
-        long timeD = time - lastClickTime;
-        if (timeD < 1000) {
-            return true;
-        }
-        lastClickTime = time;
-        return false;
-    }
-
     @Override
     public boolean onMarkerClick(@NonNull Marker activeMarker) {
-        Log.d(TAG, "onMarkerClick");
-        mCurrentLatlng = activeMarker.getPosition();
+        LatLng activetLatlng = activeMarker.getPosition();
+        Log.d(TAG, "onMarkerClick:" + activetLatlng);
         if (mCamerasAttrCache != null) {
             for (Map<LatLng, OneKilometerCamerasResponseEntity> latLngListEntityMap : mCamerasAttrCache) {
-                mActiveCamera = latLngListEntityMap.get(mCurrentLatlng);
-                mActiveCameraId = mActiveCamera.getId();
-                mCameraTypeInt = getCameraTypeInt(mActiveCamera);
-                if (mCameraTypeInt == CAMERA_QIANG_JI) {
-                    activeMarker.setIcon(mBoxActive);
-                    showBottomSheet(mCameraTypeInt, mActiveCamera);
-                    inVerseCameraIcon(activeMarker);
-                    return true;
-                } else {
-                    activeMarker.setIcon(mDomeActive);
-                    showBottomSheet(mCameraTypeInt, mActiveCamera);
-                    inVerseCameraIcon(activeMarker);
-                    return true;
+                mActiveCamera = latLngListEntityMap.get(activetLatlng);//当前定位的marker没有放在缓存中
+                if (mActiveCamera != null) {
+                    mActiveCameraId = mActiveCamera.getId();
+                    mCameraTypeInt = getCameraTypeInt(mActiveCamera);
+                    if (mCameraTypeInt == CAMERA_QIANG_JI) {
+                        activeMarker.setIcon(mBoxActive);
+                        showBottomSheet(mCameraTypeInt, mActiveCamera);
+                        inVerseCameraIcon(activeMarker);
+                        return true;
+                    } else {
+                        activeMarker.setIcon(mDomeActive);
+                        showBottomSheet(mCameraTypeInt, mActiveCamera);
+                        inVerseCameraIcon(activeMarker);
+                        return true;
+                    }
                 }
             }
         }
@@ -513,10 +604,9 @@ public class SpjkActivity extends BaseActivity<SpjkPresenter> implements SpjkCon
      * @param activeMarker
      */
     private void inVerseCameraIcon(Marker activeMarker) {
-        List<Marker> markers = mMapboxMap.getMarkers();
-        for (int i = 0; i < markers.size(); i++) {
-            Marker marker = markers.get(i);
-            OneKilometerCamerasResponseEntity cameraEntity = mCamerasCache.get(i);
+        for (int i = 1; i < mMarkers.size(); i++) {//排除第一个中心点位
+            Marker marker = mMarkers.get(i);
+            OneKilometerCamerasResponseEntity cameraEntity = mCamerasCache.get(i - 1);
             if (!marker.equals(activeMarker)) {
                 int cameraTypeInt = getCameraTypeInt(cameraEntity);
                 if (cameraTypeInt == CAMERA_QIANG_JI) {
@@ -560,7 +650,6 @@ public class SpjkActivity extends BaseActivity<SpjkPresenter> implements SpjkCon
             mTvLocationDetail.setText(address);
         }
         mTvLocationGeneral.setText(mCarmeraName);
-//        setFollowImageResource(false);
     }
 
     private void setFollowImageResource(boolean isFollowImgClicked) {

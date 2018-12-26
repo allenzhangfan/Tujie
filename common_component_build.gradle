@@ -24,7 +24,6 @@ android {
                 includeCompileClasspath true
             }
         }
-
     }
 
     buildTypes {
@@ -69,6 +68,7 @@ android {
                 manifest.srcFile 'src/main/AndroidManifest.xml'
             }
             jniLibs.srcDirs = ['libs']
+            assets.srcDirs = ['src/main/assets', 'src/assets/']
         }
     }
 }
@@ -101,5 +101,7 @@ dependencies {
     api project(":CommonService")
     //图片预览lib库
     implementation project(':component_pic')
-    implementation fileTree(include: ['*.jar','*.aar'],dir: 'libs')
+    //相机库
+    implementation project(':component_cameraview')
+    implementation fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
 }

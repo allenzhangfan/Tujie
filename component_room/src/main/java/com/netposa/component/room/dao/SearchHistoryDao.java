@@ -3,6 +3,7 @@ package com.netposa.component.room.dao;
 import com.netposa.component.room.entity.JqSearchHistoryEntity;
 
 import java.util.List;
+
 import androidx.annotation.Keep;
 import androidx.room.Dao;
 import androidx.room.Delete;

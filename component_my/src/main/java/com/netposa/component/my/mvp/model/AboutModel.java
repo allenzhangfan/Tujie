@@ -10,7 +10,12 @@ import com.jess.arms.di.scope.ActivityScope;
 
 import javax.inject.Inject;
 
+import com.netposa.common.net.HttpResponseHandler;
 import com.netposa.component.my.mvp.contract.AboutContract;
+import com.netposa.component.my.mvp.model.api.MyService;
+import com.netposa.component.my.mvp.model.entity.UpdateInfoEntity;
+
+import io.reactivex.Observable;
 
 
 @ActivityScope
@@ -30,5 +35,13 @@ public class AboutModel extends BaseModel implements AboutContract.Model {
         super.onDestroy();
         this.mGson = null;
         this.mApplication = null;
+    }
+
+    @Override
+    public Observable<UpdateInfoEntity> getUpdateJson() {
+        return mRepositoryManager
+                .obtainRetrofitService(MyService.class)
+                .getUpdateJson()
+                .compose(HttpResponseHandler.handleResult());
     }
 }

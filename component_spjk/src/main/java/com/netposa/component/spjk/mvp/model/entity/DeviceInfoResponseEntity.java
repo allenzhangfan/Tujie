@@ -48,7 +48,8 @@ public class DeviceInfoResponseEntity implements Parcelable {
     private String playUrl;
     private String address;
 
-    public DeviceInfoResponseEntity(){}
+    public DeviceInfoResponseEntity() {
+    }
 
     protected DeviceInfoResponseEntity(Parcel in) {
         id = in.readString();

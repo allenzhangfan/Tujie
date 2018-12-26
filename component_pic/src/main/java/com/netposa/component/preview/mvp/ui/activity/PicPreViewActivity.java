@@ -99,11 +99,12 @@ public class PicPreViewActivity extends BaseActivity<PicPreViewActivityPresenter
             LayoutInflater layoutInflater = LayoutInflater.from(this);
             for (int i = 0; i < pathList.size(); i++) {
                 View view = layoutInflater.inflate(R.layout.layout_pic_preview, null);
-                ImageView mIvContent = (ImageView) view.findViewById(R.id.iv_content);
+                ImageView mIvContent = view.findViewById(R.id.iv_content);
                 mImageLoader.loadImage(this, ImageConfigImpl
                         .builder()
                         .cacheStrategy(0)
                         .placeholder(R.drawable.ic_image_default)
+                        .errorPic(R.drawable.ic_image_load_failed)
                         .url(pathList.get(i))
                         .imageView(mIvContent)
                         .build());

@@ -1,10 +1,12 @@
 package com.netposa.common.app;
 
 import com.jess.arms.base.BaseApplication;
-import com.netposa.component.room.dao.DbHelper;
+import com.netposa.component.room.DbHelper;
 import com.netposa.component.room.database.AppDatabase;
 import com.netposa.component.room.migration.Migrations;
+
 import androidx.room.Room;
+
 import static com.netposa.common.constant.GlobalConstants.MAIN_DB_NAME;
 
 /**

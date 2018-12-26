@@ -17,25 +17,25 @@ public class ffmpegkit {
 
     public yuv2jpeg _yuv2jpeg;
 
-    public ffmpegkit(){
+    public ffmpegkit() {
 
     }
 
     /**
      * h264解码器对象
-     * */
-    public void ffmpegkit_decoder_h264(h264.ffmpeg_decoder_h264_callback l){
+     */
+    public void ffmpegkit_decoder_h264(h264.ffmpeg_decoder_h264_callback l) {
         m_h264 = new h264(l);
     }
 
     /**
      * 根据I帧获取I帧信息类
-     * */
-    public void ffmpegkit_decoder_idr(idrinfo.ffmpeg_decoder_idrinfo_callback l){
+     */
+    public void ffmpegkit_decoder_idr(idrinfo.ffmpeg_decoder_idrinfo_callback l) {
         _idrinfo = new idrinfo(l);
     }
 
-    public void ffmpegkit_encoder_yuv2jpeg(){
+    public void ffmpegkit_encoder_yuv2jpeg() {
         _yuv2jpeg = new yuv2jpeg();
     }
 }

@@ -11,7 +11,9 @@ import com.netposa.component.spjk.mvp.model.entity.SpjkListDeviceRequestEntity;
 import com.netposa.component.spjk.mvp.model.entity.SpjkListDeviceResponseEntity;
 import com.netposa.component.spjk.mvp.model.entity.SpjkSearchRequestEntity;
 import com.netposa.component.spjk.mvp.model.entity.SpjkSearchResponseEntity;
+
 import java.util.List;
+
 import io.reactivex.Observable;
 import retrofit2.http.Body;
 import retrofit2.http.GET;

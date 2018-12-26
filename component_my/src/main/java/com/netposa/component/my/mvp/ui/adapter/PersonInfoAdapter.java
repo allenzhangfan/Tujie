@@ -28,9 +28,9 @@ public class PersonInfoAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity
         int itemViewType = helper.getItemViewType();
         if (itemViewType == TYPE_ITEM) {
             PersonInfoEntity infoEntity = (PersonInfoEntity) item;
-            helper.setText(R.id.tv_title,infoEntity.getTitle());
-            helper.setText(R.id.tv_description,infoEntity.getDescription());
-            helper.setVisible(R.id.divider_line,infoEntity.isDividerVisable());
+            helper.setText(R.id.tv_title, infoEntity.getTitle());
+            helper.setText(R.id.tv_description, infoEntity.getDescription());
+            helper.setVisible(R.id.divider_line, infoEntity.isDividerVisable());
         }
     }
 }

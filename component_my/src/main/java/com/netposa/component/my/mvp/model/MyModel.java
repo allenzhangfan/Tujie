@@ -10,7 +10,12 @@ import com.jess.arms.di.scope.FragmentScope;
 
 import javax.inject.Inject;
 
+import com.netposa.common.net.HttpResponseHandler;
 import com.netposa.component.my.mvp.contract.MyContract;
+import com.netposa.component.my.mvp.model.api.MyService;
+import com.netposa.component.my.mvp.model.entity.UpdateInfoEntity;
+
+import io.reactivex.Observable;
 
 
 @FragmentScope

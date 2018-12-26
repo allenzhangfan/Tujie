@@ -18,6 +18,7 @@ public interface NeighbouringDevicesContract {
         void onGetNeighbouringDeviceFail();
 
         void checkDeviceSuccess(int count);
+
         void checkDeviceFail();
     }
 

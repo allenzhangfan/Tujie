@@ -13,7 +13,6 @@ import android.util.Log;
 
 import com.jess.arms.base.delegate.AppLifecycles;
 import com.netposa.common.BuildConfig;
-import com.netposa.common.constant.CommonConstant;
 import com.netposa.common.utils.FileUtils;
 
 import org.apache.log4j.Level;
@@ -22,7 +21,9 @@ import org.slf4j.LoggerFactory;
 
 import androidx.annotation.NonNull;
 
-import static com.netposa.common.constant.CommonConstant.LOG_FILE_NAME;
+import static com.netposa.common.constant.GlobalConstants.LOG_FILE_NAME;
+import static com.netposa.common.constant.GlobalConstants.LOG_PATH;
+
 
 /**
  * Created by yexiaokang on 2018/9/27.
@@ -44,7 +45,6 @@ public class Log4jAppLifecycle implements AppLifecycles, Thread.UncaughtExceptio
     public void onCreate(@NonNull Application application) {
         Handler handler = new Handler(mHandlerThread.getLooper());
         handler.post(() -> {
-            long time = System.currentTimeMillis();
             if (Build.VERSION.SDK_INT >= 23) {
                 if (application.checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE,
                         android.os.Process.myPid(),
@@ -90,9 +90,8 @@ public class Log4jAppLifecycle implements AppLifecycles, Thread.UncaughtExceptio
      * @param useFileAppender useFileAppender
      */
     public static void log4jConfigure(boolean useFileAppender) {
-        String rootDir = CommonConstant.LOG_PATH;
-        FileUtils.createOrExistsDir(rootDir);
-        String fileName = rootDir + LOG_FILE_NAME;
+        FileUtils.createOrExistsDir(LOG_PATH);
+        String fileName = LOG_PATH + LOG_FILE_NAME;
         try {
             LogConfigurator logConfigurator = new LogConfigurator();
             logConfigurator.setResetConfiguration(true);

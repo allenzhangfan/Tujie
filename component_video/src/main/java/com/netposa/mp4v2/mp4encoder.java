@@ -17,8 +17,7 @@ public class mp4encoder {
         }
     }
 
-    public int InitMp4File(String path)
-    {
+    public int InitMp4File(String path) {
         byte[] filepath = null;
         try {
             filepath = path.getBytes("gb2312");
@@ -31,7 +30,7 @@ public class mp4encoder {
 
     public native int init(byte[] filefullpath);
 
-    public native void writeh264(byte[] h264data,int len);
+    public native void writeh264(byte[] h264data, int len);
 
     public native void close();
 

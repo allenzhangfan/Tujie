@@ -1,6 +1,1 @@
-apply from:"../common_component_build.gradle"
-
-dependencies {
-    implementation project(':component_cameraview')
-    implementation project(':component_cropper')
-}
+apply from: "../common_component_build.gradle"

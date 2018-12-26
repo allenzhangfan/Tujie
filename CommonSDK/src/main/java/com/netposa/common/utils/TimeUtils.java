@@ -208,6 +208,8 @@ public final class TimeUtils {
     public static final String FORMAT7 = "yy-MM-dd HH:mm:ss";
     public static final String FORMAT8 = "yyMMdd";
     public static final String FORMAT9 = "yyyy-MM-dd-HH-mm-ss";
+    public static final String FORMAT10 = "yyyyMMddHHmmss";
+    public static final String FORMAT_PATTERN = "yyyy.MM.dd HH:mm:ss";
 
     // 格式：年－月－日
     public static final String LONG_DATE_FORMAT = "yyyy-MM-dd";
@@ -1922,22 +1924,22 @@ public final class TimeUtils {
         cl.set(Calendar.SECOND, 59);
         return cl.getTimeInMillis() / 1000;
     }
+
     /**
      * 获取当前时间的前hour小时
-     *
      */
-    public static long getBeforHour(int hour){
+    public static long getBeforHour(int hour) {
         Calendar cl = Calendar.getInstance();
         cl.setTime(new Date());
         cl.get(Calendar.YEAR);
-        int month=cl.get(Calendar.MONTH)+1;
+        int month = cl.get(Calendar.MONTH) + 1;
         cl.get(Calendar.DAY_OF_MONTH);
-        cl.add(Calendar.HOUR_OF_DAY,hour);
+        cl.add(Calendar.HOUR_OF_DAY, hour);
         cl.get(Calendar.MINUTE);
         cl.get(Calendar.MINUTE);
         cl.get(Calendar.SECOND);
-        String str=TimeUtils.millis2String(cl.getTime(),FORMAT_ONE);
-        Log.d("时间显示："+str);
+        String str = TimeUtils.millis2String(cl.getTime(), FORMAT_ONE);
+        Log.d("时间显示：" + str);
         return TimeUtils.date2Millis(cl.getTime());
     }
 }

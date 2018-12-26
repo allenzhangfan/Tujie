@@ -13,7 +13,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/size_8dp"
-        android:background="@color/item_view_divider_my" />
+        android:background="@color/color_F5F6FA" />
 
     <RelativeLayout
         android:id="@+id/rl_search_keywords"
@@ -31,7 +31,7 @@
             android:layout_centerVertical="true"
             android:gravity="left"
             android:text="@string/query_history"
-            android:textColor="@color/color_hint_text2"
+            android:textColor="@color/color_989FB0"
             android:textSize="@dimen/text_size_14sp" />
 
         <ImageView
@@ -90,7 +90,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/iv_nocontent"
             android:text="@string/search_no_result"
-            android:textColor="@color/jq_pic_text"
+            android:textColor="@color/color_697084"
             android:textSize="@dimen/text_size_16sp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"

@@ -3,4 +3,6 @@
 
     <string name="resident_ku">常住人口库</string>
     <string name="search_no_result">没有搜索到结果</string>
+    <string name="pleace_select_lib">请选择比对的库</string>
+    <string name="no_org">暂无组织可以搜索</string>
 </resources>

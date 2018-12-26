@@ -1,54 +1,33 @@
 package com.netposa.component.sfjb.mvp.model.entity;
 
-import android.widget.CompoundButton;
 
 public class OrgChoseEntity {
 
-    public static final int TYPE_GROUP=0x1;
-    public static final int TYPE_CAMERA=0X2;
-
-    private String parentId;
-    private String ChildId;
+    private String id;  //org
+    private String deviceId; //device
     private String organizationDesc;
     private int organizationType;
     private String treeDesc;
-    private boolean mIsRootOrg;
     private boolean choose;
 
-    public OrgChoseEntity(){
+    public OrgChoseEntity() {
 
     }
-    
-    public boolean isRootOrg() {
-        return mIsRootOrg;
+
+    public String getId() {
+        return id;
     }
 
-    public void setRootOrg(boolean rootOrg) {
-        this.mIsRootOrg = rootOrg;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public Object getParentId() {
-        return parentId;
+    public String getDeviceId() {
+        return deviceId;
     }
 
-    public void setParentId(String parentId) {
-        this.parentId = parentId;
-    }
-
-    public String getChildId() {
-        return ChildId;
-    }
-
-    public void setChildId(String childId) {
-        ChildId = childId;
-    }
-
-    public boolean ismIsRootOrg() {
-        return mIsRootOrg;
-    }
-
-    public void setmIsRootOrg(boolean mIsRootOrg) {
-        this.mIsRootOrg = mIsRootOrg;
+    public void setDeviceId(String deviceId) {
+        this.deviceId = deviceId;
     }
 
     public String getOrganizationDesc() {
@@ -83,16 +62,4 @@ public class OrgChoseEntity {
         this.choose = choose;
     }
 
-    @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder("OrgMainEntity{");
-        sb.append("parentId='").append(parentId).append('\'');
-        sb.append(", ChildId='").append(ChildId).append('\'');
-        sb.append(", organizationDesc='").append(organizationDesc).append('\'');
-        sb.append(", organizationType=").append(organizationType);
-        sb.append(", treeDesc='").append(treeDesc).append('\'');
-        sb.append(", mIsRootOrg=").append(mIsRootOrg);
-        sb.append('}');
-        return sb.toString();
-    }
 }

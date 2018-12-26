@@ -26,6 +26,7 @@ import com.jess.arms.utils.Preconditions;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import androidx.annotation.Keep;
 import dagger.Lazy;
 import io.rx_cache2.internal.RxCache;
 import retrofit2.Retrofit;
@@ -41,6 +42,7 @@ import retrofit2.Retrofit;
  * <a href="https://github.com/JessYanCoding">Follow me</a>
  * ================================================
  */
+@Keep
 @Singleton
 public class RepositoryManager implements IRepositoryManager {
     @Inject

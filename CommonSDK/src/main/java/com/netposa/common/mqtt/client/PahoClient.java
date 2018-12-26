@@ -2,9 +2,8 @@ package com.netposa.common.mqtt.client;
 
 import android.os.ConditionVariable;
 
+import com.netposa.common.log.Log;
 import com.netposa.common.mqtt.util.MqttHookPlugins;
-import com.netposa.common.mqtt.util.MqttLoggerFactory;
-
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
@@ -17,8 +16,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import androidx.annotation.NonNull;
 
@@ -39,7 +36,6 @@ public class PahoClient extends AbstractClient {
 
     private final Lock mConnectingLock = new ReentrantLock();
     private final ConditionVariable mInitializedCV = new ConditionVariable(true);
-    private final Logger mLogger = MqttLoggerFactory.getInstance().getLogger(TAG);
 
     public PahoClient() {
         mService = Executors.newCachedThreadPool();
@@ -68,7 +64,7 @@ public class PahoClient extends AbstractClient {
                 mMqttClient.setCallback(new MqttCallback() {
                     @Override
                     public void connectionLost(Throwable cause) {
-                        mLogger.log(Level.SEVERE, "connectionLost: ", cause);
+                        Log.e(TAG, "connectionLost: ", cause);
                         cause.printStackTrace();
                         isInitialized = false;
                         isConnected = false;
@@ -77,7 +73,7 @@ public class PahoClient extends AbstractClient {
 
                     @Override
                     public void messageArrived(String topic, MqttMessage message) {
-                        mLogger.info("messageArrived: " + topic);
+                        Log.i(TAG,"messageArrived: " + topic);
                         notifyTopic(topic, message.getPayload());
                     }
 
@@ -85,10 +81,10 @@ public class PahoClient extends AbstractClient {
                     public void deliveryComplete(IMqttDeliveryToken token) {
                         try {
                             if (token.getMessage() != null) {
-                                mLogger.info("deliveryComplete: " + token.getMessage().toString());
+                                Log.i(TAG,"deliveryComplete: " + token.getMessage().toString());
                             }
                         } catch (MqttException e) {
-                            mLogger.log(Level.SEVERE, "deliveryComplete: ", e);
+                            Log.e(TAG, "deliveryComplete: ", e);
                             e.printStackTrace();
                         }
                     }
@@ -145,7 +141,7 @@ public class PahoClient extends AbstractClient {
     public void subscribeTopic(@NonNull MqttActionListener listener, final String... topics) {
         mService.submit(() -> {
             for (String s : topics) {
-                mLogger.info("subscribeTopic: topics = " + s);
+                Log.i(TAG,"subscribeTopic: topics = " + s);
             }
             int[] qos = new int[topics.length];
             for (int i = 0; i < qos.length; i++) {
@@ -179,9 +175,9 @@ public class PahoClient extends AbstractClient {
         mService.submit(() -> {
             try {
                 mMqttClient.publish(topic, payload, qos, retain);
-                mLogger.info("onSuccess: publishTopic");
+                Log.i(TAG,"onSuccess: publishTopic");
             } catch (Exception e) {
-                mLogger.log(Level.SEVERE, "onFailure: publishTopic", e);
+                Log.e(TAG, "onFailure: publishTopic", e);
                 e.printStackTrace();
             }
         });
@@ -195,16 +191,16 @@ public class PahoClient extends AbstractClient {
             mService.submit(() -> {
                 try {
                     mMqttClient.disconnect();
-                    mLogger.info("onSuccess: disconnect");
+                    Log.i(TAG,"onSuccess: disconnect");
                 } catch (Exception e) {
-                    mLogger.log(Level.SEVERE, "onFailure: disconnect", e);
+                    Log.e(TAG, "onFailure: disconnect", e);
                     e.printStackTrace();
                 }
                 try {
                     mMqttClient.close();
-                    mLogger.info("onSuccess: close");
+                    Log.i(TAG,"onSuccess: close");
                 } catch (Exception e) {
-                    mLogger.log(Level.SEVERE, "onFailure: close", e);
+                    Log.e(TAG, "onFailure: close", e);
                     e.printStackTrace();
                 }
             });

@@ -33,7 +33,7 @@ import androidx.appcompat.app.AppCompatActivity;
  * <a href="https://github.com/JessYanCoding">Follow me</a>
  * ================================================
  */
-class ActivityLifecycleCallbacksImpl implements Application.ActivityLifecycleCallbacks {
+public class ActivityLifecycleCallbacksImpl implements Application.ActivityLifecycleCallbacks {
     @Override
     public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
         Log.w(activity.getClass().getSimpleName() + " - onActivityCreated");

@@ -29,19 +29,19 @@ import butterknife.OnClick;
 import netposa.pem.sdk.PemSdkListener;
 import netposa.pem.sdk.PemSdkManager;
 import netposa.pem.sdk.PemSdkUtils;
+
 import com.google.android.material.button.MaterialButton;
 import com.gyf.barlibrary.ImmersionBar;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.integration.AppManager;
 import com.jess.arms.utils.ArmsUtils;
-import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.netposa.common.log.Log;
 import com.netposa.common.net.NetWorkBroadcastReceiver;
 import com.netposa.common.net.NetWorkEventInterface;
 import com.netposa.common.utils.StringUtils;
-import com.netposa.common.utils.ToastUtils;
-import com.netposa.component.room.entity.SpjkCollectionDeviceEntiry;
+import com.netposa.common.utils.SystemUtil;
+import com.netposa.component.room.entity.SpjkCollectionDeviceEntity;
 import com.netposa.component.spjk.R2;
 import com.netposa.component.spjk.di.component.DaggerVideoPlayComponent;
 import com.netposa.component.spjk.di.module.VideoPlayModule;
@@ -51,6 +51,7 @@ import com.netposa.component.spjk.mvp.presenter.VideoPlayPresenter;
 import com.netposa.component.spjk.R;
 import com.netposa.component.spjk.mvp.model.entity.DeviceInfoResponseEntity;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 
@@ -59,15 +60,16 @@ import javax.inject.Inject;
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 import static com.netposa.common.constant.GlobalConstants.CAMERA_QIANG_JI;
+import static com.netposa.common.constant.GlobalConstants.KEY_SINGLE_CAMERA_LOCATION_LATITUDE;
+import static com.netposa.common.constant.GlobalConstants.KEY_SINGLE_CAMERA_LOCATION_LONGITUDE;
 import static com.netposa.component.spjk.app.SpjkConstants.BODY_TYPE;
 import static com.netposa.component.spjk.app.SpjkConstants.CAMERA_TYPE;
 import static com.netposa.component.spjk.app.SpjkConstants.FACE_TYPE;
-import static com.netposa.component.spjk.app.SpjkConstants.KEY_HIDE_VIEW;
+import static com.netposa.component.spjk.app.SpjkConstants.KEY_HISTORY_VIDEO_DEVICES_NAME;
 import static com.netposa.component.spjk.app.SpjkConstants.KEY_HISTORY_VIDEO_ORG_NAME;
 import static com.netposa.component.spjk.app.SpjkConstants.KEY_NEIGHBOURING_DEVICES;
 import static com.netposa.component.spjk.app.SpjkConstants.KEY_SINGLE_CAMERA_HISTORY_VIDEO;
 import static com.netposa.component.spjk.app.SpjkConstants.KEY_SINGLE_CAMERA_ID;
-import static com.netposa.component.spjk.app.SpjkConstants.KEY_SINGLE_CAMERA_LOCATION;
 import static com.netposa.component.spjk.app.SpjkConstants.KEY_VIDEO_TYPE;
 import static com.netposa.component.spjk.app.SpjkConstants.MSG_ONERROR;
 import static com.netposa.component.spjk.app.SpjkConstants.MSG_ONERROR_C;
@@ -142,7 +144,7 @@ public class VideoPlayActivity extends BaseActivity<VideoPlayPresenter> implemen
     ImageView mIvRight;
     @BindView(R2.id.tv_camera_name)
     TextView mIvTitleName;
-    @BindView(R2.id.iv_camera_type)//能力类型
+    @BindView(R2.id.iv_camera_type)
     ImageView mIvCameraType;
     @BindView(R2.id.iv_traffic_type)
     ImageView mIvTrafficType;
@@ -165,7 +167,9 @@ public class VideoPlayActivity extends BaseActivity<VideoPlayPresenter> implemen
     @Inject
     PtzDirectionRequestEntity mPtzDirectionRequestEntity;
     @Inject
-    SpjkCollectionDeviceEntiry mSpjkCollectionDeviceEntiry;
+    SpjkCollectionDeviceEntity mSpjkCollectionDeviceEntity;
+    @Inject
+    SystemUtil mSystemUtil;
 
     private boolean mCollected = false;
     private PemSdkManager mPemSdkManager;
@@ -181,15 +185,9 @@ public class VideoPlayActivity extends BaseActivity<VideoPlayPresenter> implemen
     private DeviceInfoResponseEntity mCurrentDevice;
     private int[] mImageId = new int[]{R.drawable.ic_type1, R.drawable.ic_type2, R.drawable.ic_type3, R.drawable.ic_type4};
 
-    private int LENGTH_0 = 0;
-    private int LENGTH_1 = 1;
-    private int LENGTH_2 = 2;
-    private int LENGTH_3 = 3;
-    private int LENGTH_4 = 4;
     private int mCurrentNetWorkStatus;
     private String mCarmeraName;
     private int mCameraTypeInt;
-
 
 
     @Override
@@ -211,8 +209,9 @@ public class VideoPlayActivity extends BaseActivity<VideoPlayPresenter> implemen
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(null!=savedInstanceState){
-            mCameraId=savedInstanceState.getString(RESUME_CAMERA_ID);
+
+        if (null != savedInstanceState) {
+            mCameraId = savedInstanceState.getString(RESUME_CAMERA_ID);
         }
         setContentView(R.layout.activity_video_play);
         mImmersionBar = ImmersionBar.with(this);
@@ -231,7 +230,7 @@ public class VideoPlayActivity extends BaseActivity<VideoPlayPresenter> implemen
         mCameraId = data.getStringExtra(KEY_SINGLE_CAMERA_ID);
         Log.i(TAG, "cameraId:" + mCameraId);
         //初始化video sdk
-        mPemSdkManager = PemSdkManager.getInstance();
+        mPemSdkManager = PemSdkManager.newInstance();
         mPemSdkManager.init(this);
         mPemSdkManager.setmGLsurfaceview(mSurfaceView);
         mPresenter.getDeviceInfo(mCameraId);
@@ -244,7 +243,7 @@ public class VideoPlayActivity extends BaseActivity<VideoPlayPresenter> implemen
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        if (!TextUtils.isEmpty(mCameraId)){
+        if (!TextUtils.isEmpty(mCameraId)) {
             outState.putString(RESUME_CAMERA_ID, mCameraId);
         }
     }
@@ -265,7 +264,7 @@ public class VideoPlayActivity extends BaseActivity<VideoPlayPresenter> implemen
             R2.id.iv_screenshot,
             R2.id.history_cardView,
             R2.id.nearby_carview,
-            R2.id.tv_shebei_adrress,
+            R2.id.tv_device_adrress,
             R2.id.iv_follow,
             R2.id.iv_attention,
             R2.id.iv_finish_activity})
@@ -293,33 +292,43 @@ public class VideoPlayActivity extends BaseActivity<VideoPlayPresenter> implemen
             if (mIsPlaying) {
                 mPresenter.onScreenCapture();
             } else {
-                ToastUtils.showShort(getString(R.string.video_not_played));
+                showMessage(getString(R.string.video_not_played));
             }
         } else if (i == R.id.history_cardView) {
+            if (mCurrentDevice == null) {
+                showMessage(getString(R.string.device_info_do_not_receive_yet));
+                return;
+            }
             Intent dataIntent = new Intent(this, HistoryVideoActivity.class);
             String orgname = mCurrentDevice.getOrgname();
             if (!TextUtils.isEmpty(orgname)) {
                 dataIntent.putExtra(KEY_SINGLE_CAMERA_HISTORY_VIDEO, mCameraId);
                 dataIntent.putExtra(KEY_HISTORY_VIDEO_ORG_NAME, mCurrentDevice.getOrgname());
+                dataIntent.putExtra(KEY_HISTORY_VIDEO_DEVICES_NAME, mCarmeraName);
                 dataIntent.putExtra(KEY_VIDEO_TYPE, mCameraTypeInt);
                 launchActivity(dataIntent);
             }
         } else if (i == R.id.nearby_carview) {
-            if (mCurrentDevice == null) {
-                showMessage(getString(R.string.device_info_do_not_receive_yet));
-                return;
+            if (!mSystemUtil.isFastDoubleClick()) {
+                String latitude = mCurrentDevice.getLatitude();
+                String longitude = mCurrentDevice.getLongitude();
+                //未拉取到摄像头也可以从列表进入视频播放界面，此时设备没有经纬度信息
+                if (mCurrentDevice == null || TextUtils.isEmpty(latitude) || TextUtils.isEmpty(longitude)) {
+                    showMessage(getString(R.string.device_info_do_not_receive_yet));
+                    return;
+                }
+                Intent dataIntent = new Intent(this, NeighbouringDevicesActivity.class);
+                dataIntent.putExtra(KEY_NEIGHBOURING_DEVICES, mCurrentDevice);
+                launchActivity(dataIntent);
             }
-            Intent dataIntent = new Intent(this, NeighbouringDevicesActivity.class);
-            dataIntent.putExtra(KEY_NEIGHBOURING_DEVICES, mCurrentDevice);
-            launchActivity(dataIntent);
-        } else if (i == R.id.tv_shebei_adrress) {
+        } else if (i == R.id.tv_device_adrress) {
             if (mCurrentDevice == null) {
                 showMessage(getString(R.string.device_info_do_not_receive_yet));
                 return;
             }
             Intent dataIntent = new Intent(this, SingleCameraLocationActivity.class);
-            LatLng latLng = new LatLng(Double.valueOf(mCurrentDevice.getLatitude()), Double.valueOf(mCurrentDevice.getLongitude()));
-            dataIntent.putExtra(KEY_SINGLE_CAMERA_LOCATION, latLng);
+            dataIntent.putExtra(KEY_SINGLE_CAMERA_LOCATION_LATITUDE, mCurrentDevice.getLatitude());
+            dataIntent.putExtra(KEY_SINGLE_CAMERA_LOCATION_LONGITUDE, mCurrentDevice.getLongitude());
             launchActivity(dataIntent);
         } else if (i == R.id.iv_follow) {
             // true 表示关注状态，进行删除 即取消关注
@@ -346,23 +355,24 @@ public class VideoPlayActivity extends BaseActivity<VideoPlayPresenter> implemen
                 setLandscapeFollowImage();
                 showToast(true);
             }
-        }else if (i==R.id.iv_finish_activity){
+        } else if (i == R.id.iv_finish_activity) {
             //删除所有的activity 只保留最底层的activity 返回到主界面
-            List<Activity> activitys=AppManager.getAppManager().getActivityList();
-            Activity activity=activitys.get(0);
+            List<Activity> activitys = AppManager.getAppManager().getActivityList();
+            Activity activity = activitys.get(0);
             AppManager.getAppManager().killAll(activity.getClass());
         }
     }
 
     /**
      * 提供关注和取消的对象
+     *
      * @return
      */
-    private SpjkCollectionDeviceEntiry provideCollectionEntiry(){
-        mSpjkCollectionDeviceEntiry.setCamertype(mCameraTypeInt);
-        mSpjkCollectionDeviceEntiry.setCamerid(mCameraId);
-        mSpjkCollectionDeviceEntiry.setCamername(mCarmeraName);
-        return mSpjkCollectionDeviceEntiry;
+    private SpjkCollectionDeviceEntity provideCollectionEntiry() {
+        mSpjkCollectionDeviceEntity.setCamertype(mCameraTypeInt);
+        mSpjkCollectionDeviceEntity.setCamerid(mCameraId);
+        mSpjkCollectionDeviceEntity.setCamername(mCarmeraName);
+        return mSpjkCollectionDeviceEntity;
     }
 
     @Override
@@ -677,10 +687,10 @@ public class VideoPlayActivity extends BaseActivity<VideoPlayPresenter> implemen
         super.onResume();
         Log.d(TAG, "onResume count:" + mCount + ",isPlaying:" + mIsPlaying);
         if (!mIsPlaying && mCount > 0) {
-            play();
+            replay();
         }
-        if (!TextUtils.isEmpty(mCameraId)){
-            mCollected=false;
+        if (!TextUtils.isEmpty(mCameraId)) {
+            mCollected = false;
             mPresenter.checkDevice(mCameraId);
         }
     }
@@ -690,7 +700,7 @@ public class VideoPlayActivity extends BaseActivity<VideoPlayPresenter> implemen
         super.onStop();
         Log.d(TAG, "onStop count:" + mCount + ",isPlaying:" + mIsPlaying);
         if (mIsPlaying) {
-            stopPlay();
+            pause();
             if (mCount == Integer.MAX_VALUE - 2) {
                 mCount = 0;
             }
@@ -701,6 +711,9 @@ public class VideoPlayActivity extends BaseActivity<VideoPlayPresenter> implemen
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if (mIsPlaying) {
+            stopPlay();
+        }
         NetWorkBroadcastReceiver.unregister(this);
     }
 
@@ -754,34 +767,35 @@ public class VideoPlayActivity extends BaseActivity<VideoPlayPresenter> implemen
         //能力类型
         String ability = reponse.getAbility();
         if (!TextUtils.isEmpty(ability)) {
-            String[] abilityData = null;
+            List<String> abilityData = null;
             String[] strArray = reponse.getAbility().split(",");
             if (null != strArray && strArray.length > 0) {
-                abilityData = new String[strArray.length];
+                abilityData = new ArrayList<>(strArray.length);
             }
+
             // 过滤数据 只要"face,body,camera,traffic"这四种类型
             for (int i = 0; i < strArray.length; i++) {
                 if (strArray[i].equals(CAMERA_TYPE) || strArray[i].equals(TRAFFIC_TYPE) || strArray[i].equals(FACE_TYPE) || strArray[i].equals(BODY_TYPE)) {
-                    abilityData[i] = strArray[i];
+                    abilityData.add(strArray[i]);
                 }
             }
-            if (abilityData.length == LENGTH_1) {
-                mIvCameraType.setImageResource(getPicType(abilityData[LENGTH_0]));
+            if (abilityData.size() == 1) {
+                mIvCameraType.setImageResource(getPicType(abilityData.get(0)));
             }
-            if (abilityData.length == LENGTH_2) {
-                mIvCameraType.setImageResource(getPicType(abilityData[LENGTH_0]));
-                mIvTrafficType.setImageResource(getPicType(abilityData[LENGTH_1]));
+            if (abilityData.size() == 2) {
+                mIvCameraType.setImageResource(getPicType(abilityData.get(0)));
+                mIvTrafficType.setImageResource(getPicType(abilityData.get(1)));
             }
-            if (abilityData.length == LENGTH_3) {
-                mIvCameraType.setImageResource(getPicType(abilityData[LENGTH_0]));
-                mIvTrafficType.setImageResource(getPicType(abilityData[LENGTH_1]));
-                mIvFaceType.setImageResource(getPicType(abilityData[LENGTH_2]));
+            if (abilityData.size() == 3) {
+                mIvCameraType.setImageResource(getPicType(abilityData.get(0)));
+                mIvTrafficType.setImageResource(getPicType(abilityData.get(1)));
+                mIvFaceType.setImageResource(getPicType(abilityData.get(2)));
             }
-            if (abilityData.length >= LENGTH_4) {
-                mIvCameraType.setImageResource(getPicType(abilityData[LENGTH_0]));
-                mIvTrafficType.setImageResource(getPicType(abilityData[LENGTH_1]));
-                mIvFaceType.setImageResource(getPicType(abilityData[LENGTH_2]));
-                mIvBodyType.setImageResource(getPicType(abilityData[LENGTH_3]));
+            if (abilityData.size() == 4) {
+                mIvCameraType.setImageResource(getPicType(abilityData.get(0)));
+                mIvTrafficType.setImageResource(getPicType(abilityData.get(1)));
+                mIvFaceType.setImageResource(getPicType(abilityData.get(2)));
+                mIvBodyType.setImageResource(getPicType(abilityData.get(3)));
             }
         }
         // 设备厂商
@@ -814,11 +828,11 @@ public class VideoPlayActivity extends BaseActivity<VideoPlayPresenter> implemen
         if (!TextUtils.isEmpty(linkno)) {
             mTvContactNum.setText(reponse.getLinkno());
         }
-        String type=reponse.getCameraType();
-        if (TextUtils.isEmpty(type)){
-            mCameraTypeInt=CAMERA_QIANG_JI;
-        }else {
-            mCameraTypeInt=Integer.parseInt(type);
+        String type = reponse.getCameraType();
+        if (TextUtils.isEmpty(type)) {
+            mCameraTypeInt = CAMERA_QIANG_JI;
+        } else {
+            mCameraTypeInt = Integer.parseInt(type);
         }
     }
 
@@ -849,7 +863,7 @@ public class VideoPlayActivity extends BaseActivity<VideoPlayPresenter> implemen
 
     @Override
     public void checkDeviceFailed() {
-
+        Log.e(TAG, "checkDeviceFailed");
     }
 
     /**
@@ -920,7 +934,7 @@ public class VideoPlayActivity extends BaseActivity<VideoPlayPresenter> implemen
     }
 
     /**
-     *设置竖屏关注的图片
+     * 设置竖屏关注的图片
      *
      * @param isFollowImgClicked
      */

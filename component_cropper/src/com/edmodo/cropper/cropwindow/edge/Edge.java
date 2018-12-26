@@ -1,15 +1,15 @@
 /*
- * Copyright 2013, Edmodo, Inc. 
+ * Copyright 2013, Edmodo, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this work except in compliance with the License.
  * You may obtain a copy of the License in the LICENSE file, or at:
  *
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" 
- * BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language 
- * governing permissions and limitations under the License. 
-*/
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS"
+ * BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
+ */
 
 package com.edmodo.cropper.cropwindow.edge;
 
@@ -136,7 +136,6 @@ public enum Edge {
      * @param edge        the Edge that is about to be expanded
      * @param imageRect   the rectangle of the picture
      * @param aspectRatio the desired aspectRatio of the picture
-     *
      * @return whether or not the new image would be out of bounds.
      */
     public boolean isNewRectangleOutOfBounds(@NonNull Edge edge, @NonNull RectF imageRect, float aspectRatio) {
@@ -241,7 +240,6 @@ public enum Edge {
      * Returns whether the new rectangle would be out of bounds.
      *
      * @param imageRect the Image to be compared with
-     *
      * @return whether it would be out of bounds
      */
     private boolean isOutOfBounds(float top, float left, float bottom, float right, @NonNull RectF imageRect) {
@@ -252,7 +250,6 @@ public enum Edge {
      * Snap this Edge to the given image boundaries.
      *
      * @param imageRect the bounding rectangle of the image to snap to
-     *
      * @return the amount (in pixels) that this coordinate was changed (i.e. the new coordinate
      * minus the old coordinate value)
      */
@@ -282,7 +279,6 @@ public enum Edge {
      * Returns the potential snap offset of snapToRect, without changing the coordinate.
      *
      * @param imageRect the bounding rectangle of the image to snap to
-     *
      * @return the amount (in pixels) that this coordinate was changed (i.e. the new coordinate
      * minus the old coordinate value)
      */
@@ -358,7 +354,6 @@ public enum Edge {
      * @param x               the x-position that the left edge is dragged to
      * @param imageRect       the bounding box of the image that is being cropped
      * @param imageSnapRadius the snap distance to the image edge (in pixels)
-     *
      * @return the actual x-position of the left edge
      */
     private static float adjustLeft(float x, @NonNull RectF imageRect, float imageSnapRadius, float aspectRatio) {
@@ -395,7 +390,6 @@ public enum Edge {
      * @param x               the x-position that the right edge is dragged to
      * @param imageRect       the bounding box of the image that is being cropped
      * @param imageSnapRadius the snap distance to the image edge (in pixels)
-     *
      * @return the actual x-position of the right edge
      */
     private static float adjustRight(float x, @NonNull RectF imageRect, float imageSnapRadius, float aspectRatio) {
@@ -433,7 +427,6 @@ public enum Edge {
      * @param y               the x-position that the top edge is dragged to
      * @param imageRect       the bounding box of the image that is being cropped
      * @param imageSnapRadius the snap distance to the image edge (in pixels)
-     *
      * @return the actual y-position of the top edge
      */
     private static float adjustTop(float y, @NonNull RectF imageRect, float imageSnapRadius, float aspectRatio) {
@@ -470,7 +463,6 @@ public enum Edge {
      * @param y               the x-position that the bottom edge is dragged to
      * @param imageRect       the bounding box of the image that is being cropped
      * @param imageSnapRadius the snap distance to the image edge (in pixels)
-     *
      * @return the actual y-position of the bottom edge
      */
     private static float adjustBottom(float y, @NonNull RectF imageRect, float imageSnapRadius, float aspectRatio) {

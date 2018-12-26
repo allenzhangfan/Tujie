@@ -1,9 +1,7 @@
 package com.netposa.common.mqtt;
 
-import android.util.Log;
-
+import com.netposa.common.log.Log;
 import com.netposa.common.mqtt.client.PahoClient;
-
 import java.util.HashMap;
 
 /**

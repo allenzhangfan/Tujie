@@ -1,5 +1,7 @@
 package com.netposa.component.my.di.module;
 
+import android.content.Context;
+
 import com.jess.arms.di.scope.ActivityScope;
 
 import dagger.Module;
@@ -11,6 +13,7 @@ import com.netposa.component.my.mvp.model.AboutModel;
 
 @Module
 public class AboutModule {
+    private Context mContext;
     private AboutContract.View view;
 
     /**
@@ -18,7 +21,8 @@ public class AboutModule {
      *
      * @param view
      */
-    public AboutModule(AboutContract.View view) {
+    public AboutModule(Context mContext,AboutContract.View view) {
+        this.mContext=mContext;
         this.view = view;
     }
 
@@ -32,5 +36,11 @@ public class AboutModule {
     @Provides
     AboutContract.Model provideAboutModel(AboutModel model) {
         return model;
+    }
+
+    @ActivityScope
+    @Provides
+    Context provideContext(){
+        return mContext;
     }
 }

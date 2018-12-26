@@ -15,7 +15,6 @@ import com.jess.arms.utils.ArmsUtils;
 import com.netposa.common.log.Log;
 import com.netposa.common.utils.TimeUtils;
 import com.netposa.commonres.widget.CaptureTimeHelper;
-import com.netposa.component.room.entity.SpjkCollectionDeviceEntiry;
 import com.netposa.component.spjk.R;
 import com.netposa.component.spjk.R2;
 import com.netposa.component.spjk.di.component.DaggerHistoryVideoComponent;
@@ -41,14 +40,15 @@ import butterknife.OnClick;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 import static com.netposa.common.constant.GlobalConstants.CAMERA_QIANG_JI;
-import static com.netposa.commonres.widget.CaptureTimeHelper.FORMAT_PATTERN;
+import static com.netposa.common.constant.GlobalConstants.PAGE_SIZE_DEFAULT;
+import static com.netposa.common.utils.TimeUtils.FORMAT_PATTERN;
 import static com.netposa.commonres.widget.CaptureTimeHelper.START_TIME;
 import static com.netposa.component.spjk.app.SpjkConstants.KEY_HISTORY_PLAY_VIDEO;
+import static com.netposa.component.spjk.app.SpjkConstants.KEY_HISTORY_VIDEO_DEVICES_NAME;
 import static com.netposa.component.spjk.app.SpjkConstants.KEY_HISTORY_VIDEO_ORG_NAME;
 import static com.netposa.component.spjk.app.SpjkConstants.KEY_SINGLE_CAMERA_HISTORY_VIDEO;
 import static com.netposa.component.spjk.app.SpjkConstants.KEY_SINGLE_CAMERA_ID;
 import static com.netposa.component.spjk.app.SpjkConstants.KEY_VIDEO_TYPE;
-import static com.netposa.component.spjk.app.SpjkConstants.PAGE_SIZE;
 
 public class HistoryVideoActivity extends BaseActivity<HistoryVideoPresenter> implements
         HistoryVideoContract.View,
@@ -77,6 +77,10 @@ public class HistoryVideoActivity extends BaseActivity<HistoryVideoPresenter> im
     SwipeRefreshLayout mSrfl;
     @BindView(R2.id.cl_no_content)
     ConstraintLayout mClNoContent;
+    @BindView(R2.id.iv_no_content)
+    ImageView mIvNoContent;
+    @BindView(R2.id.tv_no_content)
+    TextView mTvNoContent;
 
     @Inject
     RecyclerView.LayoutManager mLayoutManager;
@@ -93,13 +97,13 @@ public class HistoryVideoActivity extends BaseActivity<HistoryVideoPresenter> im
     @Inject
     CaptureTimeHelper mCaptureTimeHelper;
 
-    private int mCurrent = PAGE_SIZE;
-    private int mCurrentHour;
+    private int mCurrentPage = 1;
     private String mCameraId;
     private long mStartTime;
     private long mEndTime;
     private String mOrgName;
     private int mCameraTypeInt;
+    private String mDeviceName;
 
 
     @Override
@@ -126,8 +130,11 @@ public class HistoryVideoActivity extends BaseActivity<HistoryVideoPresenter> im
         }
         mCameraId = data.getStringExtra(KEY_SINGLE_CAMERA_HISTORY_VIDEO);
         mOrgName = data.getStringExtra(KEY_HISTORY_VIDEO_ORG_NAME);
-        mCameraTypeInt=data.getIntExtra(KEY_VIDEO_TYPE,CAMERA_QIANG_JI);
+        mDeviceName = data.getStringExtra(KEY_HISTORY_VIDEO_DEVICES_NAME);
+        mCameraTypeInt = data.getIntExtra(KEY_VIDEO_TYPE, CAMERA_QIANG_JI);
         mTVtTitle.setText(R.string.history_video);
+        mIvNoContent.setImageResource(R.drawable.ic_no_follow);
+        mTvNoContent.setText(R.string.no_history_video);
         mTVtTitle.getPaint().setFakeBoldText(true);
 
         //recyclerview
@@ -145,20 +152,17 @@ public class HistoryVideoActivity extends BaseActivity<HistoryVideoPresenter> im
                 android.R.color.holo_red_light, android.R.color.holo_orange_light,
                 android.R.color.holo_green_light);
         mSrfl.setOnRefreshListener(this);
-        mSrfl.setRefreshing(true);
-
-        mAdapter.setOnItemChildClickListener((adapter, view, position) -> {
-            if (view.getId() == R.id.iv_play) {
-                HistoryVideoResponseEntity.VideoListEntity item = (HistoryVideoResponseEntity.VideoListEntity) adapter.getItem(position);
-                Intent intent = new Intent(this, HistoryVideoPlayActivity.class);
-                String playUrl = item.getPlayUrl();
-                intent.putExtra(KEY_HISTORY_PLAY_VIDEO, playUrl);
-                intent.putExtra(KEY_HISTORY_VIDEO_ORG_NAME, mOrgName);
-                intent.putExtra(KEY_SINGLE_CAMERA_ID,mCameraId);
-                intent.putExtra(KEY_VIDEO_TYPE,mCameraTypeInt);
-                launchActivity(intent);
-            }
-        });
+        mAdapter.setOnItemClickListener(((adapter, view, position) -> {
+            HistoryVideoResponseEntity.VideoListEntity item = (HistoryVideoResponseEntity.VideoListEntity) adapter.getItem(position);
+            Intent intent = new Intent(this, HistoryVideoPlayActivity.class);
+            String playUrl = item.getPlayUrl();
+            intent.putExtra(KEY_HISTORY_PLAY_VIDEO, playUrl);
+            intent.putExtra(KEY_HISTORY_VIDEO_ORG_NAME, mOrgName);
+            intent.putExtra(KEY_HISTORY_VIDEO_DEVICES_NAME, mDeviceName);
+            intent.putExtra(KEY_SINGLE_CAMERA_ID, mCameraId);
+            intent.putExtra(KEY_VIDEO_TYPE, mCameraTypeInt);
+            launchActivity(intent);
+        }));
 
         mRlBeginTime.setOnClickListener(this);
         mRlEndTime.setOnClickListener(this);
@@ -166,35 +170,38 @@ public class HistoryVideoActivity extends BaseActivity<HistoryVideoPresenter> im
         //时间选择有关初始化
         Calendar startCalendar = Calendar.getInstance();
         Calendar endCalendar = Calendar.getInstance();
-        mCurrentHour = startCalendar.get(Calendar.HOUR_OF_DAY);
-        mCaptureTimeHelper.init(startCalendar, endCalendar,this);
+        mCaptureTimeHelper.init(startCalendar, endCalendar, this);
         // 出始默认请求此时之前的2小时
-        long mStartDate = TimeUtils.getBeforHour(-2);// 当前时间的前2小时
-        long mEndDate = TimeUtils.getBeforHour(0);//当前时间
-        mPresenter.getCameraHistoryList(mStartDate, mEndDate, mCameraId, PAGE_SIZE);
+        mStartTime = TimeUtils.getBeforHour(-2);// 当前时间的前2小时
+        mEndTime = TimeUtils.getBeforHour(0);//当前时间
+        // 自动下拉刷新
+        mRvContent.postDelayed(() -> {
+            mSrfl.setRefreshing(true);
+            mPresenter.getCameraHistoryList(mStartTime, mEndTime, mCameraId, 1);
+        }, 100);
     }
 
     @Override
     public void onRefresh() {
-        mPresenter.getCameraHistoryList(mStartTime, mEndTime, mCameraId, PAGE_SIZE);
-        mAdapter.loadMoreEnd(true);
+        mPresenter.getCameraHistoryList(mStartTime, mEndTime, mCameraId, 1);
+        mAdapter.setEnableLoadMore(false);
     }
 
     @Override
     public void onLoadMoreRequested() {
-        mCurrent++;
-        mPresenter.getCameraHistoryList(mStartTime, mEndTime, mCameraId, mCurrent);
-        mAdapter.loadMoreEnd(true);
+        mCurrentPage++;
+        mSrfl.setEnabled(false);
+        mPresenter.getCameraHistoryList(mStartTime, mEndTime, mCameraId, mCurrentPage);
     }
 
     @Override
     public void showLoading(String message) {
-
+        mSrfl.setRefreshing(true);
     }
 
     @Override
     public void hideLoading() {
-
+        mSrfl.setRefreshing(false);
     }
 
     @Override
@@ -232,22 +239,33 @@ public class HistoryVideoActivity extends BaseActivity<HistoryVideoPresenter> im
     @Override
     public void getVideoSucess(HistoryVideoResponseEntity entity) {
         Log.d(TAG, entity.toString());
+        mSrfl.setRefreshing(false);
+        mAdapter.setEnableLoadMore(true);
         List<HistoryVideoResponseEntity.VideoListEntity> videoList = entity.getVideoList();
+        Log.d(TAG, "currentPage:" + mCurrentPage + ",dataList:" + videoList.size());
         if (videoList.size() > 0) {
-            mBeanList.addAll(entity.getVideoList());
-            refreshData();
-            if (mBeanList.size() < 10 && mBeanList.size() > 0) {
-                mAdapter.disableLoadMoreIfNotFullPage();
+            if (mCurrentPage == 1) {
+                showNoDataPage(false);
+                mBeanList.clear();
+            } else {
+                mSrfl.setEnabled(true);
             }
-            showNoDatePage(false);
+            mBeanList.addAll(videoList);
+            mAdapter.notifyDataSetChanged();
+            if (videoList.size() < PAGE_SIZE_DEFAULT) {
+                mAdapter.loadMoreEnd(false);
+            } else {
+                mAdapter.loadMoreComplete();
+            }
         } else {
-            showNoDatePage(true);
+            showNoDataPage(true);
+            mSrfl.setRefreshing(false);
         }
     }
 
     @Override
     public void getVideoFAiled() {
-        showNoDatePage(true);
+        showNoDataPage(true);
     }
 
     @Override
@@ -260,12 +278,12 @@ public class HistoryVideoActivity extends BaseActivity<HistoryVideoPresenter> im
         }
     }
 
-    private void showNoDatePage(boolean show) {
-        if (show){
+    private void showNoDataPage(boolean show) {
+        if (show) {
             mSrfl.setVisibility(View.GONE);
             mClNoContent.setVisibility(View.VISIBLE);
-        }else {
-            if (mSrfl.getVisibility()==View.GONE){
+        } else {
+            if (mSrfl.getVisibility() == View.GONE) {
                 mSrfl.setVisibility(View.VISIBLE);
             }
             mClNoContent.setVisibility(View.GONE);
@@ -286,7 +304,7 @@ public class HistoryVideoActivity extends BaseActivity<HistoryVideoPresenter> im
             mTvEndTime.setText(endTimeStr);
             mIvEndTime.setVisibility(View.GONE);
             //开始查询历史视频
-            mPresenter.getCameraHistoryList(mStartTime, mEndTime, mCameraId, PAGE_SIZE);
+            mPresenter.getCameraHistoryList(mStartTime, mEndTime, mCameraId, 1);
         }
     }
 }

@@ -42,6 +42,7 @@ public final class NetworkUtils {
         NETWORK_UNKNOWN,
         NETWORK_NO
     }
+
     //没有连接网络
     private static final int NETWORK_NONE = -1;
     //移动网络
@@ -227,9 +228,9 @@ public final class NetworkUtils {
         return tm != null ? tm.getNetworkOperatorName() : null;
     }
 
-    private static final int NETWORK_TYPE_GSM      = 16;
+    private static final int NETWORK_TYPE_GSM = 16;
     private static final int NETWORK_TYPE_TD_SCDMA = 17;
-    private static final int NETWORK_TYPE_IWLAN    = 18;
+    private static final int NETWORK_TYPE_IWLAN = 18;
 
     /**
      * 获取当前网络类型

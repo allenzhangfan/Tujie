@@ -1,5 +1,8 @@
 package com.netposa.component.room.entity;
 
+import java.util.UUID;
+
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -11,12 +14,10 @@ import androidx.room.PrimaryKey;
 @Entity(tableName = "LoginConfig")
 public class LoginConfigEntity {
 
-    /**
-     * 主键
-     */
+    @NonNull
     @PrimaryKey
-    @ColumnInfo(name = "id")
-    private int id;
+    @ColumnInfo(name = "uuid")
+    private String uuid;
 
     /**
      * 用户名
@@ -30,12 +31,17 @@ public class LoginConfigEntity {
     @ColumnInfo(name = "password")
     private String password;
 
-    public int getId() {
-        return id;
+    public LoginConfigEntity() {
+        uuid = UUID.randomUUID().toString();
     }
 
-    public void setId(int id) {
-        this.id = id;
+    @NonNull
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(@NonNull String uuid) {
+        this.uuid = uuid;
     }
 
     public String getUsername() {

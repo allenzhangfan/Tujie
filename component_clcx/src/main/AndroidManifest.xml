@@ -14,7 +14,10 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".mvp.ui.activity.CarTypeActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activity.ViewCarPathActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

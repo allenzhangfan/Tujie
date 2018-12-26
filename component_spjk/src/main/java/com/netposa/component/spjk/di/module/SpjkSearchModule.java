@@ -4,11 +4,13 @@ import android.content.Context;
 
 import com.chad.library.adapter.base.loadmore.LoadMoreView;
 import com.jess.arms.di.scope.ActivityScope;
+
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import dagger.Module;
 import dagger.Provides;
+
 import com.netposa.commonres.widget.CustomerLoadMoreView;
 import com.netposa.component.room.entity.SpjkSearchHistoryEntity;
 import com.netposa.component.spjk.mvp.contract.SpjkSearchContract;
@@ -21,6 +23,7 @@ import com.netposa.component.spjk.mvp.ui.adapter.SpjkSearchResulthAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.inject.Named;
 
 
@@ -35,7 +38,7 @@ public class SpjkSearchModule {
      * @param view
      */
     public SpjkSearchModule(Context context, SpjkSearchContract.View view) {
-        this.mContext=context;
+        this.mContext = context;
         this.view = view;
     }
 
@@ -81,7 +84,7 @@ public class SpjkSearchModule {
 
     @ActivityScope
     @Provides
-    Context provideContext(){
+    Context provideContext() {
         return mContext;
     }
 
@@ -117,13 +120,14 @@ public class SpjkSearchModule {
 
     @ActivityScope
     @Provides
-    SpjkSearchRequestEntity providerRequest(){
+    SpjkSearchRequestEntity providerRequest() {
         return new SpjkSearchRequestEntity();
     }
 
     @ActivityScope
     @Provides
-    List<SpjkSearchResponseEntity.ListBean> providerSearchList(){
+    List<SpjkSearchResponseEntity.ListBean> providerSearchList() {
         return new ArrayList<>();
     }
+
 }

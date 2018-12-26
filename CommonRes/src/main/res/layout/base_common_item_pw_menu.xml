@@ -10,7 +10,7 @@
         android:layout_height="40dp"
         android:layout_width="40dp"
         android:paddingLeft="10dp"
-        android:paddingRight="10dp"/>
+        android:paddingRight="10dp" />
 
     <TextView
         android:id="@+id/tv_item_pw_menu"
@@ -19,6 +19,6 @@
         android:layout_width="0dp"
         android:layout_weight="1"
         android:textColor="@android:color/white"
-        android:textSize="18sp"/>
+        android:textSize="18sp" />
 
 </LinearLayout>

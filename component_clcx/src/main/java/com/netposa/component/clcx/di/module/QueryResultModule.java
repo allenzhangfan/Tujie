@@ -7,15 +7,16 @@ import com.jess.arms.di.scope.ActivityScope;
 
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import dagger.Module;
 import dagger.Provides;
 
+import com.netposa.common.utils.SizeUtils;
 import com.netposa.commonres.widget.CustomerLoadMoreView;
+import com.netposa.commonres.widget.itemDecoration.SpacesItemDecoration;
 import com.netposa.component.clcx.mvp.contract.QueryResultContract;
 import com.netposa.component.clcx.mvp.model.QueryResultModel;
-import com.netposa.component.clcx.mvp.model.entity.QueryResultEntity;
+import com.netposa.component.clcx.mvp.model.entity.QueryCarSearchResponseEntity;
 import com.netposa.component.clcx.mvp.ui.adapter.QueryResultAdapter;
 
 import java.util.ArrayList;
@@ -32,8 +33,8 @@ public class QueryResultModule {
      *
      * @param view
      */
-    public QueryResultModule(Context context,QueryResultContract.View view) {
-        this.mContext=context;
+    public QueryResultModule(Context context, QueryResultContract.View view) {
+        this.mContext = context;
         this.view = view;
     }
 
@@ -58,7 +59,7 @@ public class QueryResultModule {
     @ActivityScope
     @Provides
     RecyclerView.LayoutManager provideLayoutManager() {
-        return new GridLayoutManager(mContext,2);
+        return new GridLayoutManager(mContext, 2);
     }
 
     @ActivityScope
@@ -69,19 +70,26 @@ public class QueryResultModule {
 
     @ActivityScope
     @Provides
-    List<QueryResultEntity> provideBeanList() {
+    RecyclerView.ItemDecoration provideGridItemDecoration() {
+        int itemMargin = SizeUtils.dp2px(16);
+        return new SpacesItemDecoration(itemMargin, itemMargin, itemMargin, itemMargin);
+    }
+
+    @ActivityScope
+    @Provides
+    List<QueryCarSearchResponseEntity> provideBeanList() {
         return new ArrayList<>();
     }
 
     @ActivityScope
     @Provides
-    QueryResultAdapter provideCarAdapter(List<QueryResultEntity> list){
-        return new QueryResultAdapter(list);
+    QueryResultAdapter provideCarAdapter(List<QueryCarSearchResponseEntity> list) {
+        return new QueryResultAdapter(mContext, list);
     }
 
     @ActivityScope
     @Provides
-    LoadMoreView providerLoadmoreView(){
+    LoadMoreView providerLoadmoreView() {
         return new CustomerLoadMoreView();
     }
 }

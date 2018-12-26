@@ -1,6 +1,11 @@
 package com.netposa.common.constant;
 
+import android.os.Environment;
+
+import com.netposa.common.BuildConfig;
 import com.netposa.common.utils.SPUtils;
+
+import java.io.File;
 
 
 /**
@@ -10,9 +15,127 @@ import com.netposa.common.utils.SPUtils;
 public final class GlobalConstants {
 
     /**
+     * 外部存储区默认主目录
+     */
+    public static final String DEFAULT_EXTERNAL_PATH = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator;
+
+    /**
      * 主数据库名字
      */
     public static final String MAIN_DB_NAME = "Tujie.db";
+
+    /**
+     * 应用程序主目录（外部存储区）
+     */
+    public static final String MAIN_PATH = "Tujie/";
+
+    /**
+     * 应用程序的默认根目录
+     */
+    public static final String ROOT_PATH = DEFAULT_EXTERNAL_PATH + MAIN_PATH;
+
+    /**
+     * 下载目录
+     */
+    public static final String DOWNLOAD_PATH = ROOT_PATH + "download/";
+
+    /**
+     * 缓存目录
+     */
+    public static final String CACHE_PATH = ROOT_PATH + "cache/";
+
+    /**
+     * 头像目录
+     */
+    public static final String AVATAR_PATH = ROOT_PATH + "avatar/";
+
+    /**
+     * 拍照目录
+     */
+    public static final String PICTURE_PATH = ROOT_PATH + "picture/";
+
+    /**
+     * apk 更新下载包目录
+     */
+    public static final String APK_PATH = ROOT_PATH + "apk/";
+
+    /**
+     * video 暂存目录
+     */
+    public static final String VIDEO_PATH = ROOT_PATH + "video/";
+
+    /**
+     * 日志目录
+     */
+    public static final String LOG_PATH = ROOT_PATH + "log/";
+
+    /**
+     * db目录
+     */
+    public static final String DB_PATH = ROOT_PATH + "db/";
+
+    /**
+     * 图片压缩后的最大文件大小，单位为KB
+     */
+    public static final int MAX_IMAGE_SIZE = 300;
+
+    /**
+     * Log输出开关,true为输出log，false为关闭。上线时候需要改为false
+     */
+    public static final boolean DEBUG = BuildConfig.DEBUG;
+
+    /**
+     * 国际版为true ｜ 国内版为false
+     */
+    public static final boolean INTERNATIONAL = false;
+
+    public static final String PLATFORM_TYPE = "android";
+
+    /**
+     * 常量token
+     */
+    public static final String TOKEN = "token";
+
+    /**
+     * 常量uid
+     */
+    public static final String UID = "uid";
+
+    /**
+     * 服务器时间
+     */
+    public static final String SERVER_DATE = "server_date";
+
+    /**
+     * 极光推送成功的标示字符
+     */
+    public static final String JPUSH_SET_SUCCESS = "jpush_alias_success";
+
+    /**
+     * 再次运行程序
+     */
+    public static final String RUN_AGAIN = "isAgainRun";
+
+    /**
+     * 网络连接超时时间，单位为毫秒（15s）
+     */
+    public static final int CONNECT_TIMEOUT_MILLIS = 15 * 1000;
+
+    /**
+     * 网络读写超时时间，单位为毫秒(15s)
+     */
+    public static final int READ_TIMEOUT_MILLIS = 15 * 1000;
+
+
+    /**
+     * session
+     */
+    public static final String SESSION = "SESSION";
+
+    /**
+     * 日志名字
+     */
+    public static final String LOG_FILE_NAME = "netposa_tujie.log";
 
     /**
      * 后门Key
@@ -87,14 +210,27 @@ public final class GlobalConstants {
     public static final String CONFIG_LAST_USER_NICKNAME = "config_last_user_nickname";
     // 登录名
     public static final String CONFIG_LAST_USER_LOGIN_NAME = "config_last_user_login_name";
+    // 用户id
+    public static final String CONFIG_LAST_USER_LOGIN_ID = "config_last_user_login_id";
+    // 性别
+    public static final String CONFIG_LAST_USER_GENDER = "config_last_user_gender";
+    // 组织
+    public static final String CONFIG_LAST_USER_GROUP = "config_last_user_group";
+    // 警号
+    public static final String CONFIG_LAST_USER_POLICE_NO = "config_last_user_police_no";
+    // 电话
+    public static final String CONFIG_LAST_USER_TEL_NO = "config_last_user_tel_no";
     // 密码
-    public static final String LOGIN_PASSWORD="login_password";
+    public static final String LOGIN_PASSWORD = "login_password";
     // 是否登陆 标志位
     public static final String HAS_LOGIN = "has_login";
-
+    // 是否第一次获取字典表
+    public static final String HAS_FIRST_DICTIONARY = "has_first_dictionary";
     // 是否刷脸 标志位
     public static final String HAS_FACE = "has_face";
-
+    //类型 人脸/车辆
+    public static final String FACE_TYPE = "FACE";
+    public static final String VEHICLE_TYPE = "VEHICLE";
     //  消息开关
     public static final String CONFIG_MESSAGE_SWITCH = "config_message_switch";
 
@@ -139,11 +275,6 @@ public final class GlobalConstants {
      * 直播录像的截图存储路径
      */
     public static final String SNAP_PATH = "snaps/";
-
-    /**
-     * 服务器时间
-     */
-    public static final String SERVER_DATE = "server_date";
 
     /**
      * 枪机
@@ -298,27 +429,29 @@ public final class GlobalConstants {
      */
     public static final String IS_VALUED_REPORT = "02";
 
-
     public static final String EXTRA_ADDR = "extra_location";
     public static final String EXTRA_LAT = "extra_lat";
     public static final String EXTRA_LON = "extra_lon";
 
-    /**
-     * 朝阳群众的token
-     */
-    public static final String CONFIG_CYQZ_TOKEN = "config_cyqz_token";
-
-    /**
-     * 智慧云眼token
-     */
-    public static final String UID = "uid";
-
-    /**
-     * token
-     */
-    public static final String TOKEN = "netposa_token";
-
     public static final String USER_NAME = "user_name";
+
+    //性别
+    public static final String TYPE_MALE = "0";//男性
+    public static final String TYPE_FAMALE = "1";//女性
+    public static final String TYPE_ALL = "";//所有
+    //眼镜
+    public static final String TYPE_WEAR_GLASS = "1";//戴眼镜
+    public static final String TYPE_NO_WEAR_GLASS = "0";//未戴眼镜
+    public static final String TYPE_OTHER = "-1";//其它
+
+    //布控类型
+    public static final int TYPE_CAR_DEPLOY = 1;//车辆布控
+    public static final int TYPE_FACE_DEPLOY = 2;//人脸布控
+
+    //警情处理状态
+    public static final int TYPE_VALID = 2;//有效
+    public static final int TYPE_INVALID = 1;//无效
+    public static final int TYPE_SUSPENDING = 0;//待处理
 
     /**
      * 羚羊事件上传的token
@@ -327,17 +460,7 @@ public final class GlobalConstants {
 
     public static final String INTENT_SHOW_SUCCESS_DIALOG = "intent_show_success_dialog";
 
-    /**
-     * 线索的类型.
-     * "11": "一般违法线索",
-     * "12": "严重违法线索",
-     * "13": "各类安全隐患",
-     * "14": "其它"
-     */
-    public static final int TYPE_1 = 11;
-    public static final int TYPE_2 = 12;
-    public static final int TYPE_3 = 13;
-    public static final int TYPE_4 = 14;
+    public static final String PART_NAME_IMAGE = "file";
 
     public static final String EXTRA_START_FROM_CLUE = "extra_start_from_clue";
 
@@ -382,10 +505,6 @@ public final class GlobalConstants {
     public static final String EXTRA_SHOW_DOWNLOAD = "extra_show_download";
     public static final String EXTRA_SAVE_DIR = "extra_save_dir";
 
-    /**
-     * 图片压缩后的最大文件大小，单位为KB
-     */
-    public static final int MAX_IMAGE_SIZE = 300;
 
     /**
      * 图片最大边界
@@ -407,38 +526,13 @@ public final class GlobalConstants {
      */
     public static final int PAGE_SIZE_DEFAULT = 20;
 
-    /**
-     * 视频身份默认的加载页大小
-     */
-    public static final int VID_PAGE_SIZE = 20;
-
-    /**
-     * 无效计数
-     */
-    public static final int VID_COUNT_INVALID = -1;
-
-    /**
-     * 彩云档案无效计数
-     */
-    public static final int CYDA_COUNT_INVALID = -1;
-
     public static final int COUNT_INVALID = -1;
 
-    /**
-     * 图片地址
-     */
-    public static final String IMAGE_URL = "image_url";
+    public static final String FACE_CAPTURE_PIC = "face_capture.jpg";
+    public static final String FACE_CAPTURE_PRESS_PIC = "face_capture_press.jpg";
 
-    /**
-     * VID号
-     */
-    public static final String KEY_VID_NUMER = "key_vid_numer";
-    /**
-     * 身份证号
-     */
-    public static final String KEY_ID_NUMER = "key_id_numer";
+    public static final String DEFAULT_CITY = "武汉市";
 
-    public static final int NOTIFY_ID_DCJ = 0xf1;
     public static final int NOTIFY_ID_ALARM = 0xf2;
 
     /**
@@ -449,12 +543,22 @@ public final class GlobalConstants {
     /**
      * MAPBOX地图服务器
      */
-    public static final String MAP_KEY="pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4M29iazA2Z2gycXA4N2pmbDZmangifQ.-g_vE53SD2WrJ6tFX7QHmA";
+    public static final String MAP_KEY = "pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4M29iazA2Z2gycXA4N2pmbDZmangifQ.-g_vE53SD2WrJ6tFX7QHmA";
 
     /**
-     * Baseurl 的key
+     * 地图缩小范围最大值
      */
-    public static final String KEY_BASE_URL = "baseUrl";
+    public static final float ZOOM_IN_MAX = 18;
+
+    /**
+     * 地图放大范围最小值
+     */
+    public static final float ZOOM_OUT_MIN = 5;
+
+    /**
+     * xml中默认大小(mapbox_cameraZoom)
+     */
+    public static final float DEFAULT_MAPBOX_CAMERAZOOM = 13;
 
     /**
      * BASE URL
@@ -467,15 +571,133 @@ public final class GlobalConstants {
     public static final String DOMAIN_NAME_HEADER = "Domain-Name: ";
 
     /**
+     * 视频播放外网ip  58.49.28.186:58287
+     * 内网ip         192.168.101.31:554
+     */
+    public static final String OUTER_NET_PLAY_IP = "58.49.28.186:58287";
+
+    /**
+     * 图片外网ip   58.49.28.186:57199
+     * 内网ip      172.16.90.168:6551
+     */
+    public static final String OUTER_NET_IMAGE_IP = "58.49.28.186:57199";
+
+    /*********************************权限请求码*********************************/
+    public static final int REQUEST_CODE_SPJK = 10001;
+    public static final int REQUEST_CODE_YTST = 10002;
+    public static final int REQUEST_CODE_SFJB = 10003;
+    public static final int REQUEST_CODE_CLCX = 10004;
+    public static final int REQUEST_CODE_RLTK = 10005;
+    public static final int REQUEST_CODE_JQ = 10006;
+    /*********************************权限请求码*********************************/
+
+    /*********************************key值*********************************/
+
+    /**
+     * Baseurl 的key
+     */
+    public static final String KEY_BASE_URL = "baseUrl";
+
+    /**
+     * 跳转警情详情的key
+     */
+    public static final String KEY_JQ_ITEM = "jq_item";
+
+    /**
+     * 图片地址
+     */
+    public static final String IMAGE_URL = "image_url";
+
+    /**
+     * 播放地址
+     */
+    public static final String PLAY_URL = "play_ip_port";
+
+    /**
+     * 身份证号
+     */
+    public static final String KEY_ID_NUMER = "key_id_numer";
+
+    /**
+     * 标题
+     */
+    public static final String KEY_TITLE = "key_title";
+
+    /**
+     * 查看详情图片
+     */
+    public static final String KEY_IV_DETAIL = "key_iv_detail";
+
+    /**
+     * 查看图片时人像的名字
+     */
+    public static final String KEY_FACE_NAME = "key_name";
+
+    /**
+     * 查看详情地址
+     */
+    public static final String KEY_MOTIONNAME_DETAIL = "key_motionname_detail";
+
+    public static final String KEY_SEESION = "key_sessiKEY_POSITIONon";
+    public static final String KEY_POSITION = "key_position";
+    public static final String KEY_PICPATH = "key_pic_path";
+    public static final String KEY_DATA_KEY = "key_data_key";
+    public static final String KEY_DATA_TYPE = "key_data_type";
+
+
+    /**
+     * 查看详情时间
+     */
+    public static final String KEY_TIME_DETAIL = "key_time_detail";
+
+    /**
+     * 查看详情类型
+     */
+    public static final String KEY_TYPE_DETAIL = "key_type_detail";
+
+    /**
+     * 查看详情类型(警情)
+     */
+    public static final String KEY_JIN_QING = "key_jin_qing";
+
+    /**
+     * 查看详情类型到以图搜图
+     */
+    public static final String KEY_TYPE_DETAIL_TO_YTST = "key_type_detail_to_ytst";
+
+    /**
+     * 刷脸登录传值的flag
+     */
+    public static final String FACE_lOGIN = "face_login";
+
+    /**
      * 内外网标记
      * true为内网，false为外网
      */
     public static final String IS_LOCAL_NET = "is_local_net";
 
     /**
-     * 外网ip 58.49.28.186:58287
-     * 本地服务器调试loginIp="192.168.14.46:12000";
+     * 单个摄像头当前位置的经纬度
      */
-    public static final String VIDEO_PLAY_OUTER_NET = "58.49.28.186:58287";
+    public static final String KEY_SINGLE_CAMERA_LOCATION_LATITUDE = "key_single_camera_location_laitude";
+    public static final String KEY_SINGLE_CAMERA_LOCATION_LONGITUDE = "key_single_camera_location_longitude";
+
+    /**
+     * 身份鉴别featur 的key
+     */
+    public static final String KEY_FEATUR = "key_featur";
+
+    /**
+     * 身份鉴别抓拍图片 的key
+     */
+    public static final String KEY_ZHUAPAI_URL = "key_zhuapai_url";
+
+    /**
+     * 传送参数轨迹的key
+     */
+    public static final String KEY_TRACK_ENTITY = "key_track_entiy";
+
+
+    /*********************************key值*********************************/
 }
 

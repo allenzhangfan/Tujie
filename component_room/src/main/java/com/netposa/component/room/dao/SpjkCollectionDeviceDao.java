@@ -1,8 +1,9 @@
 package com.netposa.component.room.dao;
 
-import com.netposa.component.room.entity.SpjkCollectionDeviceEntiry;
+import com.netposa.component.room.entity.SpjkCollectionDeviceEntity;
 
 import java.util.List;
+
 import androidx.annotation.Keep;
 import androidx.room.Dao;
 import androidx.room.Insert;
@@ -14,10 +15,10 @@ import androidx.room.Query;
 public interface SpjkCollectionDeviceDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insterDevice(SpjkCollectionDeviceEntiry entity);
+    void insterDevice(SpjkCollectionDeviceEntity entity);
 
     @Query("SELECT * FROM SpjkCollectionDevice")
-    List<SpjkCollectionDeviceEntiry> getAllCollectionDevice();
+    List<SpjkCollectionDeviceEntity> getAllCollectionDevice();
 
     @Query("DELETE FROM SpjkCollectionDevice WHERE camerid=:id")
     void delete(String id);

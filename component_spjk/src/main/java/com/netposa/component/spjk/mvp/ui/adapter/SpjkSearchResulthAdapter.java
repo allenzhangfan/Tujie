@@ -23,7 +23,6 @@ import androidx.annotation.Nullable;
  * Created time：2018/10/29 14:31
  */
 public class SpjkSearchResulthAdapter extends BaseQuickAdapter<SpjkSearchResponseEntity.ListBean, BaseViewHolder> {
-    private String matchName;
     private List<String> keyList = new ArrayList<>();
 
     @Inject
@@ -35,23 +34,15 @@ public class SpjkSearchResulthAdapter extends BaseQuickAdapter<SpjkSearchRespons
     protected void convert(BaseViewHolder helper, SpjkSearchResponseEntity.ListBean item) {
         String name = item.getName();
         StringBuffer str = new StringBuffer("");
-        keyList.add(getMatchName());
+        keyList.add(item.getMatchName());
         str = TextMark.addChild(name, keyList, str);
         helper.setText(R.id.tv_name, Html.fromHtml(str.toString()));
         helper.addOnClickListener(R.id.iv_address);
         if (item.getLatitude() == 0 && item.getLatitude() == 0) {
             helper.setBackgroundRes(R.id.iv_address, R.drawable.ic_gps).setVisible(R.id.iv_address, false);
-        }else{
+        } else {
             helper.setBackgroundRes(R.id.iv_address, R.drawable.ic_gps).setVisible(R.id.iv_address, true);
         }
-    }
-
-    public void setMatchName(String matchName) {
-        this.matchName = matchName;
-    }
-
-    public String getMatchName() {
-        return matchName;
     }
 }
 

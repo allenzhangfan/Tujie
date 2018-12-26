@@ -1,16 +1,18 @@
 package com.netposa.component.login.di.module;
 
 import android.content.Context;
+
 import com.jess.arms.di.scope.ActivityScope;
-import androidx.fragment.app.FragmentActivity;
+
 import androidx.fragment.app.FragmentManager;
 import dagger.Module;
 import dagger.Provides;
-import com.netposa.commonres.modle.LoadingDialog;
+
+import com.netposa.commonres.widget.Dialog.LoadingDialogFragment;
+import com.netposa.commonres.widget.Dialog.LottieDialogFragment;
 import com.netposa.component.login.mvp.contract.LoginContract;
 import com.netposa.component.login.mvp.model.LoginModel;
 import com.netposa.component.login.mvp.model.entity.LoginRequestEntity;
-import com.tbruyelle.rxpermissions2.RxPermissions;
 
 @Module
 public class LoginModule {
@@ -23,7 +25,7 @@ public class LoginModule {
      *
      * @param view
      */
-    public LoginModule(Context context,LoginContract.View view,FragmentManager fm) {
+    public LoginModule(Context context, LoginContract.View view, FragmentManager fm) {
         mContext = context;
         this.view = view;
         mFm = fm;
@@ -43,31 +45,25 @@ public class LoginModule {
 
     @ActivityScope
     @Provides
-    Context provideContext(){
+    Context provideContext() {
         return mContext;
     }
 
     @ActivityScope
     @Provides
-    FragmentManager provideFragmentManager(){
+    FragmentManager provideFragmentManager() {
         return mFm;
     }
 
     @ActivityScope
     @Provides
-    RxPermissions provideRxPermissions() {
-        return new RxPermissions((FragmentActivity) view);
-    }
-
-    @ActivityScope
-    @Provides
-    LoginRequestEntity provideRequestEntity(){
+    LoginRequestEntity provideRequestEntity() {
         return new LoginRequestEntity();
     }
 
     @ActivityScope
     @Provides
-    LoadingDialog provideLoadingDialog() {
-        return new LoadingDialog(mContext);
+    LottieDialogFragment provideDialogFragment() {
+        return new LoadingDialogFragment();
     }
 }

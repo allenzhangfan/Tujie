@@ -243,7 +243,9 @@
     <dimen name="size_198dp">198.0dip</dimen>
     <dimen name="size_199dp">199.0dip</dimen>
     <dimen name="size_200dp">200.0dip</dimen>
+    <dimen name="size_202dp">202.0dip</dimen>
     <dimen name="size_209dp">209.0dip</dimen>
+    <dimen name="size_210dp">210.0dip</dimen>
     <dimen name="size_214dp">214.0dip</dimen>
     <dimen name="size_228dp">228.0dip</dimen>
     <dimen name="size_230dp">230.0dip</dimen>
@@ -254,6 +256,7 @@
     <dimen name="size_260dp">260.0dip</dimen>
     <dimen name="size_327dp">327.0dip</dimen>
     <dimen name="size_375dp">375.0dip</dimen>
+    <dimen name="size_405dp">405.0dip</dimen>
     <dimen name="size_476dp">476.0dip</dimen>
     <dimen name="size_500dp">500.0dip</dimen>
 

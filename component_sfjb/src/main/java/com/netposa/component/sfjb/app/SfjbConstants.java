@@ -23,8 +23,12 @@ package com.netposa.component.sfjb.app;
  * ================================================
  */
 public interface SfjbConstants {
-    int NUMBER_OF_PAGE = 10;
-    int PAGE_SIZE = 1;
     String FACE_CAPTURE_PIC = "face_capture.jpg";
     String CAPTURE_PIC_PATH = "imgPath";
+    int IS_CHILD = 1; //有下级
+    int NO_CHILD = 2; //无下级
+    String KEY_TO_FACE_CAMPARE="key_to_face_compare";
+    String KEY_TO_LIB_SEARCH="key_to_lib_search";
+    String KEY_TO_LIB_SEARCH_ORG="key_to_lib_search_org";
+    String KEY_TO_LIB_SEARCH_LIB="key_to_lib_search_lib";
 }

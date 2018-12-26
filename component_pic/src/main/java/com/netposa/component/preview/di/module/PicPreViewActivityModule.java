@@ -41,7 +41,7 @@ public class PicPreViewActivityModule {
 
     @ActivityScope
     @Provides
-    List<View> provideViewList(){
+    List<View> provideViewList() {
         return new ArrayList<>();
     }
 }

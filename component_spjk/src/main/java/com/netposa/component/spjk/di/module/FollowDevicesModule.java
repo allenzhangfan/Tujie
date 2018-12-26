@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import dagger.Module;
 import dagger.Provides;
 
-import com.netposa.component.room.entity.SpjkCollectionDeviceEntiry;
+import com.netposa.component.room.entity.SpjkCollectionDeviceEntity;
 import com.netposa.component.spjk.mvp.contract.FollowDevicesContract;
 import com.netposa.component.spjk.mvp.model.FollowDevicesModel;
 import com.netposa.component.spjk.mvp.model.entity.HistoryVideoResponseEntity;
@@ -30,7 +30,7 @@ public class FollowDevicesModule {
      *
      * @param view
      */
-    public FollowDevicesModule(Context context,FollowDevicesContract.View view) {
+    public FollowDevicesModule(Context context, FollowDevicesContract.View view) {
         mContext = context;
         this.view = view;
     }
@@ -67,13 +67,13 @@ public class FollowDevicesModule {
 
     @ActivityScope
     @Provides
-    Context provideContext(){
+    Context provideContext() {
         return mContext;
     }
 
     @ActivityScope
     @Provides
-    List<SpjkCollectionDeviceEntiry> provideBeanList() {
+    List<SpjkCollectionDeviceEntity> provideBeanList() {
         return new ArrayList<>();
     }
 }

@@ -17,14 +17,18 @@ package com.netposa.common.core;
 
 import android.content.Context;
 import android.net.ParseException;
-import android.util.Log;
 
 import com.google.gson.JsonParseException;
+import com.jess.arms.utils.ArmsUtils;
 import com.netposa.common.exception.BadResultException;
 import com.netposa.common.exception.EmptyResultException;
+import com.netposa.common.log.Log;
+import com.netposa.common.net.KickOffException;
+import com.netposa.common.net.TokenInvalidException;
 
 import org.json.JSONException;
 
+import java.net.ConnectException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 
@@ -43,7 +47,7 @@ import retrofit2.HttpException;
  */
 public class ResponseErrorListenerImpl implements ResponseErrorListener {
 
-    private static final String TAG = "ResponseErrorListener";
+    private static final String TAG = "ResponseErrorListenerImpl";
 
     @Override
     public void handleResponseError(Context context, Throwable t) {
@@ -54,18 +58,22 @@ public class ResponseErrorListenerImpl implements ResponseErrorListener {
             msg = "网络不可用";
         } else if (t instanceof SocketTimeoutException) {
             msg = "请求网络超时";
+        } else if (t instanceof ConnectException) {
+            msg = "服务器连接异常";
         } else if (t instanceof HttpException) {
             HttpException httpException = (HttpException) t;
             msg = convertStatusCode(httpException);
         } else if (t instanceof JsonParseException || t instanceof ParseException || t instanceof JSONException) {
             msg = "数据解析错误";
-        } else if (t instanceof BadResultException) {
-            msg = t.getMessage();
         } else if (t instanceof EmptyResultException) {
             msg = "没有请求到数据";
+        } else if (t instanceof BadResultException
+                || t instanceof TokenInvalidException
+                || t instanceof KickOffException) {
+            msg = t.getMessage();
         }
-        Log.e(TAG, msg, t);
-//        ArmsUtils.snackbarText(msg);
+        Log.e(TAG, msg + '\n' + Log.getStackTraceString(t));
+        ArmsUtils.snackbarText(msg);
     }
 
     private String convertStatusCode(HttpException httpException) {

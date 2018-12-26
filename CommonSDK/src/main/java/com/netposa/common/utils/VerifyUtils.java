@@ -61,7 +61,6 @@ public class VerifyUtils {
     }
 
 
-
     /**
      * @param password 密码
      * @return true：密码有中文，false密码无中文

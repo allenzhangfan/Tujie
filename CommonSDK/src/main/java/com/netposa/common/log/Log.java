@@ -268,7 +268,11 @@ public class Log {
         if (TextUtils.isEmpty(msg)) {
             msg = "";
         }
-        sLogger.info(tag.concat(" : ").concat(msg));
+        if (DEBUG) {
+            I(getTag(tag), getMsg(msg));
+        } else {
+            sLogger.info(tag.concat(" : ").concat(msg));
+        }
     }
 
     //写入sd卡
@@ -276,6 +280,10 @@ public class Log {
         if (TextUtils.isEmpty(msg)) {
             msg = "";
         }
-        sLogger.info(tag.concat(" : ").concat(msg));
+        if (DEBUG) {
+            E(getTag(tag), getMsg(msg));
+        } else {
+            sLogger.info(tag.concat(" : ").concat(msg));
+        }
     }
 }

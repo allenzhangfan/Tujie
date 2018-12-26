@@ -14,7 +14,13 @@ android {
         targetSdkVersion rootProject.ext.android["targetSdkVersion"]
         versionCode rootProject.ext.android["versionCode"]
         versionName rootProject.ext.android["versionName"]
-        renderscriptSupportModeEnabled true
+        javaCompileOptions {
+            annotationProcessorOptions {
+                includeCompileClasspath true
+            }
+        }
+        //高斯模糊图片需要添加的支持(选择性放开)
+//        renderscriptSupportModeEnabled true
     }
 
     buildTypes {
@@ -28,6 +34,5 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    api rootProject.ext.dependencies["ucrop"]
     api project(":CommonSDK")
 }

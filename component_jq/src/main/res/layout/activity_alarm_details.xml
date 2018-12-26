@@ -4,18 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/item_view_divider"
+    android:background="@color/color_E5E6EB"
     android:fitsSystemWindows="true"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     android:orientation="vertical"
     tools:ignore="MissingDefaultResource">
 
     <include layout="@layout/include_title_bar" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/size_0_5dp"
-        android:layout_marginTop="@dimen/_5dp"
-        android:background="@color/item_view_divider" />
+    <include layout="@layout/common_view_divider" />
 
     <LinearLayout
         android:id="@+id/content"
@@ -34,10 +32,9 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/size_0dp"
-                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/size_7dp"
                 android:orientation="vertical">
-
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -47,32 +44,27 @@
                     android:paddingRight="@dimen/size_18dp">
 
                     <LinearLayout
+                        android:id="@+id/ll_capture"
                         android:layout_width="0dip"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
+                        android:clickable="true"
+                        android:foreground="?attr/selectableItemBackground"
                         android:gravity="center"
                         android:orientation="vertical">
 
-                        <androidx.cardview.widget.CardView
-                            android:layout_width="@dimen/size_150dp"
-                            android:layout_height="@dimen/size_150dp"
-                            android:clickable="true"
-                            android:foreground="?attr/selectableItemBackground"
-                            app:cardCornerRadius="0dp"
-                            app:cardElevation="0dp"
-                            app:cardUseCompatPadding="false">
-
-                            <ImageView
-                                android:id="@+id/captureImg"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:background="@drawable/ic_image_default" />
-                        </androidx.cardview.widget.CardView>
+                        <com.netposa.commonres.widget.RoundImageView
+                            android:id="@+id/captureImg"
+                            android:layout_width="@dimen/size_164dp"
+                            android:layout_height="@dimen/size_164dp"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/ic_image_default"
+                            app:radius="@dimen/size_2dp" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_5dp"
+                            android:layout_marginTop="@dimen/size_8dp"
                             android:text="@string/capture_image"
                             android:textSize="@dimen/text_size_11sp" />
                     </LinearLayout>
@@ -80,30 +72,25 @@
                     <LinearLayout
                         android:layout_width="0dip"
                         android:layout_height="match_parent"
+                        android:layout_marginLeft="@dimen/size_16dp"
                         android:layout_weight="1"
+                        android:clickable="true"
+                        android:foreground="?attr/selectableItemBackground"
                         android:gravity="center"
                         android:orientation="vertical">
 
-                        <androidx.cardview.widget.CardView
-                            android:layout_width="@dimen/size_150dp"
-                            android:layout_height="@dimen/size_150dp"
-                            android:clickable="true"
-                            android:foreground="?attr/selectableItemBackground"
-                            app:cardCornerRadius="0dp"
-                            app:cardElevation="0dp">
-
-                            <ImageView
-                                android:id="@+id/controlImg"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:background="@drawable/ic_image_default"
-                                android:scaleType="centerCrop" />
-                        </androidx.cardview.widget.CardView>
+                        <com.netposa.commonres.widget.RoundImageView
+                            android:id="@+id/controlImg"
+                            android:layout_width="@dimen/size_164dp"
+                            android:layout_height="@dimen/size_164dp"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/ic_image_default"
+                            app:radius="@dimen/size_2dp" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_5dp"
+                            android:layout_marginTop="@dimen/size_8dp"
                             android:text="@string/alarm_control_pic"
                             android:textSize="@dimen/text_size_11sp" />
                     </LinearLayout>
@@ -113,8 +100,10 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/size_0_5dp"
-                    android:layout_marginTop="@dimen/size_10dp"
-                    android:background="@color/item_view_divider" />
+                    android:layout_marginStart="@dimen/size_16dp"
+                    android:layout_marginTop="@dimen/size_16dp"
+                    android:layout_marginEnd="@dimen/size_16dp"
+                    android:background="@color/color_E5E6EB" />
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
@@ -132,7 +121,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/size_24dp"
-                    android:background="@color/item_view_divider_my" />
+                    android:background="@color/color_F5F6FA" />
             </LinearLayout>
         </ScrollView>
     </LinearLayout>
@@ -148,7 +137,7 @@
         android:visibility="gone">
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_login"
+            android:id="@+id/btn_no"
             style="@style/AlarmInvalidButton"
             android:layout_width="@dimen/size_0dp"
             android:layout_height="@dimen/size_49dp"
@@ -156,10 +145,11 @@
             android:foreground="?attr/selectableItemBackground"
             android:gravity="center"
             android:text="@string/un_effect"
-            android:textColor="@color/face_login_color"
+            android:textColor="@color/color_697084"
             android:textSize="@dimen/text_size_16sp" />
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_yes"
             style="@style/AlarmEffectiveButton"
             android:layout_width="@dimen/size_0dp"
             android:layout_height="@dimen/size_49dp"
@@ -169,6 +159,7 @@
             android:text="@string/in_effect"
             android:textColor="@color/white"
             android:textSize="@dimen/text_size_16sp" />
-
     </LinearLayout>
+
+    <include layout="@layout/common_no_content" />
 </LinearLayout>

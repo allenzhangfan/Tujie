@@ -15,5 +15,5 @@
         android:layout_height="match_parent"
         android:cacheColorHint="@null"
         android:scrollbars="none"
-        android:divider="@null"/>
+        android:divider="@null" />
 </LinearLayout>

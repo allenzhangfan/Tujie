@@ -9,6 +9,7 @@ public class SpjkSearchResponseEntity {
     private int pageNo;
     private int totalRecords;
     private List<ListBean> list;
+
     public int getPageNo() {
         return pageNo;
     }
@@ -49,7 +50,7 @@ public class SpjkSearchResponseEntity {
          * latitude : 30.50547097865371
          * longitude : 114.41178942437482
          */
-
+        private String matchName; //标记匹配
         private String ability;
         private String cameraType;
         private String gbId;
@@ -63,6 +64,14 @@ public class SpjkSearchResponseEntity {
         private double latitude;
         private double longitude;
         private List<Integer> structureType;
+
+        public String getMatchName() {
+            return matchName;
+        }
+
+        public void setMatchName(String matchName) {
+            this.matchName = matchName;
+        }
 
         public String getAbility() {
             return ability;

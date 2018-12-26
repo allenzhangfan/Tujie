@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="token_invalid">登录信息失效，\n请重新登录</string>
+    <string name="kick_off">您的账号已在其他终端登录，\n如非本人操作，请联系管理员或修改密码</string>
     <string name="common_bad_gateway">服务器错误</string>
     <string name="common_error_no_permission">操作无权限</string>
 

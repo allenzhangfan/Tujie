@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
+    android:fitsSystemWindows="false"
     android:orientation="vertical">
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:scaleType="fitXY"
-        android:src="@drawable/splash_screen_bg" />
+        android:src="@drawable/ic_startup_page_bg" />
 
     <TextView
         android:id="@+id/bottom_tv"
@@ -20,7 +20,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="@dimen/size_20dp"
         android:text="@string/company_name"
-        android:textColor="@color/gray_9e9e9e"
+        android:textColor="@color/color_989FB0"
         android:textSize="@dimen/size_12dp" />
 
     <TextView
@@ -39,7 +39,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@id/zhuanzhu_tv"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="@dimen/size_12dp"
-         />
+        android:layout_marginBottom="@dimen/size_8dp"
+        android:src="@drawable/ic_startup_page_logo" />
 
 </RelativeLayout>

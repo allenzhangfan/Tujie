@@ -24,13 +24,9 @@
 
         <activity
             android:name=".mvp.ui.activity.LoginActivity"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".mvp.ui.activity.FaceLoginActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".mvp.ui.activity.CropPictureActivity"
-            android:screenOrientation="portrait" />
+
         <activity
             android:name=".mvp.ui.activity.SetUpIpActivity"
             android:screenOrientation="portrait" />

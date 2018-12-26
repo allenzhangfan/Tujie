@@ -24,5 +24,15 @@ package com.netposa.component.jq.app;
  */
 public interface JqConstants {
     int NUMBER_OF_PAGE = 10;
-    String KEY_JQ_ITEM= "jq_item";
+    int TYPE_CAR_NUMBER = 3;
+    String KEY_DETAILS = "key_details";
+    String LEVAL_1 = "1";
+    String LEVAL_2 = "2";
+    String LEVAL_3 = "3";
+    String LOCATION = "0.0"; //经纬度为0.0;
+    int FACE_TO_DETAIL_REQUESTCODE = 1;
+    int FACE_TO_DETAIL_RESULTCODE=2;
+    int CAR_TO_DETAIL_REQUESTCODE=3;
+    int CAR_TO_DETAIL_RESULTCODE=4;
+    String TAG="jinqing";
 }

@@ -17,7 +17,7 @@ public class LoginServiceImpl implements LoginService {
     @Override
     public void login() {
         Log.d(TAG, "start to login----->");
-        ARouter.getInstance().build(RouterHub.LOGIN_LOGIN_ACTIVITY).navigation(mContext);//发起无参数的路由操作
+        ARouter.getInstance().build(RouterHub.LOGIN_ACTIVITY).navigation(mContext);//发起无参数的路由操作
     }
 
     @Override

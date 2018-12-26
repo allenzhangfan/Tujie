@@ -1,4 +1,4 @@
-apply from:"../common_component_build.gradle"
+apply from: "../common_component_build.gradle"
 
 dependencies {
     //视频sdk模块

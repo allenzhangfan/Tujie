@@ -1,6 +1,5 @@
 package com.netposa.component.room.dao;
 
-import com.netposa.component.room.entity.JqSearchHistoryEntity;
 import com.netposa.component.room.entity.SpjkSearchHistoryEntity;
 
 import java.util.List;

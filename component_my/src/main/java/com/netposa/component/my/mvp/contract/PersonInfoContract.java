@@ -2,6 +2,7 @@ package com.netposa.component.my.mvp.contract;
 
 import com.jess.arms.mvp.IView;
 import com.jess.arms.mvp.IModel;
+import com.netposa.component.my.mvp.model.entity.LogOutResponseEntity;
 import io.reactivex.Observable;
 
 public interface PersonInfoContract {
@@ -16,6 +17,6 @@ public interface PersonInfoContract {
     //Model层定义接口,外部只需关心Model返回的数据,无需关心内部细节,即是否使用缓存
     interface Model extends IModel {
 
-        Observable<String> logOut();
+        Observable<LogOutResponseEntity> logOut();
     }
 }

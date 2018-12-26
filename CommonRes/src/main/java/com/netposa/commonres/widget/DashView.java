@@ -119,7 +119,7 @@ public class DashView extends View {
 //            }
 //        });
 //        previousAnimator.start();
-        previous=0;
+        previous = 0;
         invalidate();
     }
 
@@ -137,7 +137,7 @@ public class DashView extends View {
         float top = 0;
         float right = width * previous;
         float bottom = height;
-        canvas.drawRect(left, top, width, bottom,basePaint);
+        canvas.drawRect(left, top, width, bottom, basePaint);
         canvas.drawRect(left, top, right, bottom, solidPaint);
         if (anim) {
             invalidate();

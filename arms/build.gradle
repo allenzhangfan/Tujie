@@ -51,30 +51,21 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     api rootProject.ext.dependencies["annotation"]
-    api rootProject.ext.dependencies["appcompat"]
-    api rootProject.ext.dependencies["asynclayoutinflater"]
-    api rootProject.ext.dependencies["cardview"]
-    api rootProject.ext.dependencies["constraintlayout"]
-    api rootProject.ext.dependencies["coordinatorlayout"]
-    api rootProject.ext.dependencies["drawerlayout"]
-    api rootProject.ext.dependencies["exifinterface"]
-    api rootProject.ext.dependencies["localbroadcastmanager"]
-    api rootProject.ext.dependencies["recyclerview"]
-    api rootProject.ext.dependencies["swiperefreshlayout"]
-    api rootProject.ext.dependencies["viewpager"]
-
-    api rootProject.ext.dependencies["material"]
+    api(rootProject.ext.dependencies["appcompat"]) {
+        exclude group: "androidx.core"
+        exclude group: "androidx.annotation"
+    }
+    api rootProject.ext.dependencies["core"]
+    compileOnly rootProject.ext.dependencies["material"]
     api(rootProject.ext.dependencies["butterknife"]) {
         exclude group: "com.android.support"
     }
     //在业务组件中，需要导入路由的编译期依赖库、以及所有的基础组件
     api(rootProject.ext.dependencies["arouter-api"]) {
         exclude module: 'support-v4'
-        exclude module: 'annotation'
-        exclude module: 'core'
     }
     annotationProcessor rootProject.ext.dependencies["arouter-compiler"]
-    api rootProject.ext.dependencies["retrofit-url-manager"]
+    
     //rx
     api rootProject.ext.dependencies["rxjava2"]
     api(rootProject.ext.dependencies["rxandroid2"]) {
@@ -83,22 +74,20 @@ dependencies {
     api(rootProject.ext.dependencies["rxcache2"]) {
         exclude module: 'rxjava'
         exclude module: 'dagger'
+        exclude module: 'api'
     }
     api(rootProject.ext.dependencies["rxcache-jolyglot-gson"]) {
         exclude module: 'gson'
     }
     api(rootProject.ext.dependencies["rxlifecycle-android"]) {
-        exclude module: 'rxjava'
-        exclude module: 'rxandroid'
-    }
-    api (rootProject.ext.dependencies["rxlifecycle-android-lifecycle"]){
-        exclude module: 'rxandroid'
-        exclude module: 'lifecycle-runtime'
-    }
-    api(rootProject.ext.dependencies["rxpermissions2"]) {
-        exclude module: 'rxjava'
-        exclude module: 'annotation'
         exclude module: 'support-annotations'
+        exclude module: 'rxjava'
+        exclude module: 'rxandroid'
+    }
+    api(rootProject.ext.dependencies["rxlifecycle-android-lifecycle"]) {
+        exclude group: "io.reactivex.rxjava2"
+        exclude group: "com.android.support"
+        exclude group: "android.arch.lifecycle"
     }
     api rootProject.ext.dependencies['rxerrorhandler2']
     //network
@@ -132,8 +121,6 @@ dependencies {
     annotationProcessor rootProject.ext.dependencies["dagger2-compiler"]
     api rootProject.ext.dependencies["gson"]
 
-    //recyclerViewAdapterHelper
-    api rootProject.ext.dependencies["recyclerViewAdapterHelper"]
     api(rootProject.ext.dependencies["barlibrary"]) {
         exclude group: "com.android.support"
     }

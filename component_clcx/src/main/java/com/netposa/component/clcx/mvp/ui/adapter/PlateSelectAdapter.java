@@ -4,7 +4,9 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.netposa.component.clcx.R;
 import com.netposa.component.clcx.mvp.model.entity.PlateSelectEntity;
+
 import java.util.List;
+
 import androidx.annotation.Nullable;
 
 /**

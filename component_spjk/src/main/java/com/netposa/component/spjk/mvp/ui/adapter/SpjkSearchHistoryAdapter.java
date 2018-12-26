@@ -6,7 +6,9 @@ import com.netposa.component.room.entity.SpjkSearchHistoryEntity;
 import com.netposa.component.spjk.R;
 
 import java.util.List;
+
 import javax.inject.Inject;
+
 import androidx.annotation.Nullable;
 
 /**
@@ -23,7 +25,7 @@ public class SpjkSearchHistoryAdapter extends BaseQuickAdapter<SpjkSearchHistory
     @Override
     protected void convert(BaseViewHolder helper, SpjkSearchHistoryEntity item) {
         String name = item.getName();
-        helper.setText(R.id.tv_name,name);
+        helper.setText(R.id.tv_name, name);
         helper.addOnClickListener(R.id.iv_delete);
     }
 }

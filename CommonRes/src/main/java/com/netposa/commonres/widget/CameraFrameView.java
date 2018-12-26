@@ -77,7 +77,7 @@ public class CameraFrameView extends View {
 
 
         // middle line color
-        mPaint.setColor(ContextCompat.getColor(getContext(), R.color.white_alpha20));
+        mPaint.setColor(ContextCompat.getColor(getContext(), R.color.color_15FFFFFF));
 
         // vertical
         for (int i = 1; i < mSplit; i++) {

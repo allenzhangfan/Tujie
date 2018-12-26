@@ -13,7 +13,9 @@
         tools:replace="android:theme"
         tools:ignore="GoogleAppIndexingWarning">
 
-        <activity android:name=".mvp.ui.activity.MyActivity" android:screenOrientation="portrait">
+        <activity
+            android:name=".mvp.ui.activity.MyActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -27,10 +29,10 @@
         声明 CommonSDK 的 ConfigModule -->
         <meta-data
             android:name="com.netposa.common.core.GlobalConfiguration"
-            android:value="ConfigModule"/>
+            android:value="ConfigModule" />
         <meta-data
             android:name="com.netposa.component.my.app.GlobalConfiguration"
-            android:value="ConfigModule"/>
+            android:value="ConfigModule" />
     </application>
 
 </manifest>

@@ -13,8 +13,8 @@ import javax.inject.Inject;
 import com.netposa.common.net.HttpResponseHandler;
 import com.netposa.component.my.mvp.contract.PersonInfoContract;
 import com.netposa.component.my.mvp.model.api.MyService;
+import com.netposa.component.my.mvp.model.entity.LogOutResponseEntity;
 
-import io.reactivex.Flowable;
 import io.reactivex.Observable;
 
 
@@ -38,7 +38,7 @@ public class PersonInfoModel extends BaseModel implements PersonInfoContract.Mod
     }
 
     @Override
-    public Observable<String> logOut() {
+    public Observable<LogOutResponseEntity> logOut() {
         return mRepositoryManager
                 .obtainRetrofitService(MyService.class)
                 .logOut()

@@ -1,5 +1,7 @@
 package com.netposa.common.utils;
 
+import android.text.TextUtils;
+
 import java.math.BigDecimal;
 import java.util.Arrays;
 
@@ -195,12 +197,13 @@ public class StringUtils {
 
     /**
      * 保留小数点后几位
+     *
      * @param parm 保留小数点几位
-     * @param str source 数据
+     * @param str  source 数据
      * @return
      */
-    public static double cutParse(int parm,String str){
-        Double sourct=Double.parseDouble(str);
+    public static double cutParse(int parm, String str) {
+        Double sourct = Double.parseDouble(str);
         BigDecimal bg = new BigDecimal(sourct);
         return bg.setScale(parm, BigDecimal.ROUND_HALF_UP).doubleValue();
     }
@@ -211,9 +214,50 @@ public class StringUtils {
      * @param targetValue  要查看的字段
      * @return
      */
-    public static boolean isContin(String[] strArray,String targetValue){
+    public static boolean isContin(String[] strArray, String targetValue) {
         return Arrays.asList(strArray).contains(targetValue);
     }
 
+    /**
+     * 保留小数点前的值 double转成float 用于相似度的展示
+     * @param d
+     * @return
+     */
+
+    public static float dealSimilarity (double d){
+        String similarity= String.valueOf(d);
+        if (TextUtils.isEmpty(similarity)){
+            return 0;
+        }
+        String intNumber = similarity.substring(0,similarity.indexOf("."));
+        float f= Float.parseFloat(intNumber);
+        return f;
+    }
+    /**
+     * 保留小数点前的值 double转成string 用于相似度的展示
+     * @param d
+     * @return
+     */
+    public static String dealSimilarityBackStr (double d){
+        String similarity= String.valueOf(d);
+        if (TextUtils.isEmpty(similarity)){
+            return "";
+        }
+        String strNumber = similarity.substring(0,similarity.indexOf("."));
+        return strNumber;
+    }
+    /**
+     * 保留小数点前的值 double转成int 用于相似度的展示
+     * @param d
+     * @return
+     */
+    public static int dealSimilarityBackInt (double d){
+        String similarity= String.valueOf(d);
+        if (TextUtils.isEmpty(similarity)){
+            return 0;
+        }
+        String intNumber = similarity.substring(0,similarity.indexOf("."));
+      return   Integer.parseInt( intNumber );
+    }
 
 }

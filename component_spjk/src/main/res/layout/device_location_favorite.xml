@@ -46,6 +46,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="left|center_vertical"
                     android:text="保利国际中心15F B区办公区"
+                    android:textColor="@color/color_333333"
                     android:textSize="@dimen/text_size_14sp" />
 
                 <TextView
@@ -57,6 +58,7 @@
                     android:layout_marginTop="@dimen/size_3dp"
                     android:gravity="left|center_vertical"
                     android:text="湖北省武汉市洪山区关山街道424号"
+                    android:textColor="@color/color_989FB0"
                     android:textSize="@dimen/text_size_12sp" />
             </LinearLayout>
         </LinearLayout>
@@ -93,6 +95,7 @@
                 android:layout_below="@+id/iv_follow"
                 android:layout_marginTop="@dimen/size_3dp"
                 android:gravity="left|center_vertical"
+                android:textColor="@color/color_989FB0"
                 android:text="@string/subscribe"
                 android:textSize="@dimen/text_size_12sp" />
         </RelativeLayout>

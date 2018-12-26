@@ -28,10 +28,10 @@
         声明 CommonSDK 的 ConfigModule -->
         <meta-data
             android:name="com.netposa.common.core.GlobalConfiguration"
-            android:value="ConfigModule"/>
+            android:value="ConfigModule" />
         <meta-data
             android:name="com.netposa.component.gzt.app.GlobalConfiguration"
-            android:value="ConfigModule"/>
+            android:value="ConfigModule" />
     </application>
 
 </manifest>

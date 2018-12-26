@@ -25,8 +25,7 @@ import com.netposa.component.spjk.mvp.model.entity.HistoryVideoRequestEntity;
 import com.netposa.component.spjk.mvp.model.entity.HistoryVideoResponseEntity;
 import com.trello.lifecycle2.android.lifecycle.AndroidLifecycle;
 
-import static com.netposa.component.spjk.app.SpjkConstants.NUMBER_OF_PAGE;
-import static com.netposa.component.spjk.app.SpjkConstants.PAGE_SIZE;
+import static com.netposa.common.constant.GlobalConstants.PAGE_SIZE_DEFAULT;
 
 
 @ActivityScope
@@ -64,6 +63,7 @@ public class HistoryVideoPresenter extends BasePresenter<HistoryVideoContract.Mo
         Log.i(TAG, "start to getNeighbouringDevice");
         if (!NetworkUtils.isConnected()) {
             mRootView.showMessage(mContext.getString(R.string.network_disconnect));
+            mRootView.hideLoading();
             return;
         }
         mRequestEntity.setBeginTime(startTime);
@@ -71,7 +71,7 @@ public class HistoryVideoPresenter extends BasePresenter<HistoryVideoContract.Mo
         mRequestEntity.setCameraId(cameraId);
         mPageBean = new HistoryVideoRequestEntity.PageInfoBean();
         mPageBean.setCurrentPage(page);
-        mPageBean.setPageSize(NUMBER_OF_PAGE);
+        mPageBean.setPageSize(PAGE_SIZE_DEFAULT);
         mModel.getlistHistoryVideo(mRequestEntity)
                 .subscribeOn(Schedulers.io())
                 .retryWhen(new RetryWithDelay(1, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
@@ -93,7 +93,7 @@ public class HistoryVideoPresenter extends BasePresenter<HistoryVideoContract.Mo
                     @Override
                     public void onError(Throwable t) {
                         super.onError(t);
-                        Log.d(TAG, "getCameraHistoryList error" );
+                        Log.d(TAG, "getCameraHistoryList error");
                         mRootView.getVideoFAiled();
                     }
                 });

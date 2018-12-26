@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ll_botttom_sheet"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/size_88dp"
+    android:layout_alignParentBottom="true"
+    android:background="@color/white"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:orientation="horizontal"
+    tools:showIn="@layout/activity_view_car_path">
+
+    <LinearLayout
+        android:id="@+id/ll_car_info"
+        android:layout_width="@dimen/size_0dp"
+        android:layout_height="@dimen/size_72dp"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <com.netposa.commonres.widget.RoundImageView
+            android:id="@+id/iv_camera"
+            android:layout_width="@dimen/size_72dp"
+            android:layout_height="@dimen/size_72dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/size_8dp"
+            android:background="@drawable/image_view_bound_shape"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_image_default"
+            app:radius="@dimen/size_2dp" />
+
+        <LinearLayout
+            android:id="@+id/ll_detail"
+            android:layout_width="@dimen/size_0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/size_8dp"
+            android:layout_toRightOf="@+id/iv_camera"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_location_detail"
+                style="@style/CommonTextItem"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left|center_vertical"
+                android:textColor="@color/color_333333"
+                android:textSize="@dimen/text_size_14sp" />
+
+            <TextView
+                android:id="@+id/tv_time"
+                style="@style/CommonTextItem"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/size_3dp"
+                android:gravity="left|center_vertical"
+                android:textColor="@color/color_989FB0"
+                android:textSize="@dimen/text_size_12sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_show_Detail"
+        android:layout_width="@dimen/size_70dp"
+        android:layout_height="@dimen/size_20dp"
+        android:layout_marginLeft="@dimen/size_13dp"
+        android:layout_marginTop="@dimen/size_54dp"
+        android:layout_marginRight="@dimen/size_4dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_show_detail"
+            style="@style/CommonTextItem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="left|center_vertical"
+            android:text="@string/show_details"
+            android:textColor="@color/color_2D87F9"
+            android:textSize="@dimen/text_size_12sp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_list_go" />
+    </LinearLayout>
+</LinearLayout>
+

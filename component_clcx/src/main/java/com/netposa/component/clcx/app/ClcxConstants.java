@@ -23,5 +23,21 @@ package com.netposa.component.clcx.app;
  * ================================================
  */
 public interface ClcxConstants {
-    int NUMBER_OF_PAGE = 10;
+    String KEY_SINGLE_TYPE = "key_single_type";
+    String KEY_SINGLE_RESULT="key_single_result";
+    String KEY_DICTIONARY_TYPE_START_TIME="key_dictionary_type_start_time"; //结束时间
+    String KEY_DICTIONARY_TYPE_END_TIME="key_dictionary_type_end_time"; // 开始时间
+    String KEY_POSITION="key_position";
+    String KEY_VEHICLE_TRACK="key_vehicle_track"; //车辆轨迹
+    String mType_plate = "plate";//车牌类型；
+    String mType_car = "car";//车辆类型；
+    String KEY_SELECT_RESULT = "key_select_result";
+    String KEY_CAR_DETAIL="key_car_detail";
+    int REQUESTCODE_CAR_TYPE = 1;
+    int REQUESTCODE_CAR_PLATE = 2;
+    String KEY_LIST_TYPE = "key_car_type";
+    String KEY_QUANBU = "全部";
+    String KEY_PIC_PATH = "key_pic_path";
+    String VEHICLE_YEAR_TYPE_DEEPLINT="DEEPLINT";
+    String VEHICLE_YEAR_TYPE_PCC="PCC";
 }

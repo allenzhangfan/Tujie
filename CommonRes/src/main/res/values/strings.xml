@@ -1,8 +1,9 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!--sweet dialog-->
     <string name="sure_quit">您确定要退出吗?</string>
     <string name="sure_delete_title">"您确定要删除吗？"</string>
-
+    <string name="download_image_failed">"图片下载失败"</string>
+    <string name="download_image_success">"图片下载成功:%s"</string>
     <string name="app_name">CommonRes</string>
     <string name="reset">重置</string>
     <string name="confirm">确定</string>
@@ -68,8 +69,15 @@
     <string name="clear">清空</string>
     <string name="query_hint">请输入搜索内容</string>
     <string name="query_history">历史搜索</string>
+    <string name="male">男性</string>
+    <string name="famale">女性</string>
+    <string name="wear_glasses">戴眼镜</string>
+    <string name="no_wear_glasses">未戴眼镜</string>
+    <string name="confirm_bt">确认</string>
     <!--seekbarhelper-->
     <string name="text_label_percent">%1$d%%</string>
+    <string name="qiangji">枪机</string>
+    <string name="qiu_ji">球机</string>
 
     <!--网络-->
     <string name="network_disconnect">网络不给力</string>
@@ -78,6 +86,9 @@
     <string name="network_connect_timeout">网络连接超时</string>
     <string name="network_connect_fail">网络连接失败</string>
     <string name="network_data_error">数据解析失败</string>
+    <string name="text_label_warm_tip">温馨提示</string>
+    <string name="text_label_fine">好的</string>
+    <string name="please_enable_location_service">为了达到更好的定位效果，请先进入设置中开启定位服务</string>
 
     <!--空白及缺省内容-->
     <string name="search_result_of_nothing_for_relations">没有查询到相关内容</string>
@@ -93,7 +104,6 @@
     <string name="login_plz_input_username">请输入用户名</string>
     <string name="login_plz_input_pwd">请输入密码</string>
     <string name="login_plz_input_ip">请输入IP</string>
-    <string name="account_phone">请输入用户名</string>
     <string name="other_login">其他登录方式</string>
     <string name="forget_pwd">忘记密码？</string>
     <string name="service_address">服务地址</string>
@@ -102,9 +112,11 @@
     <string name="tell_text">13109890324</string>
     <string name="email_text">admin@netposa.com</string>
     <string name="copy">复制</string>
+    <string name="copy_success">复制成功</string>
     <string name="sure_to_logout">确定退出登录？</string>
     <string name="exit">退出</string>
     <string name="face_login_notice">未开启刷脸登录，请使用用户名登录</string>
+    <string name="logining">登录中···</string>
 
     <!--警情-->
     <string name="jq">警情</string>
@@ -123,6 +135,14 @@
     <string name="remarks">备注</string>
     <string name="in_effect">有效</string>
     <string name="un_effect">无效</string>
+    <string name="similarity_percent">相似度: %1$d%%</string>
+    <string name="compare_result">对比结果</string>
+    <string name="compare_lib_iv">比对库图片</string>
+    <string name="deploy_car">车辆布控</string>
+    <string name="deploy_face">人脸布控</string>
+    <string name="receive_no_message_deploy_face">未收到人脸布控消息</string>
+    <string name="receive_no_message_deploy_car">未收到车辆布控消息</string>
+    <string name="no_detail_content">未查询到警情详情</string>
 
     <!--工作台-->
     <string name="workbench">工作台</string>
@@ -135,20 +155,25 @@
     <string name="list_item_chose">列表选择</string>
 
     <!--身份鉴别-->
-    <string name="sfjb_chose_compairlib">选择库比对</string>
+    <string name="sfjb_chose_compairlib">选择比对库</string>
     <string name="sfjb_all_chose">全选</string>
     <string name="sfjb_compair">比对</string>
-    <string name="identification">身份鉴别</string>
-    <string name="recognition_result">识别结果</string>
+    <string name="recognition_result">比对结果</string>
     <string name="location_now">正在定位...</string>
     <string name="not_connect_wifi">检测到当前网络未连接至wifi</string>
     <string name="video_not_played">未开始播放视频</string>
     <string name="img_has_saved">截图已保存成功</string>
+    <string name="creat_date">创建时间</string>
+    <string name="detail_info">详细信息</string>
+    <string name="no_result_message">未搜索到比对结果</string>
+    <string name="look_orginal_iv">查看原图</string>
+    <string name="no_compare_lib">未识别出比对库</string>
 
     <!--我的-->
     <string name="my">我的</string>
     <string name="person_information">个人信息</string>
     <string name="clear_cache">清理缓存</string>
+    <string name="clear_cache_success">缓存清理成功!</string>
     <string name="organization_related">所属组织</string>
     <string name="police_number">警号</string>
     <string name="phone_number">电话</string>
@@ -157,6 +182,11 @@
     <string name="app_description">视频图像解析系统</string>
     <string name="app_version">版本号:%1$s</string>
     <string name="app_update">更新版本</string>
+    <string name="upgrade_text">立即更新</string>
+    <string name="version_update">版本更新</string>
+    <string name="no_new_version">暂无更新地址</string>
+    <string name="latest_version">已经是最新版本啦</string>
+    <string name="should_update">该更新啦</string>
 
     <!--人脸拍照-->
     <string name="take_picture_tip">拍照过程中请保持脸部处于显示框内</string>
@@ -168,6 +198,9 @@
     <string name="history_video">历史视频</string>
     <string name="unsubscribe">取消关注</string>
     <string name="subscribe">关注设备</string>
+    <string name="no_devices_subscribe">没有关注的设备</string>
+    <string name="no_history_video">暂无历史视频</string>
+    <string name="no_choose_list">未查询到相关列表</string>
     <string name="tv_history_video_time">%1$s 至 %2$s</string>
     <string name="neighbouring_devices">周边设备</string>
     <string name="no_neighbouring_devices">该范围内没有设备</string>
@@ -183,7 +216,6 @@
     <string name="collect_time">采集时间</string>
     <string name="query_hint_plate_number">请输入车牌号码</string>
     <string name="wheel_path">行车轨迹</string>
-    <string name="test1">结束时间\n2018-03-02 12:11:11</string>
     <string name="no_result">未找到结果</string>
     <string name="clcx_title">查询结果</string>
     <string name="clcx_record">通行记录</string>
@@ -208,4 +240,43 @@
     <string name="sun_visor">遮阳板</string>
     <string name="is_visor_face">是否遮挡面部</string>
     <string name="other_marker">其他标志物</string>
+    <string name="show_details">查看详情</string>
+    <string name="view_path">查看轨迹</string>
+    <string name="device_info_do_not_receive_yet">设备信息暂未获取到，请稍后再试!</string>
+    <string name="clcx_unknow">未知</string>
+    <string name="clcx_unidentified">未识别</string>
+    <string name="clcx_bayonet_info">无卡口信息</string>
+    <string name="other">其它</string>
+    <string name="clcx_database_copy">已复制字典数据</string>
+    <string name="time_quantum">时间段</string>
+    <string name="wear_glasses_or_not">有无眼镜</string>
+    <string name="twenty_four_hours">24小时</string>
+    <string name="three_days">3天</string>
+    <string name="seven_days">7天</string>
+
+    <!--人脸图库 -->
+    <string name="rltk_choce_device">选择设备</string>
+    <string name="rltk_photo_information">图片信息</string>
+    <string name="capture_device">抓拍设备</string>
+    <string name="age">年龄</string>
+    <string name="glasses">眼镜</string>
+    <string name="no_recordId">暂未选择人员</string>
+    <string name="no_deviceId">暂未选择设备</string>
+
+    <!--以图搜图-->
+    <string name="search_person">搜人</string>
+    <string name="search_car">搜车</string>
+    <string name="uploading">上传中···</string>
+    <string name="select_target">选择目标</string>
+    <string name="time_sort">时间排序</string>
+    <string name="similarity_sort">相似度排序</string>
+    <string name="guiji_analysis">轨迹分析</string>
+    <string name="not_discern">没有识别出图片中的目标</string>
+    <string name="update_failed">上传失败</string>
+
+    <!--图片详情-->
+    <string name="no_tag">图片没有特征</string>
+    <string name="no_recognized">未识别出特征,请重新拍照</string>
+    <string name="take_pic_face">请选择人体进行拍照</string>
+    <string name="take_pic_car">请选择车牌进行拍照</string>
 </resources>

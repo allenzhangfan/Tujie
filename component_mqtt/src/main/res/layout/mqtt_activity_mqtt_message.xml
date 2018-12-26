@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MqttMessageActivity"
+    tools:ignore="HardcodedText">
+
+    <TextView
+        android:id="@+id/amm_mqtt_desc_tv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="MQTT消息订阅/发布"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.05"/>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/amm_mqtt_topic_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/amm_mqtt_desc_tv">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/amm_mqtt_topic_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Topic(订阅/发布)"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/amm_mqtt_payload_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/amm_mqtt_topic_layout">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/amm_mqtt_payload_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Payload(发布字段，订阅时无效)"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/amm_mqtt_subscribe_bt"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="订阅"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/amm_mqtt_publish_bt"
+        app:layout_constraintTop_toBottomOf="@+id/amm_mqtt_payload_layout"/>
+
+    <Button
+        android:id="@+id/amm_mqtt_publish_bt"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/size_10dp"
+        android:text="发布"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintLeft_toRightOf="@+id/amm_mqtt_subscribe_bt"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/amm_mqtt_payload_layout"/>
+
+    <ScrollView
+        android:id="@+id/amm_mqtt_scrollView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/amm_mqtt_publish_bt">
+
+        <TextView
+            android:id="@+id/amm_mqtt_message_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

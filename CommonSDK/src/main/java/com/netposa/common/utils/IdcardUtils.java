@@ -563,7 +563,7 @@ public class IdcardUtils {
      * 根据身份编号获取性别
      *
      * @param idCard 身份编号
-     * @return 性别(M-男，F-女，N-未知)
+     * @return 性别(M - 男 ， F - 女 ， N - 未知)
      */
     public static String getGenderByIdCard(String idCard) {
         String sGender = "N";

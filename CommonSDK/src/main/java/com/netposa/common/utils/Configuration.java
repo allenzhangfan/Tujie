@@ -2,7 +2,7 @@ package com.netposa.common.utils;
 
 import android.os.Environment;
 
-import com.netposa.common.constant.CommonConstant;
+import com.netposa.common.constant.GlobalConstants;
 
 import java.io.File;
 
@@ -17,7 +17,7 @@ public class Configuration {
      * 获取应用程序存储根目录目录
      */
     public static String getRootPath() {
-        return CommonConstant.ROOT_PATH;
+        return GlobalConstants.ROOT_PATH;
     }
 
     /**
@@ -26,7 +26,7 @@ public class Configuration {
      * @return 成功则返回获取到的路径，失败则返回null
      */
     public static String getCacheDirectoryPath() {
-        String path = getRootPath() + CommonConstant.CACHE_PATH;
+        String path = GlobalConstants.CACHE_PATH;
         if (FileUtils.createOrExistsDir(path)) {
             return path;
         } else {
@@ -62,7 +62,7 @@ public class Configuration {
      * @return 成功则返回获取到的路径，失败则返回null
      */
     public static String getAvatarDirectoryPath() {
-        String path = getRootPath() + CommonConstant.AVATAR_PATH;
+        String path = GlobalConstants.AVATAR_PATH;
         if (FileUtils.createOrExistsDir(path)) {
             return path;
         } else {
@@ -76,7 +76,7 @@ public class Configuration {
      * @return 成功则返回获取到的路径，失败则返回null
      */
     public static String getPictureDirectoryPath() {
-        String path = getRootPath() + CommonConstant.PICTURE_PATH;
+        String path = GlobalConstants.PICTURE_PATH;
         if (FileUtils.createOrExistsDir(path)) {
             return path;
         } else {
@@ -90,7 +90,7 @@ public class Configuration {
      * @return 成功则返回获取到的路径，失败则返回null
      */
     public static String getDownloadDirectoryPath() {
-        String path = getRootPath() + CommonConstant.DOWNLOAD_PATH;
+        String path = GlobalConstants.DOWNLOAD_PATH;
         if (FileUtils.createOrExistsDir(path)) {
             return path;
         } else {
@@ -104,7 +104,7 @@ public class Configuration {
      * @return 成功则返回获取到的路径，失败则返回null
      */
     public static String getVideoDirectoryPath() {
-        String path = getRootPath() + CommonConstant.VIDEO_PATH;
+        String path = GlobalConstants.VIDEO_PATH;
         if (FileUtils.createOrExistsDir(path)) {
             return path;
         } else {
@@ -118,7 +118,7 @@ public class Configuration {
      * @return 成功则返回获取到的路径，失败则返回null
      */
     public static String getAPKDirectoryPath() {
-        String path = getRootPath() + CommonConstant.APK_PATH;
+        String path = GlobalConstants.APK_PATH;
         if (FileUtils.createOrExistsDir(path)) {
             return path;
         } else {
@@ -132,7 +132,7 @@ public class Configuration {
      * @return 成功则返回获取到的路径，失败则返回null
      */
     public static String getLogDirectoryPath() {
-        String path = getRootPath() + CommonConstant.LOG_PATH;
+        String path = GlobalConstants.LOG_PATH;
         if (FileUtils.createOrExistsDir(path)) {
             return path;
         } else {
@@ -141,7 +141,7 @@ public class Configuration {
     }
 
     public static String getExternalROOTPath() {
-        return getExternalStorage() + CommonConstant.MAIN_PATH;
+        return getExternalStorage() + GlobalConstants.MAIN_PATH;
     }
 
     public static String getInternalROOTPath() {
@@ -189,7 +189,7 @@ public class Configuration {
     public static String getExternalStorage() {
         String externalPath = Environment.getExternalStorageDirectory().getAbsolutePath();
         if (externalPath == null || "".equals(externalPath.trim()) || !FileUtils.isFileExists(externalPath)) {
-            externalPath = CommonConstant.DEFAULT_EXTERNAL_PATH;
+            externalPath = GlobalConstants.DEFAULT_EXTERNAL_PATH;
         } else if (!externalPath.endsWith("/")) {
             externalPath += "/";
         }

@@ -38,6 +38,7 @@ import androidx.annotation.Nullable;
 import io.reactivex.Completable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Action;
+
 import static com.jess.arms.base.Platform.DEPENDENCY_SUPPORT_DESIGN;
 
 /**
@@ -147,7 +148,7 @@ public final class AppManager {
      */
     public void showSnackbar(String message, boolean isLong) {
         if (getCurrentActivity() == null && getTopActivity() == null) {
-            Log.w(TAG,"mCurrentActivity == null when showSnackbar(String,boolean)");
+            Log.w(TAG, "mCurrentActivity == null when showSnackbar(String,boolean)");
             return;
         }
         Completable.fromAction(() -> {
@@ -160,7 +161,7 @@ public final class AppManager {
 //                View view = activity.getWindow().getDecorView().findViewById(android.R.id.content);
 //                Snackbar.make(view, message, isLong ? Snackbar.LENGTH_LONG : Snackbar.LENGTH_SHORT).show();
 //            } else {
-                ArmsUtils.makeText(mApplication, message);
+            ArmsUtils.makeText(mApplication, message);
 //            }
         }).subscribeOn(AndroidSchedulers.mainThread()).subscribe();
 
@@ -173,7 +174,7 @@ public final class AppManager {
      */
     public void startActivity(Intent intent) {
         if (getTopActivity() == null) {
-            Log.w(TAG,"mCurrentActivity == null when startActivity(Intent)");
+            Log.w(TAG, "mCurrentActivity == null when startActivity(Intent)");
             //如果没有前台的activity就使用new_task模式启动activity
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             mApplication.startActivity(intent);
@@ -244,7 +245,7 @@ public final class AppManager {
     @Nullable
     public Activity getTopActivity() {
         if (mActivityList == null) {
-            Log.w(TAG,"mActivityList == null when getTopActivity()");
+            Log.w(TAG, "mActivityList == null when getTopActivity()");
             return null;
         }
         return mActivityList.size() > 0 ? mActivityList.get(mActivityList.size() - 1) : null;
@@ -283,7 +284,7 @@ public final class AppManager {
      */
     public void removeActivity(Activity activity) {
         if (mActivityList == null) {
-            Log.w(TAG,"mActivityList == null when removeActivity(Activity)");
+            Log.w(TAG, "mActivityList == null when removeActivity(Activity)");
             return;
         }
         synchronized (AppManager.class) {
@@ -300,7 +301,7 @@ public final class AppManager {
      */
     public Activity removeActivity(int location) {
         if (mActivityList == null) {
-            Log.w(TAG,"mActivityList == null when removeActivity(int)");
+            Log.w(TAG, "mActivityList == null when removeActivity(int)");
             return null;
         }
         synchronized (AppManager.class) {
@@ -318,7 +319,7 @@ public final class AppManager {
      */
     public void killActivity(Class<?> activityClass) {
         if (mActivityList == null) {
-            Log.w(TAG,"mActivityList == null when killActivity(Class)");
+            Log.w(TAG, "mActivityList == null when killActivity(Class)");
             return;
         }
         synchronized (AppManager.class) {
@@ -343,7 +344,7 @@ public final class AppManager {
      */
     public boolean activityInstanceIsLive(Activity activity) {
         if (mActivityList == null) {
-            Log.w(TAG,"mActivityList == null when activityInstanceIsLive(Activity)");
+            Log.w(TAG, "mActivityList == null when activityInstanceIsLive(Activity)");
             return false;
         }
         return mActivityList.contains(activity);
@@ -358,7 +359,7 @@ public final class AppManager {
      */
     public boolean activityClassIsLive(Class<?> activityClass) {
         if (mActivityList == null) {
-            Log.w(TAG,"mActivityList == null when activityClassIsLive(Class)");
+            Log.w(TAG, "mActivityList == null when activityClassIsLive(Class)");
             return false;
         }
         for (Activity activity : mActivityList) {
@@ -378,7 +379,7 @@ public final class AppManager {
      */
     public Activity findActivity(Class<?> activityClass) {
         if (mActivityList == null) {
-            Log.w(TAG,"mActivityList == null when findActivity(Class)");
+            Log.w(TAG, "mActivityList == null when findActivity(Class)");
             return null;
         }
         for (Activity activity : mActivityList) {

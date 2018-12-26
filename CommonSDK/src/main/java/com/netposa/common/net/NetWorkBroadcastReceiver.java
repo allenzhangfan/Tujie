@@ -5,7 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
+
 import com.netposa.common.utils.NetworkUtils;
+
 import java.util.HashMap;
 import java.util.Map;
 

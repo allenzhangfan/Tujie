@@ -31,7 +31,7 @@ import com.netposa.component.jq.R2;
 import com.netposa.component.jq.di.component.DaggerJqSearchComponent;
 import com.netposa.component.jq.di.module.JqSearchModule;
 import com.netposa.component.jq.mvp.contract.JqSearchContract;
-import com.netposa.component.jq.mvp.model.entity.JqItemEntity;
+import com.netposa.common.entity.push.JqItemEntity;
 import com.netposa.component.jq.mvp.presenter.JqSearchPresenter;
 import com.netposa.component.jq.mvp.ui.adapter.JqAdapter;
 import com.netposa.component.room.entity.JqSearchHistoryEntity;
@@ -44,10 +44,10 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
-import static com.netposa.component.jq.mvp.model.entity.JqItemEntity.TYPE_CAR;
-import static com.netposa.component.jq.mvp.model.entity.JqItemEntity.TYPE_INVALID;
-import static com.netposa.component.jq.mvp.model.entity.JqItemEntity.TYPE_PEOPLE;
-import static com.netposa.component.jq.mvp.model.entity.JqItemEntity.TYPE_SUSPENDING;
+import static com.netposa.common.constant.GlobalConstants.TYPE_CAR_DEPLOY;
+import static com.netposa.common.constant.GlobalConstants.TYPE_INVALID;
+import static com.netposa.common.constant.GlobalConstants.TYPE_FACE_DEPLOY;
+import static com.netposa.common.constant.GlobalConstants.TYPE_SUSPENDING;
 
 public class JqSearchActivity extends BaseActivity<JqSearchPresenter> implements JqSearchContract.View, TextWatcher, TextView.OnEditorActionListener, SwipeRefreshLayout.OnRefreshListener, BaseQuickAdapter.RequestLoadMoreListener {
 
@@ -145,20 +145,20 @@ public class JqSearchActivity extends BaseActivity<JqSearchPresenter> implements
         //TODO test data here
         for (int i = 0; i < 20; i++) {
             JqItemEntity entity1 = new JqItemEntity();
-            entity1.setItemType(TYPE_PEOPLE);
+            entity1.setItemType(TYPE_FACE_DEPLOY);
             entity1.setItemHandleType(TYPE_INVALID);
-            entity1.setAddress("武汉市2月6日城市人脸布控");
-            entity1.setTime("2018-10-11 12:31:33");
+            entity1.setCaptureLibName("武汉市2月6日城市人脸布控");
+            entity1.setAlarmTime("2018-10-11 12:31:33");
             entity1.setCameraLocation("保利国际中心1楼正门摄像机");
             entity1.setSimilarity(94);
             mSearchResultBeanList.add(entity1);
 
             JqItemEntity entity2 = new JqItemEntity();
             entity2.setItemHandleType(TYPE_SUSPENDING);
-            entity2.setItemType(TYPE_CAR);
+            entity2.setItemType(TYPE_CAR_DEPLOY);
             entity2.setCarNumber("陕A 11L003");
-            entity2.setAddress("武汉市2月6日城市人脸布控");
-            entity2.setTime("2018-10-11 12:31:33");
+            entity2.setCaptureLibName("武汉市2月6日城市人脸布控");
+            entity2.setAlarmTime("2018-10-11 12:31:33");
             entity2.setCameraLocation("保利国际中心1楼正门摄像机");
             mSearchResultBeanList.add(entity2);
         }
@@ -249,7 +249,7 @@ public class JqSearchActivity extends BaseActivity<JqSearchPresenter> implements
         if (actionId == EditorInfo.IME_ACTION_SEARCH) {
             mQuery = mOneKeyClearEditText.getText().toString().trim();
             if (TextUtils.isEmpty(mQuery)) {
-                ToastUtils.showShort(R.string.query_hint);
+                showMessage(getString(R.string.query_hint));
                 return false;
             }
             KeyboardUtils.hideSoftInput(this);
@@ -272,7 +272,7 @@ public class JqSearchActivity extends BaseActivity<JqSearchPresenter> implements
             mSearchHistoryAdapter.loadMoreEnd(true);
             mSrfl.setRefreshing(false);
             mSrfl.setEnabled(false);
-        }, 2000);
+        }, 100);
     }
 
     private void showAndHideSearchHistoryLayout(boolean show) {

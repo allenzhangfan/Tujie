@@ -2,4 +2,4 @@
     android:id="@+id/divider_line"
     android:layout_width="match_parent"
     android:layout_height="@dimen/size_8dp"
-    android:background="@color/item_view_divider_my" />
+    android:background="@color/color_F5F6FA" />

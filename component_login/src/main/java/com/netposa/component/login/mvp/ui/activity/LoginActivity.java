@@ -1,12 +1,16 @@
 package com.netposa.component.login.mvp.ui.activity;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -23,9 +27,9 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import butterknife.BindView;
 import butterknife.OnClick;
-import me.jessyan.retrofiturlmanager.RetrofitUrlManager;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
@@ -33,18 +37,21 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputLayout;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
+import com.jess.arms.integration.IRepositoryManager;
 import com.jess.arms.utils.ArmsUtils;
 import com.netposa.common.BuildConfig;
+import com.netposa.common.app.ErrorDialog;
 import com.netposa.common.constant.GlobalConstants;
 import com.netposa.common.constant.UrlConstant;
+import com.netposa.common.core.Log4jAppLifecycle;
 import com.netposa.common.core.RouterHub;
 import com.netposa.common.log.Log;
 import com.netposa.common.utils.KeyboardUtils;
+import com.netposa.common.utils.ReflectUtils;
 import com.netposa.common.utils.SPUtils;
 import com.netposa.common.utils.SoftKeyBoardListener;
-import com.netposa.common.utils.ToastUtils;
-import com.netposa.commonres.modle.LoadingDialog;
 import com.netposa.commonres.widget.DashView;
+import com.netposa.commonres.widget.Dialog.LottieDialogFragment;
 import com.netposa.component.login.R2;
 import com.netposa.component.login.di.component.DaggerLoginComponent;
 import com.netposa.component.login.di.module.LoginModule;
@@ -52,20 +59,29 @@ import com.netposa.component.login.mvp.contract.LoginContract;
 import com.netposa.component.login.mvp.presenter.LoginPresenter;
 import com.netposa.component.login.R;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import javax.inject.Inject;
 
+import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
+import static com.netposa.common.constant.GlobalConstants.HAS_FACE;
 import static com.netposa.common.constant.GlobalConstants.IS_LOCAL_NET;
 import static com.netposa.component.login.app.LoginConstants.KEY_LOGIN_IP;
 import static com.netposa.component.login.app.LoginConstants.REQUEST_CODE_LOGIN_IP;
 
-@Route(path = RouterHub.LOGIN_LOGIN_ACTIVITY)
+@Route(path = RouterHub.LOGIN_ACTIVITY)
 public class LoginActivity extends BaseActivity<LoginPresenter> implements LoginContract.View {
 
+    private static final int REQUEST_PERMISSIONS = 0;
+
     @Inject
-    LoadingDialog mLoadingDialog;
+    LottieDialogFragment mLoadingDialogFragment;
+    @Inject
+    IRepositoryManager mRepositoryManager;
+
     @BindView(R2.id.login_scrollivew)
     ScrollView mScrollView;
     @BindView(R2.id.et_account)
@@ -87,6 +103,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
     private Dialog forget_pw_Dialog;
     private MaterialButton confirmBtn;
     private Boolean mHas_login;
+    private String mSaveUserName;
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -105,7 +122,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
 
     @Override
     public void initView(@Nullable Bundle savedInstanceState) {
-        mPresenter.requestPermissions();
+        checkPermissions();
         initEditTextBottomLine();
         SoftKeyBoardListener.setListener(this, new SoftKeyBoardListener.OnSoftKeyBoardChangeListener() {
             @Override
@@ -119,25 +136,25 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
             }
         });
         if (!TextUtils.isEmpty(SPUtils.getInstance().getString(GlobalConstants.CONFIG_LAST_USER_LOGIN_NAME))) {
-            mEtAccount.setText(SPUtils.getInstance().getString(GlobalConstants.CONFIG_LAST_USER_LOGIN_NAME));
+            mSaveUserName = SPUtils.getInstance().getString(GlobalConstants.CONFIG_LAST_USER_LOGIN_NAME);
+            mEtAccount.setText(mSaveUserName);
             mTilUsernameHit.setHint(getString(R.string.user_name));
         }
-        mHas_login = SPUtils.getInstance().getBoolean(GlobalConstants.HAS_LOGIN, false);
-        if (!mHas_login) {
-            SPUtils.getInstance().put(GlobalConstants.HAS_FACE, false);
-        }
+//        mHas_login = SPUtils.getInstance().getBoolean(GlobalConstants.HAS_LOGIN, false);
+//        if (!mHas_login) {
+////            SPUtils.getInstance().put(HAS_FACE, false);
+//        }
         //调试账号密码
         //admin admin123
         if (BuildConfig.DEBUG) {
             mEtAccount.setText("admin");
             mEtPassword.setText("a123456");
-            mTilUsernameHit.setHint(getString(R.string.user_name));
-            mTilPasswordHit.setHint(getString(R.string.password));
             SPUtils.getInstance().put(IS_LOCAL_NET, true);
         } else {
             SPUtils.getInstance().put(IS_LOCAL_NET, false);
         }
-
+        mTilUsernameHit.setHint(getString(R.string.user_name));
+        mTilPasswordHit.setHint(getString(R.string.password));
         mEtAccount.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {
@@ -152,7 +169,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if (editable.length()==0){
+                if (editable.length() == 0) {
                     mTilUsernameHit.setHint(getString(R.string.login_plz_input_username));
                 }
             }
@@ -170,12 +187,62 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if (editable.length()==0){
+                if (editable.length() == 0) {
                     mTilPasswordHit.setHint(getString(R.string.login_plz_input_pwd));
                 }
             }
         });
+    }
 
+    private void checkPermissions() {
+        List<String> permissions = new ArrayList<>();
+        if (ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.CAMERA) != PERMISSION_GRANTED) {
+            permissions.add(Manifest.permission.CAMERA);
+        }
+        if (ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE) != PERMISSION_GRANTED) {
+            permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        }
+        if (ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.READ_PHONE_STATE) != PERMISSION_GRANTED) {
+            permissions.add(Manifest.permission.READ_PHONE_STATE);
+        }
+        if (ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION) != PERMISSION_GRANTED) {
+            permissions.add(Manifest.permission.ACCESS_FINE_LOCATION);
+        }
+        if (!permissions.isEmpty()) {
+            ActivityCompat.requestPermissions(this,
+                    permissions.toArray(new String[0]), REQUEST_PERMISSIONS);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions
+            , @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case REQUEST_PERMISSIONS:
+                boolean result = true;
+                for (int grantResult : grantResults) {
+                    if (grantResult != PERMISSION_GRANTED) {
+                        result = false;
+                        break;
+                    }
+                }
+                if (result) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        Log4jAppLifecycle.log4jConfigure(Environment.getExternalStorageState()
+                                .equals(Environment.MEDIA_MOUNTED));
+                    }
+                    //初始化应用目录
+                    mPresenter.initDirs();
+                } else {
+                    runOnUiThread(() -> ErrorDialog.newInstance(getString(R.string.require_several_permission)).show(getSupportFragmentManager(), "dialog"));
+                }
+                break;
+        }
     }
 
     private void initEditTextBottomLine() {
@@ -197,12 +264,12 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
 
     @Override
     public void showLoading(String message) {
-        mLoadingDialog.show();
+        mLoadingDialogFragment.show(getSupportFragmentManager(), "LoadingDialog");
     }
 
     @Override
     public void hideLoading() {
-        mLoadingDialog.dismiss();
+        mLoadingDialogFragment.dismissAllowingStateLoss();
     }
 
     @Override
@@ -235,11 +302,22 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
 //            goToHomeActivity();
             login();
         } else if (id == R.id.face_type_login) {
-            if (SPUtils.getInstance().getBoolean(GlobalConstants.HAS_FACE)) {
-                Intent faceLoginIntent = new Intent(this, FaceLoginActivity.class);
-                launchActivity(faceLoginIntent);
+            String userName = mEtAccount.getText().toString();
+            if (TextUtils.isEmpty(userName)) {
+                showMessage(getString(R.string.login_plz_input_username));
+                return;
+            }
+            //保存的用户和输入的用户名不一样
+            if (null != mSaveUserName && !(userName.equals(mSaveUserName))) {
+                showMessage(getString(R.string.face_login_notice));
+                return;
+            }
+            if (SPUtils.getInstance().getBoolean(HAS_FACE)) {
+                ARouter.getInstance().build(RouterHub.CAMERA_FACE_LOGIN_ACTIVITY)
+                        .withString(HAS_FACE, userName)
+                        .navigation(this);
             } else {
-                ToastUtils.showShort(R.string.face_login_notice);
+                showMessage(getString(R.string.face_login_notice));
             }
         }
     }
@@ -291,7 +369,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
         //  cm.setText(messageContent);
         ClipData myClip = ClipData.newPlainText("text", messageContent);
         cm.setPrimaryClip(myClip);
-        ToastUtils.showShort("复制成功");
+        showMessage(getString(R.string.copy_success));
     }
 
     /**
@@ -317,16 +395,14 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
                 Log.e(TAG, "ip is null !");
                 return;
             }
-            String loginIp = data.getStringExtra(KEY_LOGIN_IP);
-            Log.i(TAG, "loginIp:" + loginIp);
-            /**参考{@link UrlConstant#APP_DOMAIN},使用setGlobalDomain会替换全局baseurl**/
-            String newLoginUrl = "http://" + loginIp;
+            String newBaseUrl = UrlConstant.sBaseUrl = data.getStringExtra(KEY_LOGIN_IP);
+            /**参考{@link UrlConstant#sBaseUrl},使用setGlobalDomain会替换全局baseurl**/
             if (BuildConfig.DEBUG) {
                 SPUtils.getInstance().put(IS_LOCAL_NET, false);
             } else {
                 SPUtils.getInstance().put(IS_LOCAL_NET, true);
             }
-            RetrofitUrlManager.getInstance().setGlobalDomain(newLoginUrl);
+            ReflectUtils.setRetrofitBaseUrlTemporarily(mRepositoryManager, newBaseUrl, true);
         }
     }
 
@@ -342,17 +418,17 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
         String username = mEtAccount.getText().toString().trim();
         String password = mEtPassword.getText().toString().trim();
         if (TextUtils.isEmpty(username)) {
-            ToastUtils.showShort(R.string.login_plz_input_username);
+            showMessage(getString(R.string.login_plz_input_username));
             KeyboardUtils.hideSoftInput(this, mEtAccount);
             return;
         }
         if (TextUtils.isEmpty(password)) {
-            ToastUtils.showShort(R.string.login_plz_input_pwd);
+            showMessage(getString(R.string.login_plz_input_pwd));
             KeyboardUtils.hideSoftInput(this, mEtPassword);
             return;
         }
         if (mEtPassword.getText().length() < 6) {
-            ToastUtils.showShort(R.string.password_width);
+            showMessage(getString(R.string.password_width));
         } else {
             Objects.requireNonNull(mPresenter).login(username, password);
         }
@@ -361,6 +437,6 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
     @Override
     public void goToHomeActivity() {
         ARouter.getInstance().build(RouterHub.APP_HOME_ACTIVITY).navigation(this);
-        finish();
+        killMyself();
     }
 }

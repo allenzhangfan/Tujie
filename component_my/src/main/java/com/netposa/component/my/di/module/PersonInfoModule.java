@@ -4,26 +4,22 @@ import android.content.Context;
 
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.jess.arms.di.scope.ActivityScope;
-import androidx.core.content.ContextCompat;
+
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import dagger.Module;
 import dagger.Provides;
 
-import com.jess.arms.di.scope.ActivityScope;
-import com.netposa.commonres.modle.HorizontalItemDecoration;
-import com.netposa.commonres.modle.LoadingDialog;
+import com.netposa.commonres.widget.Dialog.LoadingDialogFragment;
+import com.netposa.commonres.widget.Dialog.LottieDialogFragment;
 import com.netposa.commonres.widget.Dialog.SweetDialog;
-import com.netposa.component.my.R;
 import com.netposa.component.my.mvp.contract.PersonInfoContract;
 import com.netposa.component.my.mvp.model.PersonInfoModel;
 import com.netposa.component.my.mvp.ui.adapter.PersonInfoAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.inject.Inject;
 
 @Module
 public class PersonInfoModule {
@@ -78,8 +74,8 @@ public class PersonInfoModule {
 
     @ActivityScope
     @Provides
-    LoadingDialog provideLoadingDialog() {
-        return new LoadingDialog(mContext);
+    LottieDialogFragment provideDialogFragment() {
+        return new LoadingDialogFragment();
     }
 
     @ActivityScope

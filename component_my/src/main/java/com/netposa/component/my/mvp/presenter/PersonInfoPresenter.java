@@ -2,6 +2,7 @@ package com.netposa.component.my.mvp.presenter;
 
 import android.app.Application;
 
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.jess.arms.integration.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.mvp.BasePresenter;
@@ -15,10 +16,12 @@ import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 
 import javax.inject.Inject;
 
-import com.jess.arms.utils.RxLifecycleUtils;
+import com.netposa.common.core.RouterHub;
+import com.netposa.common.log.Log;
+import com.netposa.common.service.mqtt.PushService;
 import com.netposa.component.my.mvp.contract.PersonInfoContract;
+import com.netposa.component.my.mvp.model.entity.LogOutResponseEntity;
 import com.trello.lifecycle2.android.lifecycle.AndroidLifecycle;
-import com.trello.rxlifecycle2.android.ActivityEvent;
 
 
 @ActivityScope
@@ -52,17 +55,23 @@ public class PersonInfoPresenter extends BasePresenter<PersonInfoContract.Model,
                 .doOnSubscribe(disposable -> mRootView.showLoading(""))
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doFinally(() -> {if(mRootView!=null) mRootView.hideLoading();})
+                .doFinally(() -> {
+                    if (mRootView != null) mRootView.hideLoading();
+                })
                 .compose(AndroidLifecycle.createLifecycleProvider((LifecycleOwner) mRootView).bindToLifecycle())
-                .subscribe(new ErrorHandleSubscriber<String>(mErrorHandler) {
+                .subscribe(new ErrorHandleSubscriber<LogOutResponseEntity>(mErrorHandler) {
                     @Override
-                    public void onNext(String objectEntity) {
+                    public void onNext(LogOutResponseEntity objectEntity) {
+                        Log.i(TAG, "logOut success !");
+                        //退出登录后不再接收MQTT消息
+                        PushService pushService = (PushService) ARouter.getInstance().build(RouterHub.MQTT_PUSH_SERVICE).navigation();
+                        pushService.closeMQTT();
                         mRootView.logOutSuccess();
                     }
 
                     @Override
                     public void onError(Throwable t) {
-                        // super.onError(t);
+                        Log.e(TAG, "logOut error !");
                         mRootView.logOutFail();
                     }
                 });

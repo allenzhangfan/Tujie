@@ -5,7 +5,7 @@
     android:id="@+id/rl_root_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/color_main_bg"
+    android:background="@color/color_FFFDFDFE"
     tools:ignore="MissingDefaultResource">
 
     <FrameLayout
@@ -33,30 +33,22 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:text="@string/workbench"
-                android:textColor="@color/color_text_fold"
+                android:textColor="@color/color_19233C"
                 android:textSize="@dimen/text_size_28sp"
                 android:textStyle="bold" />
         </LinearLayout>
 
     </FrameLayout>
 
-    <LinearLayout
-        android:id="@+id/ll_content"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/gzt_rv"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginLeft="@dimen/size_8dp"
-        android:layout_marginRight="@dimen/size_8dp"
-        android:layout_weight="1"
-        android:orientation="vertical"
+        android:layout_height="wrap_content"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fl_head">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/gzt_rv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:listitem="@layout/item_gzt" />
-    </LinearLayout>
+        app:layout_constraintTop_toBottomOf="@+id/fl_head"
+        app:spanCount="3"
+        tools:listitem="@layout/item_gzt" />
 </androidx.constraintlayout.widget.ConstraintLayout>

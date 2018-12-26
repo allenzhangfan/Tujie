@@ -1,37 +1,56 @@
 package com.netposa.component.login.mvp.presenter;
 
-import android.Manifest;
 import android.app.Application;
 import android.content.Context;
+import android.text.TextUtils;
 
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.google.gson.Gson;
 import com.jess.arms.integration.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.http.imageloader.ImageLoader;
+
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.LifecycleOwner;
+import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
+import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
+
 import javax.inject.Inject;
-import com.jess.arms.utils.PermissionUtil;
-import com.netposa.common.app.ErrorDialog;
+
 import com.netposa.common.constant.GlobalConstants;
+import com.netposa.common.constant.MqttConstants;
+import com.netposa.common.constant.UrlConstant;
+import com.netposa.common.core.RouterHub;
 import com.netposa.common.log.Log;
+import com.netposa.common.service.mqtt.PushService;
 import com.netposa.common.utils.EncryptUtils;
+import com.netposa.common.utils.FileUtils;
 import com.netposa.common.utils.NetworkUtils;
 import com.netposa.common.utils.SPUtils;
 import com.netposa.component.login.R;
 import com.netposa.component.login.mvp.contract.LoginContract;
 import com.netposa.component.login.mvp.model.entity.LoginRequestEntity;
-import com.netposa.component.login.mvp.model.entity.LoginResponseEntity;
-import com.tbruyelle.rxpermissions2.RxPermissions;
+import com.netposa.common.entity.login.LoginResponseEntity;
+import com.netposa.component.room.DbHelper;
 import com.trello.lifecycle2.android.lifecycle.AndroidLifecycle;
+
+import java.util.ArrayList;
 import java.util.List;
 
+import static com.netposa.common.constant.GlobalConstants.CONFIG_LAST_USER_GENDER;
+import static com.netposa.common.constant.GlobalConstants.CONFIG_LAST_USER_GROUP;
+import static com.netposa.common.constant.GlobalConstants.CONFIG_LAST_USER_LOGIN_ID;
+import static com.netposa.common.constant.GlobalConstants.CONFIG_LAST_USER_POLICE_NO;
+import static com.netposa.common.constant.GlobalConstants.CONFIG_LAST_USER_TEL_NO;
 
 @ActivityScope
 public class LoginPresenter extends BasePresenter<LoginContract.Model, LoginContract.View> {
@@ -44,13 +63,13 @@ public class LoginPresenter extends BasePresenter<LoginContract.Model, LoginCont
     @Inject
     AppManager mAppManager;
     @Inject
-    RxPermissions mRxPermissions;
-    @Inject
     Context mContext;
     @Inject
     FragmentManager mFm;
     @Inject
     LoginRequestEntity mRequestEntity;
+    @Inject
+    Gson mGson;
 
     @Inject
     public LoginPresenter(LoginContract.Model model, LoginContract.View rootView) {
@@ -67,50 +86,15 @@ public class LoginPresenter extends BasePresenter<LoginContract.Model, LoginCont
     }
 
     /**
-     * 权限请求
-     */
-    public void requestPermissions() {
-        PermissionUtil.requestPermission(
-                new PermissionUtil.RequestPermission() {
-                    @Override
-                    public void onRequestPermissionSuccess() {
-                        Log.d(TAG, "Request permissions success");
-                    }
-
-                    @Override
-                    public void onRequestPermissionFailure(List<String> permissions) {
-                        Log.d(TAG, "Request permissions failure : " + permissions);
-                        if (permissions.contains(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                            ErrorDialog
-                                    .newInstance(mContext.getString(R.string.sdcard_write_permission))
-                                    .show(mFm, "dialog");
-                        }
-                    }
-
-                    @Override
-                    public void onRequestPermissionFailureWithAskNeverAgain(List<String> permissions) {
-                        Log.d(TAG, "Request permissions failureWithAskNeverAgain : " + permissions);
-                    }
-                }
-                , mRxPermissions
-                , mErrorHandler
-                , Manifest.permission.READ_EXTERNAL_STORAGE
-                , Manifest.permission.WRITE_EXTERNAL_STORAGE
-                , Manifest.permission.CAMERA
-                , Manifest.permission.READ_PHONE_STATE
-                , Manifest.permission.ACCESS_COARSE_LOCATION
-                , Manifest.permission.ACCESS_FINE_LOCATION
-                );
-    }
-
-    /**
      * 登录
+     *
      * @param username
      * @param password
      */
     public void login(String username, String password) {
         if (!NetworkUtils.isConnected()) {
             mRootView.showMessage(mContext.getString(R.string.network_disconnect));
+            mRootView.hideLoading();
             return;
         }
         String encryptPassword = EncryptUtils.encryptMD5ToString(password);
@@ -131,17 +115,86 @@ public class LoginPresenter extends BasePresenter<LoginContract.Model, LoginCont
                 .subscribe(new ErrorHandleSubscriber<LoginResponseEntity>(mErrorHandler) {
                     @Override
                     public void onNext(LoginResponseEntity response) {
-                        Log.d(TAG,new Gson().toJson(response));
+                        Log.d(TAG, new Gson().toJson(response));
                         Log.i(TAG, "onNext: token = " + response.getTokenId());
+                        // 登录成功 判断是否切换用户 切换了用户 把 HAS_LOGIN 设置false
+                        String saveName = SPUtils.getInstance().getString(GlobalConstants.CONFIG_LAST_USER_LOGIN_NAME);
+                        if (!TextUtils.isEmpty(saveName) && !(saveName.equals(username))) {
+                            SPUtils.getInstance().put(GlobalConstants.HAS_FACE, false);
+                        }
                         SPUtils.getInstance().put(GlobalConstants.TOKEN, response.getTokenId());
-                        SPUtils.getInstance().put(GlobalConstants.HAS_LOGIN, true);
-                        SPUtils.getInstance().put(GlobalConstants.CONFIG_LAST_USER_LOGIN_NAME,username);
+                        LoginResponseEntity.UserEntity loginUserEntity = response.getUser();
+//                        SPUtils.getInstance().put(GlobalConstants.HAS_LOGIN, true);
+                        SPUtils.getInstance().put(GlobalConstants.CONFIG_LAST_USER_LOGIN_NAME, username);
+                        SPUtils.getInstance().put(GlobalConstants.CONFIG_LAST_USER_NICKNAME, loginUserEntity.getName());
+                        SPUtils.getInstance().put(CONFIG_LAST_USER_GENDER, loginUserEntity.getGender());
+                        SPUtils.getInstance().put(CONFIG_LAST_USER_GROUP, loginUserEntity.getOrgName());
+                        SPUtils.getInstance().put(CONFIG_LAST_USER_POLICE_NO, loginUserEntity.getPoliceNo());
+                        SPUtils.getInstance().put(CONFIG_LAST_USER_TEL_NO, loginUserEntity.getPhoneNo());
+                        SPUtils.getInstance().put(CONFIG_LAST_USER_LOGIN_ID, loginUserEntity.getId());
+                        //各种url配置
+                        SPUtils.getInstance().put(MqttConstants.MQTT_SERVER_URI, UrlConstant.parseMqttUrl(response.getMqttOuterIp()));
+                        SPUtils.getInstance().put(GlobalConstants.IMAGE_URL, response.getPictureOuterIp());
+                        SPUtils.getInstance().put(GlobalConstants.PLAY_URL, response.getVideoOuterIp());
+                        // 登录的时候删除上次缓存的推送消息
+                        DbHelper
+                                .getInstance()
+                                .deleteAllAlarmMessages()
+                                .subscribeOn(Schedulers.io())
+                                .subscribe();
+
+                        PushService pushService = (PushService) ARouter.getInstance().build(RouterHub.MQTT_PUSH_SERVICE).navigation();
+                        pushService.activateMQTT();
                         mRootView.goToHomeActivity();
                     }
 
                     @Override
                     public void onError(Throwable t) {
                         super.onError(t);
+                    }
+                });
+    }
+
+    public void initDirs() {
+        List<String> pathList = new ArrayList<>();
+        pathList.add(GlobalConstants.ROOT_PATH);
+        pathList.add(GlobalConstants.DB_PATH);
+        pathList.add(GlobalConstants.LOG_PATH);
+        pathList.add(GlobalConstants.DOWNLOAD_PATH);
+        pathList.add(GlobalConstants.CACHE_PATH);
+        pathList.add(GlobalConstants.PICTURE_PATH);
+        pathList.add(GlobalConstants.VIDEO_PATH);
+
+        List<Boolean> mkdirResults = new ArrayList<>(pathList.size());
+        Observable
+                .fromIterable(pathList)
+                .flatMap((Function<String, ObservableSource<Boolean>>) path -> {
+                    boolean mkdirResult = FileUtils.createOrExistsDir(path);
+                    Log.i(TAG, "path:" + path + ",mkdirResult:" + mkdirResult);
+                    mkdirResults.add(mkdirResult);
+                    return Observable.fromIterable(mkdirResults);
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Boolean>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(Boolean result) {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        Log.e("Utils", "mkdirs onComplete");
                     }
                 });
     }

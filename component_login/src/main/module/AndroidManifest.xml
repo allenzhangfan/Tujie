@@ -24,12 +24,9 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".mvp.ui.activity.SetUpIpActivity" android:screenOrientation="portrait"/>
-
-        <activity android:name=".mvp.ui.activity.CropPictureActivity" android:screenOrientation="portrait"/>
-
-        <activity android:name=".mvp.ui.activity.FaceLoginActivity" android:screenOrientation="portrait"/>
-
+        <activity
+            android:name=".mvp.ui.activity.SetUpIpActivity"
+            android:screenOrientation="portrait" />
 
         <!-- 每个业务组件需要声明两个 ConfigModule, CommonSDK 的 ConfigModule 和 业务组件自己的 ConfigModule
         CommonSDK 的 ConfigModule 含有有每个组件都可共用的配置信息, 业务组件自己的 ConfigModule 含有自己独有的配置

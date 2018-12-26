@@ -57,13 +57,13 @@ public class CircleProgressView extends View {
     public CircleProgressView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         TypedArray attributes = context.obtainStyledAttributes(attrs, R.styleable.CircleProgressView);
-        mHeadColor = attributes.getColor(R.styleable.CircleProgressView_head_color, getResources().getColor(R.color.progress_front_head));
-        mEndColor = attributes.getColor(R.styleable.CircleProgressView_end_color, getResources().getColor(R.color.progress_front_end));
+        mHeadColor = attributes.getColor(R.styleable.CircleProgressView_head_color, getResources().getColor(R.color.color_63BBFF));
+        mEndColor = attributes.getColor(R.styleable.CircleProgressView_end_color, getResources().getColor(R.color.color_2D87F9));
         mCircleWidth = attributes.getDimensionPixelSize(R.styleable.CircleProgressView_circle_width, 20);
         mScoreSize = attributes.getDimensionPixelSize(R.styleable.CircleProgressView_score_size, 20);
         mScoreSemblanceSize = attributes.getDimensionPixelSize(R.styleable.CircleProgressView_semblance_size, 12);
-        mScoreColor = attributes.getColor(R.styleable.CircleProgressView_score_color, getResources().getColor(R.color.progress_score_color));
-        mScoreSemblanceColor = attributes.getColor(R.styleable.CircleProgressView_score_color, getResources().getColor(R.color.progress_score_semblance_color));
+        mScoreColor = attributes.getColor(R.styleable.CircleProgressView_score_color, getResources().getColor(R.color.color_313131));
+        mScoreSemblanceColor = attributes.getColor(R.styleable.CircleProgressView_score_color, getResources().getColor(R.color.color_868686));
         mContext = context;
         initData();
     }
@@ -79,7 +79,7 @@ public class CircleProgressView extends View {
         mCirclePaint.setStrokeJoin(Paint.Join.ROUND);
         mCirclePaint.setStrokeCap(Paint.Cap.ROUND);
 
-        mCircleBgPaint.setColor(getResources().getColor(R.color.gray_eee));
+        mCircleBgPaint.setColor(getResources().getColor(R.color.color_EEEEEE));
         mCircleBgPaint.setStrokeWidth(mCircleWidth);
         mCircleBgPaint.setStyle(Paint.Style.STROKE);
         mCircleBgPaint.setStrokeCap(Paint.Cap.BUTT);
@@ -112,7 +112,7 @@ public class CircleProgressView extends View {
         // Rect bounds = new Rect();
         int currentScore = (int) mCurrentScore;
         //方式一
-        float textWidth = mScorePaint.measureText(currentScore+mScoreSuffix);  //获取文字的宽度
+        float textWidth = mScorePaint.measureText(currentScore + mScoreSuffix);  //获取文字的宽度
         float x = (getMeasuredWidth() - textWidth) / 2; //x的位置
         float y = getMeasuredHeight() / 2 +
                 (-mScorePaint.ascent() - (mScorePaint.descent() - mScorePaint.ascent()) / 2);
@@ -174,12 +174,14 @@ public class CircleProgressView extends View {
         setScore(score, true);
     }
 
-    /** 例如:80%
-     * @param score 数字
-     * @param isAnim 是否带动画
+    /**
+     * 例如:80%
+     *
+     * @param score       数字
+     * @param isAnim      是否带动画
      * @param scoreSuffix 后缀 %
      */
-    public void setScore(float score,boolean isAnim,String scoreSuffix) {
+    public void setScore(float score, boolean isAnim, String scoreSuffix) {
         mScoreSuffix = scoreSuffix;
         setScore(score, isAnim);
     }

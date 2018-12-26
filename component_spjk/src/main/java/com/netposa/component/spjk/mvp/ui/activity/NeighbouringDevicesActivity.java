@@ -2,22 +2,24 @@ package com.netposa.component.spjk.mvp.ui.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.location.Location;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.gyf.barlibrary.ImmersionBar;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
@@ -30,15 +32,17 @@ import com.mapbox.mapboxsdk.annotations.MarkerOptions;
 import com.mapbox.mapboxsdk.annotations.PolygonOptions;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
-import com.mapbox.mapboxsdk.constants.MapboxConstants;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.netposa.common.constant.GlobalConstants;
 import com.netposa.common.log.Log;
+import com.netposa.common.service.location.IntegratedLocation;
 import com.netposa.common.service.location.LocationService;
-import com.netposa.component.room.entity.SpjkCollectionDeviceEntiry;
+import com.netposa.common.utils.SizeUtils;
+import com.netposa.common.utils.SystemUtil;
+import com.netposa.component.room.entity.SpjkCollectionDeviceEntity;
 import com.netposa.component.spjk.R2;
 import com.netposa.component.spjk.di.component.DaggerNeighbouringDevicesComponent;
 import com.netposa.component.spjk.di.module.NeighbouringDevicesModule;
@@ -58,9 +62,11 @@ import javax.inject.Inject;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 import static com.netposa.common.constant.GlobalConstants.CAMERA_QIANG_JI;
+import static com.netposa.common.constant.GlobalConstants.DEFAULT_MAPBOX_CAMERAZOOM;
+import static com.netposa.common.constant.GlobalConstants.ZOOM_IN_MAX;
+import static com.netposa.common.constant.GlobalConstants.ZOOM_OUT_MIN;
 import static com.netposa.component.spjk.app.SpjkConstants.DEFAULT_LATITUDE;
 import static com.netposa.component.spjk.app.SpjkConstants.DEFAULT_LONGITUDE;
-import static com.netposa.component.spjk.app.SpjkConstants.DEFAULT_MAPBOX_CAMERAZOOM;
 import static com.netposa.component.spjk.app.SpjkConstants.KEY_CAMERA_ATTENTION_FLAG;
 import static com.netposa.component.spjk.app.SpjkConstants.KEY_NEIGHBOURING_DEVICES;
 import static com.netposa.component.spjk.app.SpjkConstants.KEY_SINGLE_CAMERA_ID;
@@ -86,14 +92,19 @@ public class NeighbouringDevicesActivity extends BaseActivity<NeighbouringDevice
     MapView mMapView;
     @BindView(R2.id.tv_follow)
     TextView mTvFollow;
+    @BindView(R2.id.ll_zoom)
+    LinearLayout mLlZoom;
+    @BindView(R2.id.iv_location)
+    ImageView mIvLocation;
+
     @Inject
-    SpjkCollectionDeviceEntiry mSpjkCollectionDeviceEntiry;
+    SpjkCollectionDeviceEntity mSpjkCollectionDeviceEntity;
+    @Inject
+    SystemUtil mSystemUtil;
 
 
     /**************************MAPBOX**************************/
     //IntRange函数限定参数范围
-    private static final float ZOOM_IN_MAX = MapboxConstants.MAXIMUM_ZOOM;//缩小范围
-    private static final float ZOOM_OUT_MIN = MapboxConstants.MINIMUM_ZOOM;//放大范围
     private float mCurrentZoomValue = DEFAULT_MAPBOX_CAMERAZOOM;//xml中默认大小(mapbox_cameraZoom)
     private LatLng mCurrentLatlng;
     private MapboxMap mMapboxMap;
@@ -116,6 +127,11 @@ public class NeighbouringDevicesActivity extends BaseActivity<NeighbouringDevice
     private String mCarmeraName;
     private int mCameraTypeInt;
     private String mResumeCameraId = RESUME_CAMERA_ID;
+    private boolean mCansroll;//bottomsheet能否滑动
+    private int mIvLocationLeftMargin, mIvLocationTopMargin, mIvLocationRightMargin, mIvLocationBottomMargin;
+    private int mLlZoomLeftMargin, mLlZoomTopMargin, mLlZoomRightMargin, mLlZoomBottomMargin;
+    private RelativeLayout.LayoutParams mIvLocationLayoutParams, mLlZoomLayoutParams;
+
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
         DaggerNeighbouringDevicesComponent //如找不到该类,请编译一下项目
@@ -129,13 +145,92 @@ public class NeighbouringDevicesActivity extends BaseActivity<NeighbouringDevice
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(savedInstanceState != null){
-            mActiveCameraId=savedInstanceState.getString(mResumeCameraId);
-        }
-        mPresenter.requestPermission();
         Mapbox.getInstance(this, GlobalConstants.MAP_KEY);
+        setContentView(R.layout.activity_neighbouring_devices);
+        mImmersionBar = ImmersionBar.with(this);
+        mImmersionBar.statusBarColor(R.color.white)
+                .statusBarDarkFont(true, 0.2f)
+                .init();
+        //绑定到butterknife
+        ButterKnife.bind(this);
+
+        if (savedInstanceState != null) {
+            mActiveCameraId = savedInstanceState.getString(mResumeCameraId);
+        }
+
+        mMapView.setStyleUrl("asset://gaode-vector-bright-local.json");
         mMapView.onCreate(savedInstanceState);
         mMapView.getMapAsync(this);
+
+        mTVtTitle.setText(R.string.neighbouring_devices);
+        mBottomSheetBehavior = BottomSheetBehavior.from(mLlBottomSheet);
+        mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+        mBottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View view, int state) {
+                switch (state) {
+                    case BottomSheetBehavior.STATE_DRAGGING:
+                        mCansroll = false;
+                        Log.d(TAG, "STATE_DRAGGING");
+                        break;
+                    case BottomSheetBehavior.STATE_SETTLING:
+                        mCansroll = true;
+                        Log.d(TAG, "STATE_SETTLING");
+                        break;
+                    case BottomSheetBehavior.STATE_EXPANDED:
+                        if (mCansroll) {
+                            mIvLocationTopMargin = mIvLocationTopMargin - SizeUtils.dp2px(48);
+                            mIvLocationBottomMargin = mIvLocationBottomMargin + SizeUtils.dp2px(48);
+                            mLlZoomTopMargin = mLlZoomTopMargin - SizeUtils.dp2px(48);
+                            mLlZoomBottomMargin = mLlZoomBottomMargin + SizeUtils.dp2px(48);
+                            Log.d(TAG, "STATE_EXPANDED t:" + mIvLocationTopMargin + ",b:" + mIvLocationBottomMargin);
+                            mIvLocationLayoutParams.setMargins(
+                                    mIvLocationLeftMargin,
+                                    mIvLocationTopMargin,
+                                    mIvLocationRightMargin,
+                                    mIvLocationBottomMargin);
+                            mIvLocation.setLayoutParams(mIvLocationLayoutParams);
+                            mLlZoomLayoutParams.setMargins(
+                                    mLlZoomLeftMargin,
+                                    mLlZoomTopMargin,
+                                    mLlZoomRightMargin,
+                                    mLlZoomBottomMargin);
+
+                        }
+                        break;
+                    case BottomSheetBehavior.STATE_COLLAPSED:
+                        Log.d(TAG, "STATE_COLLAPSED");
+                        break;
+                    case BottomSheetBehavior.STATE_HIDDEN:
+                        mIvLocationTopMargin = mIvLocationTopMargin + SizeUtils.dp2px(48);
+                        mIvLocationBottomMargin = mIvLocationBottomMargin - SizeUtils.dp2px(48);
+                        mLlZoomTopMargin = mLlZoomTopMargin + SizeUtils.dp2px(48);
+                        mLlZoomBottomMargin = mLlZoomBottomMargin - SizeUtils.dp2px(48);
+                        Log.d(TAG, "STATE_HIDDEN t:" + mIvLocationTopMargin + ",b:" + mIvLocationBottomMargin);
+                        mIvLocationLayoutParams.setMargins(
+                                mIvLocationLeftMargin,
+                                mIvLocationTopMargin,
+                                mIvLocationRightMargin,
+                                mIvLocationBottomMargin);
+                        mIvLocation.setLayoutParams(mIvLocationLayoutParams);
+                        mLlZoomLayoutParams.setMargins(
+                                mLlZoomLeftMargin,
+                                mLlZoomTopMargin,
+                                mLlZoomRightMargin,
+                                mLlZoomBottomMargin);
+                        break;
+                    case BottomSheetBehavior.STATE_HALF_EXPANDED:
+                        Log.d(TAG, "STATE_HALF_EXPANDED");
+                        break;
+                }
+            }
+
+            @Override
+            public void onSlide(@NonNull View view, float v) {
+
+            }
+        });
+
         Intent data = getIntent();
         if (data == null) {
             Log.e(TAG, "intent data is null,please check !");
@@ -145,7 +240,7 @@ public class NeighbouringDevicesActivity extends BaseActivity<NeighbouringDevice
         Double latitude = Double.valueOf(mCurrentDevice.getLatitude());
         Double longitude = Double.valueOf(mCurrentDevice.getLongitude());
         mCurrentLatlng = new LatLng(latitude, longitude);
-        mActiveCameraId=mCurrentDevice.getId();
+        mActiveCameraId = mCurrentDevice.getId();
     }
 
     @Override
@@ -158,8 +253,8 @@ public class NeighbouringDevicesActivity extends BaseActivity<NeighbouringDevice
     protected void onResume() {
         super.onResume();
         mMapView.onResume();
-        if (!TextUtils.isEmpty(mActiveCameraId)){
-            mIsFollow=false;
+        if (!TextUtils.isEmpty(mActiveCameraId)) {
+            mIsFollow = false;
             mPresenter.checkDevice(mActiveCameraId);
         }
     }
@@ -187,7 +282,6 @@ public class NeighbouringDevicesActivity extends BaseActivity<NeighbouringDevice
         super.onDestroy();
         if (mMapboxMap != null) {
             mMapboxMap.removeOnMapClickListener(this);
-            mMapboxMap.removeOnMapClickListener(this);
         }
         if (mMapView != null) {
             mMapView.onDestroy();
@@ -198,33 +292,35 @@ public class NeighbouringDevicesActivity extends BaseActivity<NeighbouringDevice
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         mMapView.onSaveInstanceState(outState);
-        if (!TextUtils.isEmpty(mActiveCameraId)){
+        if (!TextUtils.isEmpty(mActiveCameraId)) {
             outState.putString(mResumeCameraId, mActiveCameraId);
         }
     }
 
     @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        mIvLocationLayoutParams = (RelativeLayout.LayoutParams) mIvLocation.getLayoutParams();
+        mIvLocationLeftMargin = mIvLocationLayoutParams.leftMargin;
+        mIvLocationTopMargin = mIvLocationLayoutParams.topMargin;
+        mIvLocationRightMargin = mIvLocationLayoutParams.rightMargin;
+        mIvLocationBottomMargin = mIvLocationLayoutParams.bottomMargin;
+
+        mLlZoomLayoutParams = (RelativeLayout.LayoutParams) mLlZoom.getLayoutParams();
+        mLlZoomLeftMargin = mLlZoomLayoutParams.leftMargin;
+        mLlZoomTopMargin = mLlZoomLayoutParams.topMargin;
+        mLlZoomRightMargin = mLlZoomLayoutParams.rightMargin;
+        mLlZoomBottomMargin = mLlZoomLayoutParams.bottomMargin;
+    }
+
+    @Override
     public int initContentLayout(@Nullable Bundle savedInstanceState) {
-        return R.layout.activity_neighbouring_devices; //如果你不需要框架帮你设置 setContentView(id) 需要自行设置,请返回 0
+        return 0; //如果你不需要框架帮你设置 setContentView(id) 需要自行设置,请返回 0
     }
 
     @Override
     public void initView(@Nullable Bundle savedInstanceState) {
-        mTVtTitle.setText(R.string.neighbouring_devices);
-        mBottomSheetBehavior = BottomSheetBehavior.from(mLlBottomSheet);
-        mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-        mBottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
-            @Override
-            public void onStateChanged(@NonNull View view, int i) {
-
-            }
-
-            @Override
-            public void onSlide(@NonNull View view, float v) {
-
-            }
-        });
-
+        //如果initContentLayout返回0请不要再调用initView方法
     }
 
     @Override
@@ -258,7 +354,7 @@ public class NeighbouringDevicesActivity extends BaseActivity<NeighbouringDevice
             R2.id.head_left_iv,
             R2.id.nearby_iv_zoom_in,
             R2.id.nearby_iv_zoom_out,
-            R2.id.nearby_iv_location,
+            R2.id.iv_location,
             R2.id.iv_follow,
             R2.id.ll_camera_info})
     public void onViewClick(View view) {
@@ -275,19 +371,19 @@ public class NeighbouringDevicesActivity extends BaseActivity<NeighbouringDevice
                 mCurrentZoomValue--;
                 zoomInAndOut();
             }
-        } else if (id == R.id.nearby_iv_location) {
-            if (!isFastDoubleClick()) {
+        } else if (id == R.id.iv_location) {
+            if (!mSystemUtil.isFastDoubleClick()) {
                 doLocation();
                 focusToCenterInMap();
             }
         } else if (id == R.id.iv_follow) {
-            mSpjkCollectionDeviceEntiry.setCamerid(mActiveCameraId);
-            mSpjkCollectionDeviceEntiry.setCamername(mCarmeraName);
+            mSpjkCollectionDeviceEntity.setCamerid(mActiveCameraId);
+            mSpjkCollectionDeviceEntity.setCamername(mCarmeraName);
             String camerType = String.valueOf(mCameraTypeInt);
             if (TextUtils.isEmpty(camerType)) {//默认枪机
-                mSpjkCollectionDeviceEntiry.setCamertype(CAMERA_QIANG_JI);
+                mSpjkCollectionDeviceEntity.setCamertype(CAMERA_QIANG_JI);
             } else {
-                mSpjkCollectionDeviceEntiry.setCamertype(mCameraTypeInt);
+                mSpjkCollectionDeviceEntity.setCamertype(mCameraTypeInt);
             }
             if (mIsFollow) {// 已经关注了 做删除操作
                 mPresenter.deleteDevice(mActiveCameraId);
@@ -295,7 +391,7 @@ public class NeighbouringDevicesActivity extends BaseActivity<NeighbouringDevice
                 mIsFollow = false;
                 showToast(false);
             } else {// 关注操作
-                mPresenter.insterDevice(mSpjkCollectionDeviceEntiry);
+                mPresenter.insterDevice(mSpjkCollectionDeviceEntity);
                 setFollowImageResource(true);
                 showToast(true);
                 mIsFollow = true;
@@ -334,7 +430,6 @@ public class NeighbouringDevicesActivity extends BaseActivity<NeighbouringDevice
         mDomeActive = iconFactory.fromResource(R.drawable.ic_dome_camera_active);
         mBoxActive = iconFactory.fromResource(R.drawable.ic_box_camera_active);
         focusToCenterInMap();
-
     }
 
     /**
@@ -358,7 +453,7 @@ public class NeighbouringDevicesActivity extends BaseActivity<NeighbouringDevice
             latLng.setLongitude(point.longitude());
             boundsArea.add(latLng);
         }
-        boundsArea.alpha(0.25f);
+        boundsArea.alpha(0.15f);
         boundsArea.fillColor(ContextCompat.getColor(this, R.color.app_theme_color));
         mMapboxMap.addPolygon(boundsArea);
     }
@@ -370,7 +465,7 @@ public class NeighbouringDevicesActivity extends BaseActivity<NeighbouringDevice
         } else {
             centerPoint = new LatLng(DEFAULT_LATITUDE, DEFAULT_LONGITUDE);
         }
-        Log.d(TAG, centerPoint == mCurrentLatlng ? "定位成功" : "定位失败");
+        //默认一公里范围圈
         return MapBoxUtil.getInstance().createCircleGeometry(centerPoint, 1000);
     }
 
@@ -383,21 +478,19 @@ public class NeighbouringDevicesActivity extends BaseActivity<NeighbouringDevice
 
     private void doLocation() {
         mLocationService = ARouter.getInstance().navigation(LocationService.class);
-        Location location = getLocation();
-        Log.e(TAG, "getLocation :" + location);
-        if (location != null) {
-            mCurrentLatlng = new LatLng(location.getLatitude(), location.getLongitude());
-            Log.i(TAG, "location latitude: " + location.getLatitude() + ",longitude:" + location.getLongitude());
-        } else {
-            Log.e(TAG, "location is null");
-        }
-    }
-
-    private Location getLocation() {
-        if (mLocationService != null) {
-            return mLocationService.getLocation();
-        }
-        return null;
+        mLocationService.addLocationListenerBoundLifecycle(new LocationService.LocationListener() {
+            @Override
+            public void onLocationChanged(@NonNull IntegratedLocation location) {
+                if (location != null) {
+                    mCurrentLatlng = new LatLng(location.getLatitude(), location.getLongitude());
+                    Log.i(TAG, "doLocation success for " + location.getLocateMethod()
+                            + " !!\ncurrentLatlng: " + mCurrentLatlng
+                            + "\naddress:" + location.getAddress());
+                } else {
+                    Log.e(TAG, "doLocation failed !!");
+                }
+            }
+        }, this);
     }
 
     @Override
@@ -465,19 +558,6 @@ public class NeighbouringDevicesActivity extends BaseActivity<NeighbouringDevice
     @Override
     public void checkDeviceFail() {
 
-    }
-
-    //判断是否是快速点击(双击)，保证多次点击只响应一次点击事件
-    private long lastClickTime = 0L; //上一次点击的时间
-
-    public boolean isFastDoubleClick() {
-        long time = System.currentTimeMillis();
-        long timeD = time - lastClickTime;
-        if (timeD < 1000) {
-            return true;
-        }
-        lastClickTime = time;
-        return false;
     }
 
     @Override

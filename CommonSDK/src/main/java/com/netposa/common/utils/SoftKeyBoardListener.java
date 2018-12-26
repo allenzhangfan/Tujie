@@ -23,7 +23,7 @@ public class SoftKeyBoardListener {
                 rootView.getWindowVisibleDisplayFrame(r);
 
                 int visibleHeight = r.height();
-                System.out.println(""+visibleHeight);
+                System.out.println("" + visibleHeight);
                 if (rootViewVisibleHeight == 0) {
                     rootViewVisibleHeight = visibleHeight;
                     return;

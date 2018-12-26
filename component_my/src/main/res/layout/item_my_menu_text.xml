@@ -20,7 +20,7 @@
         android:layout_marginStart="@dimen/size_16dp"
         android:layout_toStartOf="@+id/tv_value"
         android:layout_toEndOf="@+id/iv_image"
-        android:textColor="@color/black_common"
+        android:textColor="@color/color_44485A"
         android:textSize="@dimen/text_size_15sp" />
 
     <TextView
@@ -30,7 +30,7 @@
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
         android:layout_marginEnd="@dimen/size_36dp"
-        android:textColor="@color/color_hint_text"
+        android:textColor="@color/color_C0C5D1"
         android:textSize="@dimen/text_size_12sp" />
 
     <ImageView
@@ -50,6 +50,6 @@
         android:layout_height="@dimen/size_0_5dp"
         android:layout_below="@id/iv_image"
         android:layout_marginTop="@dimen/size_17dp"
-        android:background="@color/item_view_divider" />
+        android:background="@color/color_E5E6EB" />
 
 </RelativeLayout>

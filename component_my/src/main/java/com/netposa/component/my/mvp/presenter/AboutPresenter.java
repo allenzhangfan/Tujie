@@ -1,21 +1,18 @@
 package com.netposa.component.my.mvp.presenter;
 
 import android.app.Application;
+import android.content.Context;
 
 import com.jess.arms.integration.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
-import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.http.imageloader.ImageLoader;
-
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
-
 import javax.inject.Inject;
-
 import com.netposa.component.my.mvp.contract.AboutContract;
 
 
 @ActivityScope
-public class AboutPresenter extends BasePresenter<AboutContract.Model, AboutContract.View> {
+public class AboutPresenter extends UpdatePresenter {
     @Inject
     RxErrorHandler mErrorHandler;
     @Inject
@@ -24,6 +21,8 @@ public class AboutPresenter extends BasePresenter<AboutContract.Model, AboutCont
     ImageLoader mImageLoader;
     @Inject
     AppManager mAppManager;
+    @Inject
+    Context mContext;
 
     @Inject
     public AboutPresenter(AboutContract.Model model, AboutContract.View rootView) {

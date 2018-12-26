@@ -58,7 +58,7 @@ public interface IActivity {
      * @param appComponent
      */
     void setupActivityComponent(@NonNull AppComponent appComponent);
-    
+
     /**
      * 初始化 View, 如果 {@link #initContentLayout(Bundle)} 返回 0, 框架则不会调用 {@link Activity#setContentView(int)}
      *
@@ -68,7 +68,7 @@ public interface IActivity {
     int initContentLayout(@Nullable Bundle savedInstanceState);
 
     /**
-     * 初始化数据
+     * 初始化数据(如果initContentLayout返回0请不要再调用initView方法)
      *
      * @param savedInstanceState
      */

@@ -18,6 +18,7 @@ package com.jess.arms.base;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.InflateException;
+
 import com.gyf.barlibrary.ImmersionBar;
 import com.jess.arms.R;
 import com.jess.arms.base.delegate.IActivity;
@@ -26,8 +27,10 @@ import com.jess.arms.integration.cache.CacheType;
 import com.jess.arms.integration.lifecycle.ActivityLifecycleable;
 import com.jess.arms.mvp.IPresenter;
 import com.jess.arms.utils.ArmsUtils;
-import com.trello.rxlifecycle2.android.ActivityEvent;
+import com.trello.rxlifecycle3.android.ActivityEvent;
+
 import javax.inject.Inject;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;

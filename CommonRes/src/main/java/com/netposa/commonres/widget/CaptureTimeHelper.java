@@ -18,15 +18,12 @@ import androidx.fragment.app.FragmentManager;
 public class CaptureTimeHelper {
 
     private static final String TAG = CaptureTimeHelper.class.getSimpleName();
-    public static final String FORMAT_PATTERN = "yyyy.MM.dd HH:mm:ss";
-    public static final String FORMAT_PATTERN2 = "yyyy-MM-dd HH:mm:ss";
     public static final int START_TIME = 0x0;
     public static final int END_TIME = 0x1;
     private Calendar mStartCalendar;
     private Calendar mEndCalender;
     private FragmentManager mFm;
     private Listener mListener;
-
     public CaptureTimeHelper(FragmentManager fm) {
         mFm = fm;
     }
@@ -41,7 +38,7 @@ public class CaptureTimeHelper {
      * @param startCalendar 开始时间
      * @param endCalender   结束时间
      */
-    public void init(@NonNull Calendar startCalendar, @NonNull Calendar endCalender,Listener listener) {
+    public void init(@NonNull Calendar startCalendar, @NonNull Calendar endCalender, Listener listener) {
         mStartCalendar = startCalendar;
         mEndCalender = endCalender;
         mListener = listener;
@@ -68,7 +65,7 @@ public class CaptureTimeHelper {
                     mStartCalendar.set(Calendar.MINUTE, minute);
                     mStartCalendar.set(Calendar.SECOND, second);
                     Log.i(TAG, "showStartTimeDialog: " + hourOfDay + "/" + minute + "/" + second);
-                    mListener.setCaptureTime(mStartCalendar.getTimeInMillis(),START_TIME);
+                    mListener.setCaptureTime(mStartCalendar.getTimeInMillis(), START_TIME);
                 },
                 mStartCalendar.get(Calendar.HOUR_OF_DAY),
                 mStartCalendar.get(Calendar.MINUTE),
@@ -99,7 +96,7 @@ public class CaptureTimeHelper {
                     mEndCalender.set(Calendar.MINUTE, minute);
                     mEndCalender.set(Calendar.SECOND, second);
                     Log.i(TAG, "showEndTimeDialog: " + hourOfDay + "/" + minute + "/" + second);
-                    mListener.setCaptureTime(mEndCalender.getTimeInMillis(),END_TIME);
+                    mListener.setCaptureTime(mEndCalender.getTimeInMillis(), END_TIME);
                 },
                 mEndCalender.get(Calendar.HOUR_OF_DAY),
                 mEndCalender.get(Calendar.MINUTE),

@@ -19,8 +19,8 @@ import android.app.Activity;
 import android.app.Application;
 import android.os.Bundle;
 
-import com.trello.rxlifecycle2.RxLifecycle;
-import com.trello.rxlifecycle2.android.ActivityEvent;
+import com.trello.rxlifecycle3.RxLifecycle;
+import com.trello.rxlifecycle3.android.ActivityEvent;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;

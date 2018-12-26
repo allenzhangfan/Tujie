@@ -11,12 +11,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import dagger.Module;
 import dagger.Provides;
 
-import com.netposa.commonres.modle.LoadingDialog;
-import com.netposa.commonres.widget.Dialog.SweetDialog;
+import com.netposa.commonres.widget.Dialog.LoadingDialogFragment;
+import com.netposa.commonres.widget.Dialog.LottieDialogFragment;
 import com.netposa.component.clcx.mvp.contract.CarRecordContract;
 import com.netposa.component.clcx.mvp.model.CarRecordModel;
+import com.netposa.component.clcx.mvp.model.entity.CarDetailRequestEntity;
+import com.netposa.component.clcx.mvp.model.entity.CarDetailResponseEntity;
 import com.netposa.component.clcx.mvp.ui.adapter.CarRecordAdapter;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -74,13 +75,26 @@ public class CarRecordModule {
 
     @ActivityScope
     @Provides
-    LoadingDialog provideLoadingDialog() {
-        return new LoadingDialog(mContext);
+    LottieDialogFragment provideDialogFragment() {
+        return new LoadingDialogFragment();
     }
 
     @ActivityScope
     @Provides
-    CarRecordAdapter providerAdapter(List<MultiItemEntity> list){
+    CarRecordAdapter providerAdapter(List<MultiItemEntity> list) {
         return new CarRecordAdapter(list);
     }
+
+    @ActivityScope
+    @Provides
+    CarDetailResponseEntity providerResponseEntity() {
+        return new CarDetailResponseEntity();
+    }
+
+    @ActivityScope
+    @Provides
+    CarDetailRequestEntity providerRequestEntity() {
+        return new CarDetailRequestEntity();
+    }
+
 }

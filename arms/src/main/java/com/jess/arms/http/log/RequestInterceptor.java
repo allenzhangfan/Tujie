@@ -163,7 +163,7 @@ public class RequestInterceptor implements Interceptor {
         try {
             originalResponse = chain.proceed(request);
         } catch (Exception e) {
-            Log.w("RequestInterceptor","Http Error: " + e);
+            Log.w("RequestInterceptor", "Http Error: " + e);
             throw e;
         }
         long t2 = logResponse ? System.nanoTime() : 0;

@@ -7,9 +7,13 @@ import android.os.Handler;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
+import com.netposa.common.core.RouterHub;
+import com.netposa.common.service.location.LocationService;
+import com.netposa.common.service.mqtt.PushService;
 import com.netposa.component.login.di.component.DaggerSplashComponent;
 import com.netposa.component.login.di.module.SplashModule;
 import com.netposa.component.login.mvp.contract.SplashContract;
@@ -61,6 +65,11 @@ public class SplashActivity extends BaseActivity<SplashPresenter> implements Spl
     }
 
     private void goToLoginActivity() {
+        //启动mqtt服务
+        PushService pushService = ARouter.getInstance().navigation(PushService.class);
+        if(pushService!=null){
+            pushService.initPushService();
+        }
         Intent intent = new Intent();
         intent.setClass(this, LoginActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

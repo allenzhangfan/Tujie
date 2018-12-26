@@ -18,14 +18,15 @@
     <string name="test_address">西安市雁塔区科技路</string>
     <string name="gender_type">男</string>
     <string name="wait_deal">待处理</string>
-
-    <string name="similarity_percent">相似度:%1$d</string>
     <string name="task_details">任务详情</string>
-
     <string name="buku_jibie">布控级别</string>
     <string name="buku_yiji">一级</string>
 
     <string name="control_aims">布控目标</string>
 
     <string name="control_reason">布控原因</string>
+    <string name="leval_1">一级</string>
+    <string name="leval_2">二级</string>
+    <string name="leval_3">三级</string>
+
 </resources>

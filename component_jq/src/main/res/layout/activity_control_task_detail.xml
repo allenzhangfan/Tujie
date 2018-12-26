@@ -3,23 +3,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/item_view_divider_my"
+    android:background="@color/color_F5F6FA"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
     tools:ignore="MissingDefaultResource">
 
     <include layout="@layout/include_title_bar" />
 
-    <View
-        android:layout_marginTop="@dimen/_5dp"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/size_13dp"
-        android:background="@color/item_view_divider" />
+    <include layout="@layout/common_view_divider" />
 
     <LinearLayout
-        android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/white"
         android:orientation="vertical">
 
 
@@ -45,14 +41,13 @@
                     android:id="@+id/car_ku_type"
                     style="@style/Alarm_detail_right_text_style"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/suspect_car" />
+                    android:layout_height="wrap_content" />
             </RelativeLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/size_0_5dp"
-                android:background="@color/item_view_divider" />
+                android:background="@color/color_E5E6EB" />
 
             <RelativeLayout
                 android:layout_width="wrap_content"
@@ -68,17 +63,16 @@
                     android:text="@string/buku_jibie" />
 
                 <TextView
-                    android:id="@+id/capture_time"
+                    android:id="@+id/capture_leval"
                     style="@style/Alarm_detail_right_text_style"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/buku_yiji" />
+                    android:layout_height="wrap_content" />
             </RelativeLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/size_0_5dp"
-                android:background="@color/item_view_divider" />
+                android:background="@color/color_E5E6EB" />
 
             <RelativeLayout
                 android:layout_width="wrap_content"
@@ -94,17 +88,41 @@
                     android:text="@string/begin_time" />
 
                 <TextView
-                    android:id="@+id/control_car_type"
+                    android:id="@+id/start_time"
                     style="@style/Alarm_detail_right_text_style"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/test_date" />
+                    android:layout_height="wrap_content" />
             </RelativeLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/size_0_5dp"
-                android:background="@color/item_view_divider" />
+                android:background="@color/color_E5E6EB" />
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/size_44dp"
+                android:layout_marginLeft="@dimen/size_16dp"
+                android:layout_marginRight="@dimen/size_16dp"
+                android:gravity="center_vertical">
+
+                <TextView
+                    style="@style/Alarm_detail_left_text_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/end_time" />
+
+                <TextView
+                    android:id="@+id/end_time"
+                    style="@style/Alarm_detail_right_text_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/size_0_5dp"
+                android:background="@color/color_E5E6EB" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -113,17 +131,18 @@
                 android:orientation="vertical">
 
                 <TextView
-                   android:layout_marginTop="@dimen/size_8dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/size_8dp"
                     android:gravity="center_vertical"
                     android:paddingLeft="@dimen/size_16dp"
                     android:paddingRight="@dimen/size_16dp"
                     android:text="@string/control_aims"
-                    android:textColor="@color/face_login_color"
+                    android:textColor="@color/color_697084"
                     android:textSize="@dimen/text_size_14sp" />
 
                 <TextView
+                    android:id="@+id/remark_target"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/size_4dp"
@@ -131,14 +150,14 @@
                     android:minLines="2"
                     android:paddingLeft="@dimen/size_16dp"
                     android:paddingRight="@dimen/size_16dp"
-                    android:text="@string/remarks_text"
-                    android:textColor="@color/jq_pic_similarity"
+                    android:textColor="@color/color_989FB0"
                     android:textSize="@dimen/text_size_15sp" />
             </LinearLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/size_8dp"
-                android:background="@color/item_view_divider_my" />
+                android:background="@color/color_F5F6FA" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -148,26 +167,25 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:layout_marginTop="@dimen/size_8dp"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/size_20dp"
+                    android:layout_marginTop="@dimen/size_8dp"
                     android:gravity="center_vertical"
                     android:paddingLeft="@dimen/size_16dp"
                     android:paddingRight="@dimen/size_16dp"
                     android:text="@string/control_reason"
-                    android:textColor="@color/face_login_color"
+                    android:textColor="@color/color_697084"
                     android:textSize="@dimen/text_size_14sp" />
 
                 <TextView
-                    android:id="@+id/remark_content"
+                    android:id="@+id/remark_reason"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/size_4dp"
                     android:gravity="center_vertical"
                     android:paddingLeft="@dimen/size_16dp"
                     android:paddingRight="@dimen/size_16dp"
-                    android:text="@string/remarks_text"
-                    android:textColor="@color/jq_pic_similarity"
+                    android:textColor="@color/color_989FB0"
                     android:textSize="@dimen/text_size_15sp" />
             </LinearLayout>
 

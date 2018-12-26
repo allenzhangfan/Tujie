@@ -13,8 +13,26 @@
         <item>小型普通客车</item>
         <item>中型普通货车</item>
         <item>重型普通货车</item>
-        <item>轻型普通客车</item>
-        <item>微型普通客车</item>
+        <item>轻型普通货车</item>
+        <item>微型普通货车</item>
     </string-array>
-
+    <string-array name="plate_type_item">
+        <item>全部</item>
+        <item>大型汽车号牌</item>
+        <item>小型汽车号牌</item>
+        <item>使馆汽车号牌</item>
+        <item>农用运输车号牌</item>
+        <item>挂车号牌</item>
+        <item>教练汽车号牌</item>
+        <item>警用汽车号牌</item>
+        <item>香港汽车号牌</item>
+        <item>武警汽车号牌</item>
+        <item>黑牌小汽车</item>
+        <item>个性化车牌</item>
+        <item>单排军牌</item>
+        <item>双排军牌</item>
+        <item>新能源小车</item>
+        <item>新能源大车</item>
+        <item>其他号牌</item>
+    </string-array>
 </resources>

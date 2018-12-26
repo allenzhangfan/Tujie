@@ -24,6 +24,7 @@ import com.netposa.component.spjk.mvp.contract.DevicelistContract;
 import com.netposa.component.spjk.mvp.model.entity.SpjkListDeviceRequestEntity;
 import com.netposa.component.spjk.mvp.model.entity.SpjkListDeviceResponseEntity;
 import com.trello.lifecycle2.android.lifecycle.AndroidLifecycle;
+
 @ActivityScope
 public class DevicelistPresenter extends BasePresenter<DevicelistContract.Model, DevicelistContract.View> {
     @Inject
@@ -56,6 +57,7 @@ public class DevicelistPresenter extends BasePresenter<DevicelistContract.Model,
     public void getSpjkDevicelist(String id) {
         if (!NetworkUtils.isConnected()) {
             mRootView.showMessage(mContext.getString(R.string.network_disconnect));
+            mRootView.hideLoading();
             return;
         }
         mRequestEntity.setId(id);

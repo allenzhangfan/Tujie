@@ -12,18 +12,10 @@
         <item name="android:textColor">#707070</item>
         <item name="android:textSize">13sp</item>
     </style>
+
     <style name="LoginErrorTheme">
         <item name="android:textColor">#E91919</item>
         <item name="android:textSize">12sp</item>
         <item name="android:layout_alignParentRight">true</item>
-    </style>
-
-    <style name="TextInputLayoutTheme" >
-        <!-- 底部线 默认颜色 -->
-        <item name="colorControlNormal">#ddd</item>
-        <!-- 底部线 EditText激活时颜色 -->
-        <item name="colorControlActivated">@color/app_theme_color</item>
-        <item name="colorControlHighlight">@color/app_theme_color</item>
-        <item name="android:width">1px</item>
     </style>
 </resources>

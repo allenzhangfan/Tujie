@@ -7,19 +7,16 @@ import com.jess.arms.di.scope.ActivityScope;
 
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import dagger.Module;
 import dagger.Provides;
 
-import com.jess.arms.di.scope.ActivityScope;
 import com.netposa.commonres.widget.CaptureTimeHelper;
 import com.netposa.commonres.widget.CustomerLoadMoreView;
-import com.netposa.component.room.entity.SpjkCollectionDeviceEntiry;
+import com.netposa.component.room.entity.SpjkCollectionDeviceEntity;
 import com.netposa.component.spjk.mvp.contract.HistoryVideoContract;
 import com.netposa.component.spjk.mvp.model.HistoryVideoModel;
-import com.netposa.component.spjk.mvp.model.entity.HistoryVideoEntity;
 import com.netposa.component.spjk.mvp.model.entity.HistoryVideoRequestEntity;
 import com.netposa.component.spjk.mvp.model.entity.HistoryVideoResponseEntity;
 import com.netposa.component.spjk.mvp.ui.adapter.HistoryVideoAdapter;
@@ -89,23 +86,25 @@ public class HistoryVideoModule {
 
     @ActivityScope
     @Provides
-    HistoryVideoRequestEntity provideRequestEntity(){
+    HistoryVideoRequestEntity provideRequestEntity() {
         return new HistoryVideoRequestEntity();
     }
 
     @ActivityScope
     @Provides
-    LoadMoreView provideLoadMoreView() { return new CustomerLoadMoreView(); }
+    LoadMoreView provideLoadMoreView() {
+        return new CustomerLoadMoreView();
+    }
 
     @ActivityScope
     @Provides
-    CaptureTimeHelper provideCaptureTimeHelper(){
+    CaptureTimeHelper provideCaptureTimeHelper() {
         return new CaptureTimeHelper(mFm);
     }
 
     @ActivityScope
     @Provides
-    SpjkCollectionDeviceEntiry provideSpjkCollectionDevice(){
-        return new SpjkCollectionDeviceEntiry();
+    SpjkCollectionDeviceEntity provideSpjkCollectionDevice() {
+        return new SpjkCollectionDeviceEntity();
     }
 }

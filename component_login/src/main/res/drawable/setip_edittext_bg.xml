@@ -4,5 +4,5 @@
     <solid android:color="@color/white" />
     <stroke
         android:width="@dimen/size_1dp"
-        android:color="@color/setup_ip_edit_color" />
+        android:color="@color/color_C0C5D1" />
 </shape>

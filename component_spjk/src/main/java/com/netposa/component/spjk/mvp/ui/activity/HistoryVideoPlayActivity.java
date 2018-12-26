@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.google.android.material.button.MaterialButton;
 import com.gyf.barlibrary.ImmersionBar;
 import com.jess.arms.base.BaseActivity;
@@ -22,14 +23,16 @@ import com.netposa.common.log.Log;
 import com.netposa.common.net.NetWorkBroadcastReceiver;
 import com.netposa.common.net.NetWorkEventInterface;
 import com.netposa.common.utils.NetworkUtils;
-import com.netposa.component.room.entity.SpjkCollectionDeviceEntiry;
+import com.netposa.component.room.entity.SpjkCollectionDeviceEntity;
 import com.netposa.component.spjk.R;
 import com.netposa.component.spjk.R2;
 import com.netposa.component.spjk.di.component.DaggerHistoryVideoPlayComponent;
 import com.netposa.component.spjk.di.module.HistoryVideoPlayModule;
 import com.netposa.component.spjk.mvp.contract.HistoryVideoPlayContract;
 import com.netposa.component.spjk.mvp.presenter.HistoryVideoPlayPresenter;
+
 import java.util.concurrent.ArrayBlockingQueue;
+
 import javax.inject.Inject;
 
 import androidx.annotation.NonNull;
@@ -40,11 +43,12 @@ import butterknife.OnClick;
 import netposa.pem.sdk.PemSdkListener;
 import netposa.pem.sdk.PemSdkManager;
 import netposa.pem.sdk.PemSdkUtils;
+
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 import static com.netposa.common.constant.GlobalConstants.CAMERA_QIANG_JI;
 import static com.netposa.component.spjk.app.SpjkConstants.KEY_HISTORY_PLAY_VIDEO;
+import static com.netposa.component.spjk.app.SpjkConstants.KEY_HISTORY_VIDEO_DEVICES_NAME;
 import static com.netposa.component.spjk.app.SpjkConstants.KEY_HISTORY_VIDEO_ORG_NAME;
-import static com.netposa.component.spjk.app.SpjkConstants.KEY_SINGLE_CAMERA_HISTORY_VIDEO;
 import static com.netposa.component.spjk.app.SpjkConstants.KEY_SINGLE_CAMERA_ID;
 import static com.netposa.component.spjk.app.SpjkConstants.KEY_VIDEO_TYPE;
 import static com.netposa.component.spjk.app.SpjkConstants.MSG_ONERROR;
@@ -90,7 +94,7 @@ public class HistoryVideoPlayActivity extends BaseActivity<HistoryVideoPlayPrese
     @Inject
     ArrayBlockingQueue<String> mCaptureblockqueue;//截图任务队列
     @Inject
-    SpjkCollectionDeviceEntiry mSpjkCollectionDeviceEntiry;
+    SpjkCollectionDeviceEntity mSpjkCollectionDeviceEntity;
 
     private PemSdkManager mPemSdkManager;
     private boolean mIsPlaying = false;
@@ -100,6 +104,7 @@ public class HistoryVideoPlayActivity extends BaseActivity<HistoryVideoPlayPrese
     private String mOrgName;
     private String mActiveCameraId;
     private int mCameraTypeInt;
+    private String mDeviceName;
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -130,21 +135,20 @@ public class HistoryVideoPlayActivity extends BaseActivity<HistoryVideoPlayPrese
         NetWorkBroadcastReceiver.register(this, this);
         Intent data = getIntent();
         if (data == null) {
-            Log.e(TAG, "intent data is null,please check !");
             return;
         }
         mUrl = data.getStringExtra(KEY_HISTORY_PLAY_VIDEO);
         mOrgName = data.getStringExtra(KEY_HISTORY_VIDEO_ORG_NAME);
+        mDeviceName = data.getStringExtra(KEY_HISTORY_VIDEO_DEVICES_NAME);
         mActiveCameraId = data.getStringExtra(KEY_SINGLE_CAMERA_ID);
-        mCameraTypeInt=data.getIntExtra(KEY_VIDEO_TYPE,CAMERA_QIANG_JI);
-        mTvOrganizeName.setText(mOrgName);
+        mCameraTypeInt = data.getIntExtra(KEY_VIDEO_TYPE, CAMERA_QIANG_JI);
+        mTvOrganizeName.setText(mDeviceName);
         Log.i(TAG, "play url:" + mUrl);
         mPresenter.checkDevice(mActiveCameraId);
         //初始化video sdk
-        mPemSdkManager = PemSdkManager.getInstance();
+        mPemSdkManager = PemSdkManager.newInstance();
         mPemSdkManager.init(this);
         mPemSdkManager.setmGLsurfaceview(mSurfaceView);
-        play();
     }
 
     @Override
@@ -453,16 +457,16 @@ public class HistoryVideoPlayActivity extends BaseActivity<HistoryVideoPlayPrese
                 play();
             }
         } else if (id == R.id.collect_iv) {
-            mSpjkCollectionDeviceEntiry.setCamerid(mActiveCameraId);
-            mSpjkCollectionDeviceEntiry.setCamername(mOrgName);
-            mSpjkCollectionDeviceEntiry.setCamertype(mCameraTypeInt);
+            mSpjkCollectionDeviceEntity.setCamerid(mActiveCameraId);
+            mSpjkCollectionDeviceEntity.setCamername(mOrgName);
+            mSpjkCollectionDeviceEntity.setCamertype(mCameraTypeInt);
             if (mCollected) {// 已经关注了 做删除操作
                 mPresenter.deleteDevice(mActiveCameraId);
                 mCollected = false;
                 setLandscapeFollowImage();
                 showToast(false);
             } else {// 关注操作
-                mPresenter.insterDevice(mSpjkCollectionDeviceEntiry);
+                mPresenter.insterDevice(mSpjkCollectionDeviceEntity);
                 mCollected = true;
                 setLandscapeFollowImage();
                 showToast(true);

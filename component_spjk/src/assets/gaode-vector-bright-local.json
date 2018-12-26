@@ -1,0 +1,2354 @@
+{
+    "version": 8,
+    "name": "Bright",
+    "sources": {
+      "gaodeVectorSource": {
+        "url": "asset://gaode-vector-v1.json",
+        "type": "vector"
+      }
+    },
+    "sprite": "asset://sprites/gaode",
+    "glyphs": "asset://glyphs/{fontstack}/{range}.pbf",
+    "layers": [
+      {
+        "id": "background",
+        "interactive": true,
+        "paint": {
+          "background-color": "#fcf9f2"
+        },
+        "type": "background"
+      },
+      {
+        "id": "city_normal_region_green",
+        "type": "fill",
+        "source": "gaodeVectorSource",
+        "source-layer": "region",
+        "paint": {
+          "fill-color": [
+            "string",
+            [
+              "get",
+              "style"
+            ]
+          ],
+          "fill-outline-color": [
+            "string",
+            [
+              "get",
+              "style"
+            ]
+          ],
+          "fill-opacity": 0.8,
+          "fill-antialias": true
+        },
+        "filter": [
+          "==",
+          "labels",
+          "regions:green"
+        ]
+      },
+      {
+        "id": "city_normal_region_business",
+        "type": "fill",
+        "source": "gaodeVectorSource",
+        "source-layer": "region",
+        "layout": {
+          
+        },
+        "paint": {
+          "fill-color": [
+            "string",
+            [
+              "get",
+              "style"
+            ]
+          ],
+          "fill-outline-color": "hsl(35, 6%, 79%)",
+          "fill-opacity": 0.8,
+          "fill-antialias": true
+        },
+        "filter": [
+          "==",
+          "labels",
+          "regions:business"
+        ]
+      },
+      {
+        "id": "city_normal_region_edu",
+        "type": "fill",
+        "source": "gaodeVectorSource",
+        "source-layer": "region",
+        "layout": {
+          
+        },
+        "paint": {
+          "fill-color": [
+            "string",
+            [
+              "get",
+              "style"
+            ]
+          ],
+          "fill-outline-color": "hsl(35, 6%, 79%)",
+          "fill-opacity": 0.8,
+          "fill-antialias": true
+        },
+        "filter": [
+          "==",
+          "labels",
+          "regions:edu"
+        ]
+      },
+      {
+        "id": "city_normal_region_public",
+        "type": "fill",
+        "source": "gaodeVectorSource",
+        "source-layer": "region",
+        "layout": {
+          
+        },
+        "paint": {
+          "fill-color": [
+            "string",
+            [
+              "get",
+              "style"
+            ]
+          ],
+          "fill-outline-color": "hsl(35, 6%, 79%)",
+          "fill-opacity": 0.8,
+          "fill-antialias": true
+        },
+        "filter": [
+          "==",
+          "labels",
+          "regions:public"
+        ]
+      },
+      {
+        "id": "city_normal_region_health",
+        "type": "fill",
+        "source": "gaodeVectorSource",
+        "source-layer": "region",
+        "layout": {
+          
+        },
+        "paint": {
+          "fill-color": [
+            "string",
+            [
+              "get",
+              "style"
+            ]
+          ],
+          "fill-outline-color": "hsl(35, 6%, 79%)",
+          "fill-opacity": 0.8,
+          "fill-antialias": true
+        },
+        "filter": [
+          "==",
+          "labels",
+          "regions:health"
+        ]
+      },
+      {
+        "id": "city_normal_region_scenicSpot",
+        "type": "fill",
+        "source": "gaodeVectorSource",
+        "source-layer": "region",
+        "layout": {
+          
+        },
+        "paint": {
+          "fill-color": [
+            "string",
+            [
+              "get",
+              "style"
+            ]
+          ],
+          "fill-outline-color": "hsl(35, 6%, 79%)",
+          "fill-opacity": 0.8,
+          "fill-antialias": true
+        },
+        "filter": [
+          "==",
+          "labels",
+          "regions:scenicSpot"
+        ]
+      },
+      {
+        "id": "city_normal_region_parkingLot",
+        "type": "fill",
+        "source": "gaodeVectorSource",
+        "source-layer": "region",
+        "layout": {
+          
+        },
+        "paint": {
+          "fill-color": [
+            "string",
+            [
+              "get",
+              "style"
+            ]
+          ],
+          "fill-outline-color": "hsl(35, 6%, 79%)",
+          "fill-opacity": 0.8,
+          "fill-antialias": true
+        },
+        "filter": [
+          "==",
+          "labels",
+          "regions:parkingLot"
+        ]
+      },
+      {
+        "id": "city_normal_region_sports",
+        "type": "fill",
+        "source": "gaodeVectorSource",
+        "source-layer": "region",
+        "layout": {
+          
+        },
+        "paint": {
+          "fill-color": [
+            "string",
+            [
+              "get",
+              "style"
+            ]
+          ],
+          "fill-outline-color": "hsl(35, 6%, 79%)",
+          "fill-opacity": 0.8,
+          "fill-antialias": true
+        },
+        "filter": [
+          "==",
+          "labels",
+          "regions:sports"
+        ]
+      },
+      {
+        "id": "city_normal_region_traffic",
+        "type": "fill",
+        "source": "gaodeVectorSource",
+        "source-layer": "region",
+        "layout": {
+          
+        },
+        "paint": {
+          "fill-color": [
+            "string",
+            [
+              "get",
+              "style"
+            ]
+          ],
+          "fill-outline-color": "hsl(35, 6%, 79%)",
+          "fill-opacity": 0.8,
+          "fill-antialias": true
+        },
+        "filter": [
+          "==",
+          "labels",
+          "regions:traffic"
+        ]
+      },
+      {
+        "id": "city_normal_region_water",
+        "type": "fill",
+        "source": "gaodeVectorSource",
+        "source-layer": "region",
+        "layout": {
+          
+        },
+        "paint": {
+          "fill-color": [
+            "string",
+            [
+              "get",
+              "style"
+            ]
+          ],
+          "fill-outline-color": "hsl(35, 6%, 79%)",
+          "fill-opacity": 0.8,
+          "fill-antialias": true
+        },
+        "filter": [
+          "==",
+          "labels",
+          "water"
+        ]
+      },
+      {
+        "id": "city_normal_region_subway",
+        "type": "fill",
+        "source": "gaodeVectorSource",
+        "source-layer": "region",
+        "layout": {
+          
+        },
+        "paint": {
+          "fill-color": [
+            "string",
+            [
+              "get",
+              "style"
+            ]
+          ],
+          "fill-outline-color": "hsl(35, 6%, 79%)",
+          "fill-opacity": 0.8,
+          "fill-antialias": true
+        },
+        "filter": [
+          "==",
+          "labels",
+          "regions:subway"
+        ]
+      },
+      {
+        "id": "city_normal_line_underPass",
+        "type": "line",
+        "source": "gaodeVectorSource",
+        "source-layer": "road",
+        "layout": {
+          "line-join": "bevel",
+          "line-cap": "butt"
+        },
+        "paint": {
+          "line-color": [
+            "string",
+            [
+              "get",
+              "fillStyle"
+            ]
+          ],
+          "line-width": [
+            "number",
+            [
+              "get",
+              "width"
+            ]
+          ],
+          "line-opacity": 1
+        },
+        "filter": [
+          "==",
+          "labels",
+          "roads:underPass"
+        ]
+      },
+      {
+        "id": "city_normal_line_railway_stroke",
+        "type": "line",
+        "source": "gaodeVectorSource",
+        "source-layer": "road",
+        "layout": {
+          "line-join": "bevel",
+          "line-cap": "butt"
+        },
+        "paint": {
+          "line-color": "hsl(4°, 1%, 52.0%)",
+          "line-width": 3,
+          "line-opacity": 1
+        },
+        "filter": [
+          "==",
+          "labels",
+          "roads:railway"
+        ]
+      },
+      {
+        "id": "city_normal_line_railway_fill",
+        "type": "line",
+        "source": "gaodeVectorSource",
+        "source-layer": "road",
+        "layout": {
+          "line-join": "bevel",
+          "line-cap": "butt"
+        },
+        "paint": {
+          "line-color": "hsl(0°, 0.0%, 100.0%)",
+          "line-width": 2,
+          "line-opacity": 1,
+          "line-dasharray": [
+            6,
+            6
+          ]
+        },
+        "filter": [
+          "==",
+          "labels",
+          "roads:railway"
+        ]
+      },
+      {
+        "id": "city_normal_line_highSpeedRailway_stroke",
+        "type": "line",
+        "source": "gaodeVectorSource",
+        "source-layer": "road",
+        "layout": {
+          "line-join": "bevel",
+          "line-cap": "butt"
+        },
+        "paint": {
+          "line-color": "hsl(4°, 48.6%, 71.0%)",
+          "line-width": 3,
+          "line-opacity": 1
+        },
+        "filter": [
+          "==",
+          "labels",
+          "roads:highSpeedRailway"
+        ]
+      },
+      {
+        "id": "city_normal_line_highSpeedRailway_fill",
+        "type": "line",
+        "source": "gaodeVectorSource",
+        "source-layer": "road",
+        "layout": {
+          "line-join": "bevel",
+          "line-cap": "butt"
+        },
+        "paint": {
+          "line-color": "hsl(0°, 0.0%, 100.0%)",
+          "line-width": 2,
+          "line-opacity": 1,
+          "line-dasharray": [
+            6,
+            6
+          ]
+        },
+        "filter": [
+          "==",
+          "labels",
+          "roads:highSpeedRailway"
+        ]
+      },
+      {
+        "id": "city_normal_line_roadsBeingBuilt_fill",
+        "type": "line",
+        "source": "gaodeVectorSource",
+        "source-layer": "road",
+        "layout": {
+          "line-join": "bevel",
+          "line-cap": "butt"
+        },
+        "paint": {
+          "line-color": "hsl(191, 4.0%, 67.0%)",
+          "line-width": 8,
+          "line-opacity": 1,
+          "line-dasharray": [
+            2,
+            2
+          ]
+        },
+        "filter": [
+          "==",
+          "labels",
+          "roads:roadsBeingBuilt"
+        ]
+      },
+      {
+        "id": "city_normal_line_roadsBeingBuilt_stroke",
+        "type": "line",
+        "source": "gaodeVectorSource",
+        "source-layer": "road",
+        "layout": {
+          "line-join": "bevel",
+          "line-cap": "butt"
+        },
+        "paint": {
+          "line-color": [
+            "string",
+            [
+              "get",
+              "fillStyle"
+            ]
+          ],
+          "line-width": [
+            "number",
+            [
+              "get",
+              "width"
+            ]
+          ],
+          "line-opacity": 1
+        },
+        "filter": [
+          "==",
+          "labels",
+          "roads:roadsBeingBuilt"
+        ]
+      },
+      {
+        "id": "city_normal_line_other",
+        "type": "line",
+        "source": "gaodeVectorSource",
+        "source-layer": "road",
+        "layout": {
+          "line-join": "bevel",
+          "line-cap": "butt"
+        },
+        "paint": {
+          "line-color": [
+            "string",
+            [
+              "get",
+              "fillStyle"
+            ]
+          ],
+          "line-width": [
+            "number",
+            [
+              "get",
+              "width"
+            ]
+          ],
+          "line-opacity": 1
+        },
+        "filter": [
+          "==",
+          "labels",
+          "roads:other"
+        ]
+      },
+      {
+        "id": "city_normal_line_levelFourRoad",
+        "type": "line",
+        "source": "gaodeVectorSource",
+        "source-layer": "road",
+        "layout": {
+          "line-join": "bevel",
+          "line-cap": "butt"
+        },
+        "paint": {
+          "line-color": [
+            "string",
+            [
+              "get",
+              "fillStyle"
+            ]
+          ],
+          "line-width": [
+            "number",
+            [
+              "get",
+              "width"
+            ]
+          ],
+          "line-opacity": 1
+        },
+        "filter": [
+          "==",
+          "labels",
+          "roads:levelFourRoad"
+        ]
+      },
+      {
+        "id": "city_normal_line_levelThreeRoad",
+        "type": "line",
+        "source": "gaodeVectorSource",
+        "source-layer": "road",
+        "layout": {
+          "line-join": "bevel",
+          "line-cap": "butt"
+        },
+        "paint": {
+          "line-color": [
+            "string",
+            [
+              "get",
+              "fillStyle"
+            ]
+          ],
+          "line-width": [
+            "number",
+            [
+              "get",
+              "width"
+            ]
+          ],
+          "line-opacity": 1
+        },
+        "filter": [
+          "==",
+          "labels",
+          "roads:levelThreeRoad"
+        ]
+      },
+      {
+        "id": "city_normal_line_secondaryRoad",
+        "type": "line",
+        "source": "gaodeVectorSource",
+        "source-layer": "road",
+        "layout": {
+          "line-join": "bevel",
+          "line-cap": "butt"
+        },
+        "paint": {
+          "line-color": [
+            "string",
+            [
+              "get",
+              "fillStyle"
+            ]
+          ],
+          "line-width": [
+            "number",
+            [
+              "get",
+              "width"
+            ]
+          ],
+          "line-opacity": 1
+        },
+        "filter": [
+          "==",
+          "labels",
+          "roads:secondaryRoad"
+        ]
+      },
+      {
+        "id": "city_normal_line_provincialRoad",
+        "type": "line",
+        "source": "gaodeVectorSource",
+        "source-layer": "road",
+        "layout": {
+          "line-join": "bevel",
+          "line-cap": "butt"
+        },
+        "paint": {
+          "line-color": [
+            "string",
+            [
+              "get",
+              "fillStyle"
+            ]
+          ],
+          "line-width": [
+            "number",
+            [
+              "get",
+              "width"
+            ]
+          ],
+          "line-opacity": 1
+        },
+        "filter": [
+          "==",
+          "labels",
+          "roads:provincialRoad"
+        ]
+      },
+      {
+        "id": "city_normal_line_nationalRoad",
+        "type": "line",
+        "source": "gaodeVectorSource",
+        "source-layer": "road",
+        "layout": {
+          "line-join": "bevel",
+          "line-cap": "butt"
+        },
+        "paint": {
+          "line-color": [
+            "string",
+            [
+              "get",
+              "fillStyle"
+            ]
+          ],
+          "line-width": [
+            "number",
+            [
+              "get",
+              "width"
+            ]
+          ],
+          "line-opacity": 1
+        },
+        "filter": [
+          "==",
+          "labels",
+          "roads:nationalRoad"
+        ]
+      },
+      {
+        "id": "city_normal_line_ringRoad",
+        "type": "line",
+        "source": "gaodeVectorSource",
+        "source-layer": "road",
+        "layout": {
+          "line-join": "bevel",
+          "line-cap": "butt"
+        },
+        "paint": {
+          "line-color": [
+            "string",
+            [
+              "get",
+              "fillStyle"
+            ]
+          ],
+          "line-width": [
+            "number",
+            [
+              "get",
+              "width"
+            ]
+          ],
+          "line-opacity": 1
+        },
+        "filter": [
+          "==",
+          "labels",
+          "roads:ringRoad"
+        ]
+      },
+      {
+        "id": "city_normal_line_highway",
+        "type": "line",
+        "source": "gaodeVectorSource",
+        "source-layer": "road",
+        "layout": {
+          "line-join": "bevel",
+          "line-cap": "butt"
+        },
+        "paint": {
+          "line-color": [
+            "string",
+            [
+              "get",
+              "fillStyle"
+            ]
+          ],
+          "line-width": [
+            "number",
+            [
+              "get",
+              "width"
+            ]
+          ],
+          "line-opacity": 1
+        },
+        "filter": [
+          "==",
+          "labels",
+          "roads:highWay"
+        ]
+      },
+      {
+        "id": "city_normal_line_subway",
+        "type": "line",
+        "source": "gaodeVectorSource",
+        "source-layer": "road",
+        "layout": {
+          "line-join": "bevel",
+          "line-cap": "butt"
+        },
+        "paint": {
+          "line-color": [
+            "string",
+            [
+              "get",
+              "fillStyle"
+            ]
+          ],
+          "line-width": [
+            "number",
+            [
+              "get",
+              "width"
+            ]
+          ],
+          "line-opacity": 1
+        },
+        "filter": [
+          "==",
+          "labels",
+          "roads:subway"
+        ]
+      },
+      {
+        "id": "city_normal_line_subwayBeingBuilt_fill",
+        "type": "line",
+        "source": "gaodeVectorSource",
+        "source-layer": "road",
+        "layout": {
+          "line-join": "bevel",
+          "line-cap": "butt"
+        },
+        "paint": {
+          "line-color": "hsl(191, 4.0%, 67.0%)",
+          "line-width": 3,
+          "line-opacity": 1,
+          "line-dasharray": [
+            4,
+            4
+          ]
+        },
+        "filter": [
+          "==",
+          "labels",
+          "roads:subwayBeingBuilt"
+        ]
+      },
+      {
+        "id": "city_normal_line_overPass",
+        "type": "line",
+        "source": "gaodeVectorSource",
+        "source-layer": "road",
+        "layout": {
+          "line-join": "bevel",
+          "line-cap": "butt"
+        },
+        "paint": {
+          "line-color": [
+            "string",
+            [
+              "get",
+              "fillStyle"
+            ]
+          ],
+          "line-width": 12,
+          "line-opacity": 1
+        },
+        "filter": [
+          "==",
+          "labels",
+          "roads:overPass"
+        ]
+      },
+      {
+        "id": "city_normal_road_label_id",
+        "type": "symbol",
+        "source": "gaodeVectorSource",
+        "source-layer": "road_label",
+        "filter": [
+          "all",
+          [
+            "!=",
+            "labels",
+            "roads:guideBoards"
+          ],
+          [
+            "!=",
+            "name",
+            "↑"
+          ]
+        ],
+        "layout": {
+          "text-pitch-alignment": "map",
+          "text-rotation-alignment": "map",
+          "text-field": "{name}",
+          "text-font": [
+            "Microsoft YaHei"
+          ],
+          "icon-image": "{icon-image}",
+          "text-size": {
+            "base": 13,
+            "stops": [
+              [
+                16,
+                14
+              ],
+              [
+                20,
+                15
+              ]
+            ]
+          },
+          "icon-offset": [
+            0,
+            0
+          ],
+          "icon-size": 1.1
+        },
+        "paint": {
+          "text-color": [
+            "string",
+            [
+              "get",
+              "text_color"
+            ]
+          ],
+          "text-halo-width": 0,
+          "text-halo-color": [
+            "string",
+            [
+              "get",
+              "text_halo_color"
+            ]
+          ]
+        }
+      },
+      {
+        "id": "city_normal_road_label_img_id",
+        "type": "symbol",
+        "source": "gaodeVectorSource",
+        "source-layer": "road_label",
+        "filter": [
+          "==",
+          "labels",
+          "roads:guideBoards"
+        ],
+        "layout": {
+          "text-field": "{name}",
+          "text-font": [
+            "Microsoft YaHei"
+          ],
+          "icon-image": "{icon-image}",
+          "text-size": 9,
+          "icon-offset": [
+            0,
+            0
+          ],
+          "icon-size": 1.1
+        },
+        "paint": {
+          "text-color": [
+            "string",
+            [
+              "get",
+              "text_color"
+            ]
+          ],
+          "text-halo-width": 1,
+          "text-halo-color": [
+            "string",
+            [
+              "get",
+              "text_halo_color"
+            ]
+          ]
+        }
+      },
+      {
+        "id": "city_normal_building_id",
+        "type": "fill-extrusion",
+        "source": "gaodeVectorSource",
+        "source-layer": "building",
+        "layout": {
+          
+        },
+        "paint": {
+          "fill-extrusion-color": "rgb(224,226,213)",
+          "fill-extrusion-opacity": 0.8,
+          "fill-extrusion-translate-anchor": "map",
+          "fill-extrusion-height": [
+            "number",
+            [
+              "get",
+              "fill-extrusion-height"
+            ]
+          ],
+          "fill-extrusion-base": 0
+        },
+        "minzoom": 12
+      },
+      {
+        "id": "city_normal_poi_hotel",
+        "type": "symbol",
+        "source": "gaodeVectorSource",
+        "source-layer": "poi",
+        "layout": {
+          "text-field": "{name}",
+          "text-font": [
+            "Microsoft YaHei"
+          ],
+          "text-size": {
+            "base": 13,
+            "stops": [
+              [
+                16,
+                14
+              ],
+              [
+                20,
+                15
+              ]
+            ]
+          },
+          "icon-image": "{icon-image}",
+          "icon-offset": [
+            0,
+            -17
+          ],
+          "icon-allow-overlap": true,
+          "icon-size": 1
+        },
+        "paint": {
+          "text-color": [
+            "string",
+            [
+              "get",
+              "text_color"
+            ]
+          ],
+          "text-halo-width": 1,
+          "text-halo-color": [
+            "string",
+            [
+              "get",
+              "text_halo_color"
+            ]
+          ]
+        },
+        "filter": [
+          "==",
+          "code",
+          "0"
+        ]
+      },
+      {
+        "id": "city_normal_poi_canyin",
+        "type": "symbol",
+        "source": "gaodeVectorSource",
+        "source-layer": "poi",
+        "layout": {
+          "text-field": "{name}",
+          "text-font": [
+            "Microsoft YaHei"
+          ],
+          "text-size": {
+            "base": 13,
+            "stops": [
+              [
+                16,
+                14
+              ],
+              [
+                20,
+                15
+              ]
+            ]
+          },
+          "icon-image": "{icon-image}",
+          "icon-offset": [
+            0,
+            -17
+          ],
+          "icon-allow-overlap": true,
+          "icon-size": 1
+        },
+        "paint": {
+          "text-color": [
+            "string",
+            [
+              "get",
+              "text_color"
+            ]
+          ],
+          "text-halo-width": 1,
+          "text-halo-color": [
+            "string",
+            [
+              "get",
+              "text_halo_color"
+            ]
+          ]
+        },
+        "filter": [
+          "==",
+          "code",
+          "1"
+        ]
+      },
+      {
+        "id": "city_normal_poi_gouwu",
+        "type": "symbol",
+        "source": "gaodeVectorSource",
+        "source-layer": "poi",
+        "layout": {
+          "text-field": "{name}",
+          "text-font": [
+            "Microsoft YaHei"
+          ],
+          "text-size": {
+            "base": 13,
+            "stops": [
+              [
+                16,
+                14
+              ],
+              [
+                20,
+                15
+              ]
+            ]
+          },
+          "icon-image": "{icon-image}",
+          "icon-offset": [
+            0,
+            -17
+          ],
+          "icon-allow-overlap": true,
+          "icon-size": 1
+        },
+        "paint": {
+          "text-color": [
+            "string",
+            [
+              "get",
+              "text_color"
+            ]
+          ],
+          "text-halo-width": 1,
+          "text-halo-color": [
+            "string",
+            [
+              "get",
+              "text_halo_color"
+            ]
+          ]
+        },
+        "filter": [
+          "==",
+          "code",
+          "2"
+        ]
+      },
+      {
+        "id": "city_normal_poi_lvyou",
+        "type": "symbol",
+        "source": "gaodeVectorSource",
+        "source-layer": "poi",
+        "layout": {
+          "text-field": "{name}",
+          "text-font": [
+            "Microsoft YaHei"
+          ],
+          "text-size": {
+            "base": 13,
+            "stops": [
+              [
+                16,
+                14
+              ],
+              [
+                20,
+                15
+              ]
+            ]
+          },
+          "icon-image": "{icon-image}",
+          "icon-offset": [
+            0,
+            -17
+          ],
+          "icon-allow-overlap": true,
+          "icon-size": 1
+        },
+        "paint": {
+          "text-color": [
+            "string",
+            [
+              "get",
+              "text_color"
+            ]
+          ],
+          "text-halo-width": 1,
+          "text-halo-color": [
+            "string",
+            [
+              "get",
+              "text_halo_color"
+            ]
+          ]
+        },
+        "filter": [
+          "==",
+          "code",
+          "3"
+        ]
+      },
+      {
+        "id": "city_normal_poi_jiaotongsheshi",
+        "type": "symbol",
+        "source": "gaodeVectorSource",
+        "source-layer": "poi",
+        "layout": {
+          "text-field": "{name}",
+          "text-font": [
+            "Microsoft YaHei"
+          ],
+          "text-size": {
+            "base": 13,
+            "stops": [
+              [
+                16,
+                14
+              ],
+              [
+                20,
+                15
+              ]
+            ]
+          },
+          "icon-image": "{icon-image}",
+          "icon-offset": [
+            0,
+            -17
+          ],
+          "icon-allow-overlap": true,
+          "icon-size": 1
+        },
+        "paint": {
+          "text-color": [
+            "string",
+            [
+              "get",
+              "text_color"
+            ]
+          ],
+          "text-halo-width": 1,
+          "text-halo-color": [
+            "string",
+            [
+              "get",
+              "text_halo_color"
+            ]
+          ]
+        },
+        "filter": [
+          "==",
+          "code",
+          "4"
+        ]
+      },
+      {
+        "id": "city_normal_poi_bank",
+        "type": "symbol",
+        "source": "gaodeVectorSource",
+        "source-layer": "poi",
+        "layout": {
+          "text-field": "{name}",
+          "text-font": [
+            "Microsoft YaHei"
+          ],
+          "text-size": {
+            "base": 13,
+            "stops": [
+              [
+                16,
+                14
+              ],
+              [
+                20,
+                15
+              ]
+            ]
+          },
+          "icon-image": "{icon-image}",
+          "icon-offset": [
+            0,
+            -17
+          ],
+          "icon-allow-overlap": true,
+          "icon-size": 1
+        },
+        "paint": {
+          "text-color": [
+            "string",
+            [
+              "get",
+              "text_color"
+            ]
+          ],
+          "text-halo-width": 1,
+          "text-halo-color": [
+            "string",
+            [
+              "get",
+              "text_halo_color"
+            ]
+          ]
+        },
+        "filter": [
+          "==",
+          "code",
+          "5"
+        ]
+      },
+      {
+        "id": "city_normal_poi_edu",
+        "type": "symbol",
+        "source": "gaodeVectorSource",
+        "source-layer": "poi",
+        "layout": {
+          "text-field": "{name}",
+          "text-font": [
+            "Microsoft YaHei"
+          ],
+          "text-size": {
+            "base": 13,
+            "stops": [
+              [
+                16,
+                14
+              ],
+              [
+                20,
+                15
+              ]
+            ]
+          },
+          "icon-image": "{icon-image}",
+          "icon-offset": [
+            0,
+            -17
+          ],
+          "icon-allow-overlap": true,
+          "icon-size": 1
+        },
+        "paint": {
+          "text-color": [
+            "string",
+            [
+              "get",
+              "text_color"
+            ]
+          ],
+          "text-halo-width": 1,
+          "text-halo-color": [
+            "string",
+            [
+              "get",
+              "text_halo_color"
+            ]
+          ]
+        },
+        "filter": [
+          "==",
+          "code",
+          "6"
+        ]
+      },
+      {
+        "id": "city_normal_poi_live",
+        "type": "symbol",
+        "source": "gaodeVectorSource",
+        "source-layer": "poi",
+        "layout": {
+          "text-field": "{name}",
+          "text-font": [
+            "Microsoft YaHei"
+          ],
+          "text-size": {
+            "base": 13,
+            "stops": [
+              [
+                16,
+                14
+              ],
+              [
+                20,
+                15
+              ]
+            ]
+          },
+          "icon-image": "{icon-image}",
+          "icon-offset": [
+            0,
+            -17
+          ],
+          "icon-allow-overlap": true,
+          "icon-size": 1
+        },
+        "paint": {
+          "text-color": [
+            "string",
+            [
+              "get",
+              "text_color"
+            ]
+          ],
+          "text-halo-width": 1,
+          "text-halo-color": [
+            "string",
+            [
+              "get",
+              "text_halo_color"
+            ]
+          ]
+        },
+        "filter": [
+          "==",
+          "code",
+          "7"
+        ]
+      },
+      {
+        "id": "city_normal_poi_hospital",
+        "type": "symbol",
+        "source": "gaodeVectorSource",
+        "source-layer": "poi",
+        "layout": {
+          "text-field": "{name}",
+          "text-font": [
+            "Microsoft YaHei"
+          ],
+          "text-size": {
+            "base": 13,
+            "stops": [
+              [
+                16,
+                14
+              ],
+              [
+                20,
+                15
+              ]
+            ]
+          },
+          "icon-image": "{icon-image}",
+          "icon-offset": [
+            0,
+            -17
+          ],
+          "icon-allow-overlap": true,
+          "icon-size": 1
+        },
+        "paint": {
+          "text-color": [
+            "string",
+            [
+              "get",
+              "text_color"
+            ]
+          ],
+          "text-halo-width": 1,
+          "text-halo-color": [
+            "string",
+            [
+              "get",
+              "text_halo_color"
+            ]
+          ]
+        },
+        "filter": [
+          "==",
+          "code",
+          "8"
+        ]
+      },
+      {
+        "id": "city_normal_poi_pe",
+        "type": "symbol",
+        "source": "gaodeVectorSource",
+        "source-layer": "poi",
+        "layout": {
+          "text-field": "{name}",
+          "text-font": [
+            "Microsoft YaHei"
+          ],
+          "text-size": {
+            "base": 13,
+            "stops": [
+              [
+                16,
+                14
+              ],
+              [
+                20,
+                15
+              ]
+            ]
+          },
+          "icon-image": "{icon-image}",
+          "icon-offset": [
+            0,
+            -17
+          ],
+          "icon-allow-overlap": true,
+          "icon-size": 1
+        },
+        "paint": {
+          "text-color": [
+            "string",
+            [
+              "get",
+              "text_color"
+            ]
+          ],
+          "text-halo-width": 1,
+          "text-halo-color": [
+            "string",
+            [
+              "get",
+              "text_halo_color"
+            ]
+          ]
+        },
+        "filter": [
+          "==",
+          "code",
+          "9"
+        ]
+      },
+      {
+        "id": "city_normal_poi_public",
+        "type": "symbol",
+        "source": "gaodeVectorSource",
+        "source-layer": "poi",
+        "layout": {
+          "text-field": "{name}",
+          "text-font": [
+            "Microsoft YaHei"
+          ],
+          "text-size": {
+            "base": 13,
+            "stops": [
+              [
+                16,
+                14
+              ],
+              [
+                20,
+                15
+              ]
+            ]
+          },
+          "icon-image": "{icon-image}",
+          "icon-offset": [
+            0,
+            -17
+          ],
+          "icon-allow-overlap": true,
+          "icon-size": 1
+        },
+        "paint": {
+          "text-color": [
+            "string",
+            [
+              "get",
+              "text_color"
+            ]
+          ],
+          "text-halo-width": 1,
+          "text-halo-color": [
+            "string",
+            [
+              "get",
+              "text_halo_color"
+            ]
+          ]
+        },
+        "filter": [
+          "==",
+          "code",
+          "10"
+        ]
+      },
+      {
+        "id": "city_normal_poi_buidling",
+        "type": "symbol",
+        "source": "gaodeVectorSource",
+        "source-layer": "poi",
+        "layout": {
+          "text-field": "{name}",
+          "text-font": [
+            "Microsoft YaHei"
+          ],
+          "text-size": {
+            "base": 13,
+            "stops": [
+              [
+                16,
+                14
+              ],
+              [
+                20,
+                15
+              ]
+            ]
+          },
+          "icon-image": "{icon-image}",
+          "icon-offset": [
+            0,
+            -17
+          ],
+          "icon-allow-overlap": true,
+          "icon-size": 1
+        },
+        "paint": {
+          "text-color": [
+            "string",
+            [
+              "get",
+              "text_color"
+            ]
+          ],
+          "text-halo-width": 1,
+          "text-halo-color": [
+            "string",
+            [
+              "get",
+              "text_halo_color"
+            ]
+          ]
+        },
+        "filter": [
+          "==",
+          "code",
+          "11"
+        ]
+      },
+      {
+        "id": "city_normal_poi_gov",
+        "type": "symbol",
+        "source": "gaodeVectorSource",
+        "source-layer": "poi",
+        "layout": {
+          "text-field": "{name}",
+          "text-font": [
+            "Microsoft YaHei"
+          ],
+          "text-size": {
+            "base": 13,
+            "stops": [
+              [
+                16,
+                14
+              ],
+              [
+                20,
+                15
+              ]
+            ]
+          },
+          "icon-image": "{icon-image}",
+          "icon-offset": [
+            0,
+            -17
+          ],
+          "icon-allow-overlap": true,
+          "icon-size": 1
+        },
+        "paint": {
+          "text-color": [
+            "string",
+            [
+              "get",
+              "text_color"
+            ]
+          ],
+          "text-halo-width": 1,
+          "text-halo-color": [
+            "string",
+            [
+              "get",
+              "text_halo_color"
+            ]
+          ]
+        },
+        "filter": [
+          "==",
+          "code",
+          "12"
+        ]
+      },
+      {
+        "id": "city_normal_poi_moto",
+        "type": "symbol",
+        "source": "gaodeVectorSource",
+        "source-layer": "poi",
+        "layout": {
+          "text-field": "{name}",
+          "text-font": [
+            "Microsoft YaHei"
+          ],
+          "text-size": {
+            "base": 13,
+            "stops": [
+              [
+                16,
+                14
+              ],
+              [
+                20,
+                15
+              ]
+            ]
+          },
+          "icon-image": "{icon-image}",
+          "icon-offset": [
+            0,
+            -17
+          ],
+          "icon-allow-overlap": true,
+          "icon-size": 1
+        },
+        "paint": {
+          "text-color": [
+            "string",
+            [
+              "get",
+              "text_color"
+            ]
+          ],
+          "text-halo-width": 1,
+          "text-halo-color": [
+            "string",
+            [
+              "get",
+              "text_halo_color"
+            ]
+          ]
+        },
+        "filter": [
+          "==",
+          "code",
+          "13"
+        ]
+      },
+      {
+        "id": "city_normal_poi_vehicle",
+        "type": "symbol",
+        "source": "gaodeVectorSource",
+        "source-layer": "poi",
+        "layout": {
+          "text-field": "{name}",
+          "text-font": [
+            "Microsoft YaHei"
+          ],
+          "text-size": {
+            "base": 13,
+            "stops": [
+              [
+                16,
+                14
+              ],
+              [
+                20,
+                15
+              ]
+            ]
+          },
+          "icon-image": "{icon-image}",
+          "icon-offset": [
+            0,
+            -17
+          ],
+          "icon-allow-overlap": true,
+          "icon-size": 1
+        },
+        "paint": {
+          "text-color": [
+            "string",
+            [
+              "get",
+              "text_color"
+            ]
+          ],
+          "text-halo-width": 1,
+          "text-halo-color": [
+            "string",
+            [
+              "get",
+              "text_halo_color"
+            ]
+          ]
+        },
+        "filter": [
+          "==",
+          "code",
+          "14"
+        ]
+      },
+      {
+        "id": "city_normal_poi_pass",
+        "type": "symbol",
+        "source": "gaodeVectorSource",
+        "source-layer": "poi",
+        "layout": {
+          "text-field": "{name}",
+          "text-font": [
+            "Microsoft YaHei"
+          ],
+          "text-size": {
+            "base": 13,
+            "stops": [
+              [
+                16,
+                14
+              ],
+              [
+                20,
+                15
+              ]
+            ]
+          },
+          "icon-image": "{icon-image}",
+          "icon-offset": [
+            0,
+            -17
+          ],
+          "icon-allow-overlap": true,
+          "icon-size": 1
+        },
+        "paint": {
+          "text-color": [
+            "string",
+            [
+              "get",
+              "text_color"
+            ]
+          ],
+          "text-halo-width": 1,
+          "text-halo-color": [
+            "string",
+            [
+              "get",
+              "text_halo_color"
+            ]
+          ]
+        },
+        "filter": [
+          "==",
+          "code",
+          "15"
+        ]
+      },
+      {
+        "id": "city_normal_poi_subway",
+        "type": "symbol",
+        "source": "gaodeVectorSource",
+        "source-layer": "poi",
+        "layout": {
+          "text-field": "{name}",
+          "text-font": [
+            "Microsoft YaHei"
+          ],
+          "text-size": {
+            "base": 13,
+            "stops": [
+              [
+                16,
+                14
+              ],
+              [
+                20,
+                15
+              ]
+            ]
+          },
+          "icon-image": "{icon-image}",
+          "icon-offset": [
+            0,
+            0
+          ],
+          "text-offset": [
+            0,
+            1.5
+          ],
+          "icon-allow-overlap": true,
+          "icon-size": 1
+        },
+        "paint": {
+          "text-color": [
+            "string",
+            [
+              "get",
+              "text_color"
+            ]
+          ],
+          "text-halo-width": 1,
+          "text-halo-color": [
+            "string",
+            [
+              "get",
+              "text_halo_color"
+            ]
+          ]
+        },
+        "filter": [
+          "all",
+          [
+            "==",
+            "code",
+            "16"
+          ],
+          [
+            "!=",
+            "icon-image",
+            "24_360"
+          ],
+          [
+            "!=",
+            "icon-image",
+            "72_360"
+          ]
+        ]
+      },
+      {
+        "id": "city_normal_poi_subway_kou",
+        "type": "symbol",
+        "source": "gaodeVectorSource",
+        "source-layer": "poi",
+        "layout": {
+          "text-field": "{name}",
+          "text-font": [
+            "Microsoft YaHei"
+          ],
+          "text-size": {
+            "base": 13,
+            "stops": [
+              [
+                16,
+                14
+              ],
+              [
+                20,
+                15
+              ]
+            ]
+          },
+          "icon-image": "{icon-image}",
+          "icon-offset": [
+            0,
+            0
+          ],
+          "icon-allow-overlap": true,
+          "icon-size": 1
+        },
+        "paint": {
+          "text-color": [
+            "string",
+            [
+              "get",
+              "text_color"
+            ]
+          ],
+          "text-halo-width": 1,
+          "text-halo-color": [
+            "string",
+            [
+              "get",
+              "text_halo_color"
+            ]
+          ]
+        },
+        "filter": [
+          "all",
+          [
+            "any",
+            [
+              "==",
+              "icon-image",
+              "24_360"
+            ],
+            [
+              "==",
+              "icon-image",
+              "72_360"
+            ]
+          ],
+          [
+            "==",
+            "code",
+            "16"
+          ]
+        ]
+      },
+      {
+        "id": "city_normal_poi_roadFacilities",
+        "type": "symbol",
+        "source": "gaodeVectorSource",
+        "source-layer": "poi",
+        "layout": {
+          "text-field": "{name}",
+          "text-font": [
+            "Microsoft YaHei"
+          ],
+          "text-size": {
+            "base": 13,
+            "stops": [
+              [
+                16,
+                14
+              ],
+              [
+                20,
+                15
+              ]
+            ]
+          },
+          "icon-image": "{icon-image}",
+          "icon-offset": [
+            0,
+            -17
+          ],
+          "icon-allow-overlap": true,
+          "icon-size": 1
+        },
+        "paint": {
+          "text-color": [
+            "string",
+            [
+              "get",
+              "text_color"
+            ]
+          ],
+          "text-halo-width": 1,
+          "text-halo-color": [
+            "string",
+            [
+              "get",
+              "text_halo_color"
+            ]
+          ]
+        },
+        "filter": [
+          "==",
+          "code",
+          "17"
+        ]
+      },
+      {
+        "id": "city_normal_poi_address",
+        "type": "symbol",
+        "source": "gaodeVectorSource",
+        "source-layer": "poi",
+        "layout": {
+          "text-field": "{name}",
+          "text-font": [
+            "Microsoft YaHei"
+          ],
+          "text-size": {
+            "base": 13,
+            "stops": [
+              [
+                16,
+                14
+              ],
+              [
+                20,
+                15
+              ]
+            ]
+          },
+          "icon-image": "{icon-image}",
+          "icon-offset": [
+            0,
+            -17
+          ],
+          "icon-allow-overlap": true,
+          "icon-size": 1
+        },
+        "paint": {
+          "text-color": [
+            "string",
+            [
+              "get",
+              "text_color"
+            ]
+          ],
+          "text-halo-width": 1,
+          "text-halo-color": [
+            "string",
+            [
+              "get",
+              "text_halo_color"
+            ]
+          ]
+        },
+        "filter": [
+          "==",
+          "code",
+          "18"
+        ]
+      },
+      {
+        "id": "city_normal_poi_other",
+        "type": "symbol",
+        "source": "gaodeVectorSource",
+        "source-layer": "poi",
+        "layout": {
+          "text-field": "{name}",
+          "text-font": [
+            "Microsoft YaHei"
+          ],
+          "text-size": {
+            "base": 13,
+            "stops": [
+              [
+                16,
+                14
+              ],
+              [
+                20,
+                15
+              ]
+            ]
+          },
+          "icon-image": "{icon-image}",
+          "icon-offset": [
+            0,
+            -17
+          ],
+          "icon-allow-overlap": true,
+          "icon-size": 1
+        },
+        "paint": {
+          "text-color": [
+            "string",
+            [
+              "get",
+              "text_color"
+            ]
+          ],
+          "text-halo-width": 1,
+          "text-halo-color": [
+            "string",
+            [
+              "get",
+              "text_halo_color"
+            ]
+          ]
+        },
+        "filter": [
+          "==",
+          "code",
+          "19"
+        ]
+      },
+      {
+        "id": "city_normal_district_city",
+        "type": "symbol",
+        "source": "gaodeVectorSource",
+        "source-layer": "poi",
+        "layout": {
+          "text-field": "{name}",
+          "text-font": [
+            "Microsoft YaHei"
+          ],
+          "text-size": {
+            "base": 13,
+            "stops": [
+              [
+                16,
+                14
+              ],
+              [
+                20,
+                15
+              ]
+            ]
+          }
+        },
+        "paint": {
+          "text-color": [
+            "string",
+            [
+              "get",
+              "text_color"
+            ]
+          ],
+          "text-halo-width": 1,
+          "text-halo-color": [
+            "string",
+            [
+              "get",
+              "text_halo_color"
+            ]
+          ]
+        },
+        "filter": [
+          "==",
+          "labels",
+          "labels:city"
+        ]
+      },
+      {
+        "id": "city_normal_district_district",
+        "type": "symbol",
+        "source": "gaodeVectorSource",
+        "source-layer": "poi",
+        "layout": {
+          "text-field": "{name}",
+          "text-font": [
+            "Microsoft YaHei"
+          ],
+          "text-size": {
+            "base": 13,
+            "stops": [
+              [
+                16,
+                14
+              ],
+              [
+                20,
+                15
+              ]
+            ]
+          }
+        },
+        "paint": {
+          "text-color": [
+            "string",
+            [
+              "get",
+              "text_color"
+            ]
+          ],
+          "text-halo-width": 1,
+          "text-halo-color": [
+            "string",
+            [
+              "get",
+              "text_halo_color"
+            ]
+          ]
+        },
+        "filter": [
+          "==",
+          "labels",
+          "labels:district"
+        ]
+      },
+      {
+        "id": "city_normal_district_town",
+        "type": "symbol",
+        "source": "gaodeVectorSource",
+        "source-layer": "poi",
+        "layout": {
+          "text-field": "{name}",
+          "text-font": [
+            "Microsoft YaHei"
+          ],
+          "text-size": {
+            "base": 13,
+            "stops": [
+              [
+                16,
+                14
+              ],
+              [
+                20,
+                15
+              ]
+            ]
+          }
+        },
+        "paint": {
+          "text-color": [
+            "string",
+            [
+              "get",
+              "text_color"
+            ]
+          ],
+          "text-halo-width": 1,
+          "text-halo-color": [
+            "string",
+            [
+              "get",
+              "text_halo_color"
+            ]
+          ]
+        },
+        "filter": [
+          "==",
+          "labels",
+          "labels:town"
+        ]
+      },
+      {
+        "id": "city_normal_district_village",
+        "type": "symbol",
+        "source": "gaodeVectorSource",
+        "source-layer": "poi",
+        "layout": {
+          "text-field": "{name}",
+          "text-font": [
+            "Microsoft YaHei"
+          ],
+          "text-size": {
+            "base": 13,
+            "stops": [
+              [
+                16,
+                14
+              ],
+              [
+                20,
+                15
+              ]
+            ]
+          }
+        },
+        "paint": {
+          "text-color": [
+            "string",
+            [
+              "get",
+              "text_color"
+            ]
+          ],
+          "text-halo-width": 1,
+          "text-halo-color": [
+            "string",
+            [
+              "get",
+              "text_halo_color"
+            ]
+          ]
+        },
+        "filter": [
+          "==",
+          "labels",
+          "labels:village"
+        ]
+      },
+      {
+        "id": "city_normal_district_aois",
+        "type": "symbol",
+        "source": "gaodeVectorSource",
+        "source-layer": "poi",
+        "layout": {
+          "text-field": "{name}",
+          "text-font": [
+            "Microsoft YaHei"
+          ],
+          "text-size": {
+            "base": 13,
+            "stops": [
+              [
+                16,
+                14
+              ],
+              [
+                20,
+                15
+              ]
+            ]
+          }
+        },
+        "paint": {
+          "text-color": [
+            "string",
+            [
+              "get",
+              "text_color"
+            ]
+          ],
+          "text-halo-width": 1,
+          "text-halo-color": [
+            "string",
+            [
+              "get",
+              "text_halo_color"
+            ]
+          ]
+        },
+        "filter": [
+          "==",
+          "labels",
+          "labels:aois"
+        ]
+      }
+    ]
+  }

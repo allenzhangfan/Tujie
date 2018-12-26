@@ -1,7 +1,6 @@
 package com.netposa.component.clcx.mvp.ui.adapter;
 
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.netposa.component.clcx.R;
@@ -20,7 +19,7 @@ public class CarRecordAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity,
         super(data);
         addItemType(TYPE_ITEM, R.layout.item_view_divider);
         addItemType(TYPE_ITEM_NAME, R.layout.item_car_title_name);
-        addItemType(TYPE_ITEM_INFO, R.layout.item_car_info);
+        addItemType(TYPE_ITEM_INFO, R.layout.item_car_person_info);
     }
 
     @Override
@@ -31,7 +30,7 @@ public class CarRecordAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity,
             helper.setText(R.id.tv_title, nameEntity.getName());
         } else if (itemViewType == TYPE_ITEM_INFO) {
             CarInfoEntity infoEntity = (CarInfoEntity) item;
-            helper.setVisible(R.id.divider_line,infoEntity.isDividerVisable());
+            helper.setVisible(R.id.divider_line, infoEntity.isDividerVisable());
             helper.setGone(R.id.iv_location, infoEntity.isGpsVisable());
             helper.setText(R.id.tv_title, infoEntity.getTitle());
             helper.setText(R.id.tv_description, infoEntity.getDescription());

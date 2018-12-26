@@ -41,9 +41,4 @@ dependencies {
     //tools
     annotationProcessor rootProject.ext.dependencies["dagger2-compiler"]
     annotationProcessor rootProject.ext.dependencies["arouter-compiler"]
-    //rx
-    api rootProject.ext.dependencies["rxjava2"]
-    api(rootProject.ext.dependencies["rxandroid2"]) {
-        exclude module: 'rxjava'
-    }
 }

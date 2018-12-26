@@ -2,7 +2,10 @@ package com.netposa.common.net;
 
 import android.text.TextUtils;
 
+import com.alibaba.android.arouter.launcher.ARouter;
+import com.jess.arms.utils.ArmsUtils;
 import com.netposa.common.R;
+import com.netposa.common.core.RouterHub;
 import com.netposa.common.entity.HttpResponseEntity;
 import com.netposa.common.exception.BadResultException;
 import com.netposa.common.exception.EmptyResultException;
@@ -47,8 +50,15 @@ public class HttpResponseHandler {
                                 return createData(result.data);
                             }
                         } else if (result.isOutOfDate()) {//token过期
-                            //过期
+                            //token过期统一跳转登录界面
+                            ARouter.getInstance().build(RouterHub.LOGIN_ACTIVITY).navigation(Utils.getContext());
+                            ArmsUtils.snackbarText(Utils.getContext().getString(R.string.token_invalid));
                             return Observable.error(new TokenInvalidException(Utils.getContext().getString(R.string.token_invalid)));
+                        } else if (result.isKickOff()) {//账号在另一个手机端登录被踢下线
+                            //统一跳转登录界面
+                            ARouter.getInstance().build(RouterHub.LOGIN_ACTIVITY).navigation(Utils.getContext());
+                            ArmsUtils.snackbarText(Utils.getContext().getString(R.string.kick_off));
+                            return Observable.error(new KickOffException(Utils.getContext().getString(R.string.kick_off)));
                         } else {
                             if (TextUtils.isEmpty(result.message)) {
                                 return Observable.error(new NullMessageException());

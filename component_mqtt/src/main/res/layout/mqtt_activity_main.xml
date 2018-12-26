@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    tools:ignore="HardcodedText">
+
+    <TextView
+        android:id="@+id/am_mqtt_desc_tv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="MQTT服务器配置"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.05"/>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/am_mqtt_host_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/am_mqtt_desc_tv">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/am_mqtt_host_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="ServerURI"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/am_mqtt_client_id_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/am_mqtt_host_layout">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/am_mqtt_client_id_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="ClientId"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/am_mqtt_user_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/am_mqtt_client_id_layout">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/am_mqtt_user_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="用户名"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/am_mqtt_pwd_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/am_mqtt_user_layout">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/am_mqtt_pwd_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="密码"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/am_mqtt_connect_bt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="连接"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/am_mqtt_pwd_layout"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

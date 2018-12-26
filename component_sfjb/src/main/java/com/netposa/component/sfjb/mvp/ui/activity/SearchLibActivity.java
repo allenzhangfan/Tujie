@@ -12,12 +12,11 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.loadmore.LoadMoreView;
+import com.google.android.material.button.MaterialButton;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
@@ -25,15 +24,15 @@ import com.netposa.common.log.Log;
 import com.netposa.common.utils.KeyboardUtils;
 import com.netposa.common.utils.ToastUtils;
 import com.netposa.commonres.widget.OneKeyClearEditText;
-import com.netposa.component.room.dao.DbHelper;
+import com.netposa.component.room.DbHelper;
 import com.netposa.component.room.entity.SfjbSearchHistoryEntity;
-import com.netposa.component.room.entity.SpjkSearchHistoryEntity;
 import com.netposa.component.sfjb.R;
 import com.netposa.component.sfjb.R2;
+
 import com.netposa.component.sfjb.di.component.DaggerSearchLibComponent;
 import com.netposa.component.sfjb.di.module.SearchLibModule;
 import com.netposa.component.sfjb.mvp.contract.SearchLibContract;
-import com.netposa.component.sfjb.mvp.model.entity.SfjbSearchResultEntity;
+import com.netposa.component.sfjb.mvp.model.entity.SearchFaceLibResponseEntity;
 import com.netposa.component.sfjb.mvp.presenter.SearchLibPresenter;
 import com.netposa.component.sfjb.mvp.ui.adapter.SfjbSearchHistoryAdapter;
 import com.netposa.component.sfjb.mvp.ui.adapter.SfjbSearchResulthAdapter;
@@ -57,9 +56,11 @@ import io.reactivex.schedulers.Schedulers;
 
 import static android.view.inputmethod.InputMethodManager.RESULT_UNCHANGED_SHOWN;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
-import static com.netposa.component.sfjb.app.SfjbConstants.PAGE_SIZE;
+import static com.netposa.common.constant.GlobalConstants.KEY_FEATUR;
+import static com.netposa.component.sfjb.app.SfjbConstants.KEY_TO_LIB_SEARCH;
+import static com.netposa.component.sfjb.app.SfjbConstants.KEY_TO_LIB_SEARCH_LIB;
 
-public class SearchLibActivity extends BaseActivity<SearchLibPresenter> implements SearchLibContract.View, TextWatcher, TextView.OnEditorActionListener, SwipeRefreshLayout.OnRefreshListener, BaseQuickAdapter.RequestLoadMoreListener {
+public class SearchLibActivity extends BaseActivity<SearchLibPresenter> implements SearchLibContract.View, TextWatcher, TextView.OnEditorActionListener, SwipeRefreshLayout.OnRefreshListener {
 
     @BindView(R2.id.okcl_search)
     OneKeyClearEditText mOkclSearch;
@@ -81,6 +82,8 @@ public class SearchLibActivity extends BaseActivity<SearchLibPresenter> implemen
     ImageView mIvNocontent;
     @BindView(R2.id.cl_no_content)
     ConstraintLayout mClNoContent;
+    @BindView(R2.id.btn_sure)
+    MaterialButton mBtn_sure;
 
     @Inject
     @Named("SearchSfjbHistory")
@@ -101,22 +104,25 @@ public class SearchLibActivity extends BaseActivity<SearchLibPresenter> implemen
     @Inject
     List<SfjbSearchHistoryEntity> mSearchHistoryBeanList;
     @Inject
-    List<SfjbSearchResultEntity> mSearchResultBeanList;
+    List<SearchFaceLibResponseEntity.ListBean> mSearchResultBeanList;
     @Inject
     LoadMoreView mLoadMoreView;
 
     private List<SfjbSearchHistoryEntity> historyEntityList = new ArrayList<>();
     private String mQuery;
-    private int mCurrentPage = PAGE_SIZE;
     private boolean mkeyword = true;  //历史搜索的可见状态
-    private boolean mResult = false;  //搜索结果的可见状态
+    private boolean mResult = false;//搜索结果的可见状态
+    private String mOrgId;
+    private ArrayList<String> mLibIds;// 库ID；
+    private String mFeature;
+    private List<SearchFaceLibResponseEntity.ListBean> mSearchFaceLibResponseEntities;
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
         DaggerSearchLibComponent //如找不到该类,请编译一下项目
                 .builder()
                 .appComponent(appComponent)
-                .searchLibModule(new SearchLibModule(this,this))
+                .searchLibModule(new SearchLibModule(this, this))
                 .build()
                 .inject(this);
     }
@@ -128,12 +134,25 @@ public class SearchLibActivity extends BaseActivity<SearchLibPresenter> implemen
 
     @Override
     public void initView(@Nullable Bundle savedInstanceState) {
+        Intent data = getIntent();
+        if (data == null) {
+            Log.e(TAG, "intent data is null,please check !");
+            return;
+        }
+        mOrgId = data.getStringExtra(KEY_TO_LIB_SEARCH);
+        mFeature = data.getStringExtra(KEY_FEATUR);
         //搜索历史recyclerview
         mRvContentKeywords.setLayoutManager(mSearchHistoryLayoutManager);
         mRvContentKeywords.setItemAnimator(mSearchHistoryItemAnimator);
         //如果可以确定每个item的高度是固定的，设置这个选项可以提高性能
         mRvContentKeywords.setHasFixedSize(true);
         mRvContentKeywords.setAdapter(mSearchHistoryAdapter);
+        mSearchHistoryAdapter.setOnItemClickListener((adapter, view, position) -> {
+            SfjbSearchHistoryEntity historyEntity = (SfjbSearchHistoryEntity) adapter.getItem(position);
+            String name = historyEntity.getName();
+            mOkclSearch.setText(name);
+            mPresenter.getMatchData(name, mOrgId);
+        });
         mSearchHistoryAdapter.setOnItemChildClickListener((adapter, view, position) -> {
             mPresenter.deleteSigleHistory(position);
         });
@@ -143,18 +162,12 @@ public class SearchLibActivity extends BaseActivity<SearchLibPresenter> implemen
         mRvContentSearchResult.setItemAnimator(mSearchResultItemAnimator);
         mRvContentSearchResult.setAdapter(mSearchResultAdapter);
         mSearchResultAdapter.setOnItemChildClickListener((adapter, view, position) -> {
-            int id=view.getId();
-            if(id==R.id.ly_single){
-                RadioButton radioButton = view.findViewById(R.id.rb_single);
-                boolean isChoose = radioButton.isChecked();
-                radioButton.setChecked(!isChoose);
-            }
+            SearchFaceLibResponseEntity.ListBean mListBean = (SearchFaceLibResponseEntity.ListBean) adapter.getItem(position);
+            mListBean.setChoose(!mListBean.isChoose());
+            refreshData();
         });
         //load more
-        mSearchHistoryAdapter.setOnLoadMoreListener(this, mRvContentKeywords);
         mSearchHistoryAdapter.setLoadMoreView(mLoadMoreView);
-
-        //SwipeRefreshLayout
         mSrfl.setColorSchemeResources(android.R.color.holo_blue_light,
                 android.R.color.holo_red_light, android.R.color.holo_orange_light,
                 android.R.color.holo_green_light);
@@ -174,7 +187,6 @@ public class SearchLibActivity extends BaseActivity<SearchLibPresenter> implemen
 
                         },
                         200);
-     //   mPresenter.getOrganizeId();
         onRefresh();
         mOkclSearch.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
         mOkclSearch.setOnEditorActionListener(this);
@@ -192,11 +204,11 @@ public class SearchLibActivity extends BaseActivity<SearchLibPresenter> implemen
                 .subscribeOn(Schedulers.io())
                 .subscribe();
     }
+
     @Override
     public void onRefresh() {
         if (mResult) {
-            mCurrentPage = PAGE_SIZE;
-        //    mPresenter.getMatchData(mQuery, mCurrentPage, mOrganizeId);
+            mPresenter.getMatchData(mQuery, mOrgId);
             mSearchResultAdapter.loadMoreEnd(true);
         } else if (mkeyword) {
             mPresenter.getAll();
@@ -212,14 +224,6 @@ public class SearchLibActivity extends BaseActivity<SearchLibPresenter> implemen
             mSearchHistoryAdapter.notifyDataSetChanged();
             mSearchHistoryAdapter.loadMoreEnd(true);
         }
-    }
-
-    @Override
-    public void onLoadMoreRequested() {
-        Log.i(TAG, "onLoadMoreRequested currentPage:" + mCurrentPage);
-        mCurrentPage++;
-     //   mPresenter.getMatchData(mQuery, mCurrentPage, mOrganizeId);
-        mSearchResultAdapter.loadMoreEnd(true);
     }
 
     @Override
@@ -239,7 +243,9 @@ public class SearchLibActivity extends BaseActivity<SearchLibPresenter> implemen
 
     private int count = 0;//清空一次以后第二次点击不做任何操作
 
-    @OnClick({R2.id.tv_cancel, R2.id.iv_delete_all})
+    @OnClick({R2.id.tv_cancel,
+            R2.id.iv_delete_all,
+            R2.id.btn_sure})
     public void onViewClicked(View view) {
         int id = view.getId();
         if (id == R.id.iv_delete_all) {
@@ -254,6 +260,16 @@ public class SearchLibActivity extends BaseActivity<SearchLibPresenter> implemen
                 mRlSearchKeywords.setVisibility(View.VISIBLE);
                 mSrfl.setVisibility(View.VISIBLE);
             }
+        }
+        if (id == R.id.btn_sure) {
+            if (mLibIds.size() == 0) {
+                showMessage(getString(R.string.pleace_select_lib));
+            } else {
+                Intent intent = new Intent(this, FaceCompareResultActivity.class);
+                intent.putExtra(KEY_FEATUR, mFeature);
+                intent.putStringArrayListExtra(KEY_TO_LIB_SEARCH_LIB, mLibIds);
+                launchActivity(intent);
+            }
         } else if (id == R.id.tv_cancel) {
             KeyboardUtils.hideSoftInput(this);
             killMyself();
@@ -265,36 +281,41 @@ public class SearchLibActivity extends BaseActivity<SearchLibPresenter> implemen
         if (i == EditorInfo.IME_ACTION_SEARCH) {
             mQuery = mOkclSearch.getText().toString().trim();
             if (TextUtils.isEmpty(mQuery)) {
-                ToastUtils.showShort(R.string.query_hint);
+                showMessage(getString(R.string.query_hint));
                 return false;
             }
             KeyboardUtils.hideSoftInput(this);
             insertData(mQuery);
-      //      mPresenter.getMatchData(mQuery, mCurrentPage, mOrganizeId);
-            showAndHideSearchHistoryLayout(true);
-            initResultData();
+            mPresenter.getMatchData(mQuery, mOrgId);
         }
         return false;
     }
 
-    private void initResultData() {
-        List<SfjbSearchResultEntity> list=new ArrayList<>();
-        for(int i=0;i<10;i++){
-            SfjbSearchResultEntity entity=new SfjbSearchResultEntity();
-            entity.setName("人像库"+i);
-            list.add(entity);
-        }
-        mSrfl.setEnabled(true);
-        mSrfl.setRefreshing(false);
-        showAndHideSearchHistoryLayout(false);
-        mSearchResultBeanList.addAll(list);
-        mSearchResultAdapter.setMatchName(mQuery);
-        //默认第一次加载会回调onLoadMoreRequested()加载更多这个方法,如果不需要可以配置如下:
-        if (mSearchResultBeanList.size() < 10 && mSearchResultBeanList.size() > 0) {
-            mSearchResultAdapter.disableLoadMoreIfNotFullPage();
-        }
-        mSrfl.setEnabled(false);
 
+    @Override
+    public void getListSuccess(SearchFaceLibResponseEntity entity) {
+        mSearchFaceLibResponseEntities=entity.getList();
+        if (mSearchFaceLibResponseEntities.size() > 0) {
+            mLibIds = new ArrayList<>();
+            mSearchResultBeanList.clear();
+            mSrfl.setEnabled(true);
+            mSrfl.setRefreshing(false);
+            showAndHideSearchHistoryLayout(false);
+            mSearchResultBeanList.addAll(mSearchFaceLibResponseEntities);
+            for (int i = 0; i < mSearchResultBeanList.size(); i++) {
+                mSearchFaceLibResponseEntities.get(i).setMatchName(mQuery);
+                mLibIds.add(mSearchFaceLibResponseEntities.get(i).getLibId());
+            }
+            contentShow();
+            mSrfl.setEnabled(false);
+        } else {
+            noContentShow();
+        }
+    }
+
+    @Override
+    public void getListFailed() {
+        noContentShow();
     }
 
     @Override
@@ -302,6 +323,12 @@ public class SearchLibActivity extends BaseActivity<SearchLibPresenter> implemen
         mQuery = charSequence.toString();
         if (TextUtils.isEmpty(mQuery)) {
             showAndHideSearchHistoryLayout(true);
+            mSearchHistoryBeanList.clear();
+            mPresenter.getAll();
+            mClNoContent.setVisibility(View.GONE);
+            mRlSearchKeywords.setVisibility(View.VISIBLE);
+            mBtn_sure.setVisibility(View.GONE);
+            mSrfl.setVisibility(View.VISIBLE);
             return;
         }
     }
@@ -318,7 +345,7 @@ public class SearchLibActivity extends BaseActivity<SearchLibPresenter> implemen
 
     @Override
     public void showLoading(String message) {
-            mSrfl.setRefreshing(true);
+        mSrfl.setRefreshing(true);
     }
 
     @Override
@@ -342,6 +369,7 @@ public class SearchLibActivity extends BaseActivity<SearchLibPresenter> implemen
     public void killMyself() {
         finish();
     }
+
     private void showAndHideSearchHistoryLayout(boolean show) {
         if (show) {
             mkeyword = true;
@@ -361,6 +389,14 @@ public class SearchLibActivity extends BaseActivity<SearchLibPresenter> implemen
     private void noContentShow() {
         mClNoContent.setVisibility(View.VISIBLE);
         mRlSearchKeywords.setVisibility(View.GONE);
+        mBtn_sure.setVisibility(View.GONE);
         mSrfl.setVisibility(View.GONE);
+    }
+
+    private void contentShow() {
+        mClNoContent.setVisibility(View.GONE);
+        mRlSearchKeywords.setVisibility(View.GONE);
+        mBtn_sure.setVisibility(View.VISIBLE);
+        mSrfl.setVisibility(View.VISIBLE);
     }
 }

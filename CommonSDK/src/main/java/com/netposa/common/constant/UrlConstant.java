@@ -1,37 +1,48 @@
 package com.netposa.common.constant;
 
 import com.netposa.common.BuildConfig;
-import com.netposa.common.spi.ImageUrlParser;
+import com.netposa.common.spi.UrlParser;
 
 import java.util.ServiceLoader;
 
-/**
- * 作者：安兴亚
- * 创建日期：2017/08/09
- * 邮箱：anxingya@lingdanet.com
- * 描述：Url地址常量
- */
-
 public final class UrlConstant {
 
-    private static final ServiceLoader<ImageUrlParser> LOADER = ServiceLoader.load(ImageUrlParser.class);
-
-    /**
-     * 测试地址
-     */
-    private static String BASE_URL = "http://192.168.152.206:24000/";
-    // public static String BASE_URL = "http://lm-dev.lingda.com/";
-    // public static String BASE_URL = "http://192.168.100.4:9091/";
-    // public static String BASE_URL = "http://218.95.36.58/";
+    private static final UrlParser URL_PARSER = ServiceLoader.load(UrlParser.class).iterator().next();
 
     /**
      * baseurl
      */
-    public static String APP_DOMAIN = BuildConfig.BASE_URL;
+    public static String sBaseUrl = BuildConfig.BASE_URL;
 
+    /**
+     * 图片服务器url
+     * @param encryptUrl
+     * @return
+     */
     public static String parseImageUrl(String encryptUrl) {
-        ImageUrlParser imageUrlParser = LOADER.iterator().next();
-        return imageUrlParser.onGetImageUrl(encryptUrl);
+        return URL_PARSER.onGetImageUrl(encryptUrl);
+    }
+
+    public static String parseLocationImageUrlSuffix() {
+        return URL_PARSER.onGetLocationImageUrlSuffix();
+    }
+
+    /**
+     * 视频播放url
+     * @param encryptUrl
+     * @return
+     */
+    public static String parsePlayUrl(String encryptUrl) {
+        return URL_PARSER.onGetPlayUrl(encryptUrl);
+    }
+
+    /**
+     * mqtt url
+     * @param originUrl
+     * @return
+     */
+    public static String parseMqttUrl(String originUrl) {
+        return URL_PARSER.onGetMqttUrl(originUrl);
     }
 
 }

@@ -1,7 +1,7 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="app_name">component_login</string>
-    <string name="edit_ip_open">58.49.28.186:58284</string>
-    <string name="edit_ip_local">192.168.101.10:12000</string>
-    <string name="sys_name">西 安 图 像 解 析 系 统</string>>
+    <string name="edit_url_open">http://58.49.28.186:58284/image-analysis-intranet/</string>
+    <string name="edit_url_local">http://192.168.101.10:12000/image-analysis-intranet/</string>
+    <string name="sys_name">视 频 图 像 解 析 系 统</string>
     <string name="company_name">东 方 网 力</string>
 </resources>

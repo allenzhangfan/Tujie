@@ -1,8 +1,10 @@
 package com.netposa.component.my.mvp.model.entity;
 
 import com.kyleduo.switchbutton.SwitchButton;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+
 import androidx.annotation.DrawableRes;
 import androidx.annotation.IntDef;
 

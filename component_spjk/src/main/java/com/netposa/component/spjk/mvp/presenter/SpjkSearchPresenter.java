@@ -21,7 +21,7 @@ import javax.inject.Inject;
 
 import com.netposa.common.log.Log;
 import com.netposa.common.utils.NetworkUtils;
-import com.netposa.component.room.dao.DbHelper;
+import com.netposa.component.room.DbHelper;
 import com.netposa.component.room.entity.SpjkSearchHistoryEntity;
 import com.netposa.component.spjk.R;
 import com.netposa.component.spjk.mvp.contract.SpjkSearchContract;
@@ -31,11 +31,13 @@ import com.netposa.component.spjk.mvp.model.entity.SpjkListDeviceResponseEntity;
 import com.netposa.component.spjk.mvp.model.entity.SpjkSearchRequestEntity;
 import com.netposa.component.spjk.mvp.model.entity.SpjkSearchResponseEntity;
 import com.trello.lifecycle2.android.lifecycle.AndroidLifecycle;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
-import static com.netposa.component.spjk.app.SpjkConstants.NUMBER_OF_PAGE;
+
+import static com.netposa.common.constant.GlobalConstants.PAGE_SIZE_DEFAULT;
 
 @ActivityScope
 public class SpjkSearchPresenter extends BasePresenter<SpjkSearchContract.Model, SpjkSearchContract.View> {
@@ -57,7 +59,6 @@ public class SpjkSearchPresenter extends BasePresenter<SpjkSearchContract.Model,
     Context mContext;
     private final DbHelper mDbHelper;
     private SpjkSearchRequestEntity.PageInfoBean mentity;
-    private int mPageSize = NUMBER_OF_PAGE;
 
     @Inject
     public SpjkSearchPresenter(SpjkSearchContract.Model model, SpjkSearchContract.View rootView) {
@@ -109,7 +110,7 @@ public class SpjkSearchPresenter extends BasePresenter<SpjkSearchContract.Model,
                     @Override
                     public void onNext(List<SpjkSearchHistoryEntity> response) {
                         Log.e(TAG, "getAll :" + response.toString());
-                        mBeanList.addAll(removeDuplicateUser(response));
+                        mBeanList.addAll(removeDuplicateSearchHistory(response));
                         mRootView.loadDataForFirstTimeSuccess();
                     }
 
@@ -124,12 +125,12 @@ public class SpjkSearchPresenter extends BasePresenter<SpjkSearchContract.Model,
         return mBeanList;
     }
 
-    private static ArrayList<SpjkSearchHistoryEntity> removeDuplicateUser(List<SpjkSearchHistoryEntity> users) {
+    private static ArrayList<SpjkSearchHistoryEntity> removeDuplicateSearchHistory(List<SpjkSearchHistoryEntity> SearchHistoryList) {
         Set<SpjkSearchHistoryEntity> set = new TreeSet<>((o1, o2) -> {
             //字符串,根据搜索结果来去重
             return o1.getName().compareTo(o2.getName());
         });
-        set.addAll(users);
+        set.addAll(SearchHistoryList);
         return new ArrayList<>(set);
     }
 
@@ -146,6 +147,7 @@ public class SpjkSearchPresenter extends BasePresenter<SpjkSearchContract.Model,
     public void getOrganizeId() {
         if (!NetworkUtils.isConnected()) {
             mRootView.showMessage(mContext.getString(R.string.network_disconnect));
+            mRootView.hideLoading();
             return;
         }
         mModel.getOrganizeId(new SpjkListDeviceRequestEntity())
@@ -161,7 +163,7 @@ public class SpjkSearchPresenter extends BasePresenter<SpjkSearchContract.Model,
                 .subscribe(new ErrorHandleSubscriber<SpjkListDeviceResponseEntity>(mErrorHandler) {
                     @Override
                     public void onNext(SpjkListDeviceResponseEntity responseEntity) {
-                        Log.d("responseEntity", responseEntity.toString());
+                        Log.d("getOrganizeId :", responseEntity.toString());
                         String id = responseEntity.getDeviceTreeList().get(0).getId();
                         if (!TextUtils.isEmpty(id)) {
                             mRootView.getOrganizeId(id);
@@ -181,13 +183,14 @@ public class SpjkSearchPresenter extends BasePresenter<SpjkSearchContract.Model,
     public void getMatchData(String result, int page, String id) {
         if (!NetworkUtils.isConnected()) {
             mRootView.showMessage(mContext.getString(R.string.network_disconnect));
+            mRootView.hideLoading();
             return;
         }
         mRequestEntity.setKey(result);
         mRequestEntity.setId(id);
         mentity = new SpjkSearchRequestEntity.PageInfoBean();
         mentity.setCurrentPage(page);
-        mentity.setPageSize(mPageSize);
+        mentity.setPageSize(PAGE_SIZE_DEFAULT);
         mRequestEntity.setPageInfo(mentity);
         mModel.getDevice(mRequestEntity)
                 .subscribeOn(Schedulers.io())
@@ -202,12 +205,13 @@ public class SpjkSearchPresenter extends BasePresenter<SpjkSearchContract.Model,
                 .subscribe(new ErrorHandleSubscriber<SpjkSearchResponseEntity>(mErrorHandler) {
                     @Override
                     public void onNext(SpjkSearchResponseEntity responseEntity) {
-                        Log.d("responseEntity", responseEntity.toString());
+                        Log.i("getMatchData:", responseEntity.toString());
                         mRootView.getListSuccess(responseEntity);
                     }
 
                     @Override
                     public void onError(Throwable t) {
+                        Log.i("getMatchData:", t.toString());
                         mRootView.getListFailed();
                     }
                 });

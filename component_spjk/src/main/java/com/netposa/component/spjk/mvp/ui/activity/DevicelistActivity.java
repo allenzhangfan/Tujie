@@ -15,10 +15,9 @@ import android.widget.TextView;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
-import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.netposa.common.log.Log;
 import com.netposa.common.utils.SizeUtils;
-import com.netposa.commonres.modle.LoadingDialog;
+import com.netposa.commonres.widget.Dialog.LottieDialogFragment;
 import com.netposa.component.spjk.R;
 import com.netposa.component.spjk.R2;
 import com.netposa.component.spjk.app.SpjkConstants;
@@ -28,18 +27,24 @@ import com.netposa.component.spjk.mvp.contract.DevicelistContract;
 import com.netposa.component.spjk.mvp.model.entity.SpjkListDeviceResponseEntity;
 import com.netposa.component.spjk.mvp.presenter.DevicelistPresenter;
 import com.netposa.component.spjk.mvp.ui.adapter.DeviceParentAdapter;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.inject.Inject;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
 import butterknife.OnClick;
+
 import static com.jess.arms.utils.Preconditions.checkNotNull;
+import static com.netposa.common.constant.GlobalConstants.KEY_SINGLE_CAMERA_LOCATION_LATITUDE;
+import static com.netposa.common.constant.GlobalConstants.KEY_SINGLE_CAMERA_LOCATION_LONGITUDE;
 import static com.netposa.component.spjk.app.SpjkConstants.KEY_SINGLE_CAMERA_ID;
-import static com.netposa.component.spjk.app.SpjkConstants.KEY_SINGLE_CAMERA_LOCATION;
 
 public class DevicelistActivity extends BaseActivity<DevicelistPresenter> implements DevicelistContract.View {
 
@@ -63,9 +68,17 @@ public class DevicelistActivity extends BaseActivity<DevicelistPresenter> implem
     LinearLayout mLlOrgMain;
     @BindView(R2.id.head_left_back_iv)
     ImageButton headLeftBackIv;
+    @BindView(R2.id.iv_no_content)
+    ImageView mIvNoContent;
+    @BindView(R2.id.tv_no_content)
+    TextView mTvNoContent;
+    @BindView(R2.id.view_divider)
+    View mViewDivider;
+    @BindView(R2.id.cl_no_content)
+    ConstraintLayout mClNoContent;
 
     @Inject
-    LoadingDialog mLoadingDialog;
+    LottieDialogFragment mLoadingDialogFragment;
     @Inject
     DeviceParentAdapter mAdapter;
     @Inject
@@ -102,6 +115,8 @@ public class DevicelistActivity extends BaseActivity<DevicelistPresenter> implem
         mAllOrgMainEntities = new ArrayList<>();
         Log.e(TAG, "initView: " + mAllOrgMainEntities.hashCode());
         mTitleTv.setText(R.string.list_item_chose);
+        mIvNoContent.setImageResource(R.drawable.ic_no_follow);
+        mTvNoContent.setText(R.string.no_choose_list);
         mHeadRightIv.setVisibility(View.VISIBLE);
         mHeadRightIv.setImageResource(R.drawable.ic_search_black);
         mOrgRecyview.setLayoutManager(mLayoutManager);
@@ -109,6 +124,9 @@ public class DevicelistActivity extends BaseActivity<DevicelistPresenter> implem
         mOrgRecyview.setAdapter(mAdapter);
         mSrl.setEnabled(false);
         mSrl.setRefreshing(false);
+        mSrl.setColorSchemeResources(android.R.color.holo_blue_light,
+                android.R.color.holo_red_light, android.R.color.holo_orange_light,
+                android.R.color.holo_green_light);
         mLeftDrawable = getResources().getDrawable(R.drawable.ic_list_go_blue);
         mLeftDrawable.setBounds(0, 0, mLeftDrawable.getMinimumWidth(), mLeftDrawable.getMinimumHeight());
         mPresenter.getSpjkDevicelist("");
@@ -130,8 +148,10 @@ public class DevicelistActivity extends BaseActivity<DevicelistPresenter> implem
             }
             if (id == R.id.iv_menu) {
                 Intent dataIntent = new Intent(this, SingleCameraLocationActivity.class);
-                LatLng latLng = new LatLng(item.getLatitude(), item.getLongitude());
-                dataIntent.putExtra(KEY_SINGLE_CAMERA_LOCATION, latLng);
+                String latitude = String.valueOf(item.getLatitude());
+                String longitude = String.valueOf(item.getLongitude());
+                dataIntent.putExtra(KEY_SINGLE_CAMERA_LOCATION_LATITUDE, latitude);
+                dataIntent.putExtra(KEY_SINGLE_CAMERA_LOCATION_LONGITUDE, longitude);
                 launchActivity(dataIntent);
             }
         });
@@ -141,26 +161,31 @@ public class DevicelistActivity extends BaseActivity<DevicelistPresenter> implem
     public void getListSuccess(SpjkListDeviceResponseEntity responseEntity) {
         List<SpjkListDeviceResponseEntity.DeviceTreeListBean> mAllEntities = new ArrayList<>();
         mOrgMainEntities.clear();
-        mOrgMainEntities.addAll(responseEntity.getDeviceTreeList());
-        Log.d("mOrgMainEntities:" + responseEntity.toString());
-        mAllEntities.addAll(mOrgMainEntities);
-        mAllOrgMainEntities.add(mAllEntities);
-        refreshData();
+        if (responseEntity.getDeviceTreeList().size() > 0) {
+            showNoDataPage(false);
+            mOrgMainEntities.addAll(responseEntity.getDeviceTreeList());
+            Log.d("mOrgMainEntities:" + responseEntity.toString());
+            mAllEntities.addAll(mOrgMainEntities);
+            mAllOrgMainEntities.add(mAllEntities);
+            refreshData();
+        } else {
+            showNoDataPage(true);
+        }
     }
 
     @Override
     public void getListFailed() {
-
+        showNoDataPage(true);
     }
 
     @Override
     public void showLoading(String message) {
-        mLoadingDialog.show();
+        mLoadingDialogFragment.show(getSupportFragmentManager(), "LoadingDialog");
     }
 
     @Override
     public void hideLoading() {
-        mLoadingDialog.dismiss();
+        mLoadingDialogFragment.dismissAllowingStateLoss();
     }
 
     @Override
@@ -202,7 +227,7 @@ public class DevicelistActivity extends BaseActivity<DevicelistPresenter> implem
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
         params.rightMargin = SizeUtils.dp2px(6);
         mTextView.setTextSize(12);
-        mTextView.setTextColor(getResources().getColor(R.color.default_text_color));
+        mTextView.setTextColor(getResources().getColor(R.color.color_333333));
         mTextView.setGravity(Gravity.CENTER);
         mTextView.setLayoutParams(params);
         mTextView.setMaxLines(1);
@@ -221,7 +246,7 @@ public class DevicelistActivity extends BaseActivity<DevicelistPresenter> implem
             TextView tv = (TextView) mLlOrgMain.getChildAt(i);
             if (i == childCount - 1) {
                 //最后一个，颜色恢复
-                tv.setTextColor(getResources().getColor(R.color.default_text_color));
+                tv.setTextColor(getResources().getColor(R.color.color_333333));
             } else {
                 headLeftBackIv.setVisibility(View.VISIBLE);
                 tv.setTextColor(getResources().getColor(R.color.app_theme_color));
@@ -261,7 +286,7 @@ public class DevicelistActivity extends BaseActivity<DevicelistPresenter> implem
                     if (null != orgTv) {
                         mLlOrgMain.removeView(orgTv);
                         mIndex--;
-                        ((TextView) (mLlOrgMain.getChildAt(mLlOrgMain.getChildCount() - 1))).setTextColor(getResources().getColor(R.color.default_text_color));
+                        ((TextView) (mLlOrgMain.getChildAt(mLlOrgMain.getChildCount() - 1))).setTextColor(getResources().getColor(R.color.color_333333));
                         Log.e(TAG, "循环-->:" + remainingChildCount + ",tvIndex:" + tvIndex + ",i:" + i + ",j:" + j + ",mAllOrgMainEntities:" + mAllOrgMainEntities.size() + ",mOrgMainEntities:" + mOrgMainEntities);
                     }
                 }
@@ -285,6 +310,18 @@ public class DevicelistActivity extends BaseActivity<DevicelistPresenter> implem
             } else {
                 killMyself();
             }
+        }
+    }
+
+    private void showNoDataPage(boolean show) {
+        if (show) {
+            mViewDivider.setVisibility(View.GONE);
+            mOrgRecyview.setVisibility(View.GONE);
+            mClNoContent.setVisibility(View.VISIBLE);
+        } else {
+            mViewDivider.setVisibility(View.VISIBLE);
+            mOrgRecyview.setVisibility(View.VISIBLE);
+            mClNoContent.setVisibility(View.GONE);
         }
     }
 }

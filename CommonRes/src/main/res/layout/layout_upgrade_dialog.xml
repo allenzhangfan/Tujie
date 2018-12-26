@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:background="@color/transparent"
+    android:orientation="vertical">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="@dimen/size_4dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="380dp"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/upgrade_img_bg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/update_illustrations" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/size_12dp"
+                    android:layout_marginRight="@dimen/size_12dp"
+                    android:layout_marginTop="@dimen/size_20dp"
+                    android:lineSpacingMultiplier="1.2"
+                    android:text="@string/version_update"
+                    android:textColor="@color/color_262626"
+                    android:textSize="16sp" />
+
+
+                <ScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/size_174dp"
+                    android:layout_marginLeft="@dimen/size_20dp"
+                    android:layout_marginRight="@dimen/size_20dp"
+                    android:layout_marginTop="@dimen/size_8dp">
+
+                    <TextView
+                        android:id="@+id/message"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="top"
+                        android:lineSpacingMultiplier="1.2"
+                        android:textColor="@color/color_333333"
+                        android:textSize="@dimen/text_size_14sp"
+                        tools:text="发现新版本" />
+                </ScrollView>
+
+                <Button
+                    android:id="@+id/btn_confirm"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/size_40dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="@dimen/size_20dp"
+                    android:layout_marginLeft="@dimen/size_12dp"
+                    android:layout_marginRight="@dimen/size_12dp"
+                    android:layout_marginTop="@dimen/size_16dp"
+                    android:background="@drawable/shape_updata_btn"
+                    android:gravity="center"
+                    android:text="@string/upgrade_text"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_size_16sp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <ImageView
+        android:id="@+id/btn_cacel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:padding="@dimen/size_24dp"
+        android:src="@drawable/update_off" />
+</LinearLayout>

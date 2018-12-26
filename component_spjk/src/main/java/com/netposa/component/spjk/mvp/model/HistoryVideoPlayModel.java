@@ -9,6 +9,7 @@ import com.jess.arms.mvp.BaseModel;
 import com.jess.arms.di.scope.ActivityScope;
 
 import javax.inject.Inject;
+
 import com.netposa.component.spjk.mvp.contract.HistoryVideoPlayContract;
 
 

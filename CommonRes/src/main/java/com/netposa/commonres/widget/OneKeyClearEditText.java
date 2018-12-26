@@ -39,7 +39,7 @@ public class OneKeyClearEditText extends AppCompatEditText
         super(context, attrs, defStyleAttr);
         TypedArray array =
                 context.getTheme().obtainStyledAttributes(new int[]{android.R.attr.colorAccent});
-        colorAccent = array.getColor(0, getResources().getColor(R.color.edit_text_hint_color));
+        colorAccent = array.getColor(0, getResources().getColor(R.color.color_999999));
         array.recycle();
         TypedArray array2 = context.obtainStyledAttributes(attrs, R.styleable.OneKeyClearEditText);
         drawableColor = array2.getColor(R.styleable.OneKeyClearEditText_deletecolor, colorAccent);

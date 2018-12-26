@@ -58,14 +58,20 @@ public class CarTypeModule {
 
     @ActivityScope
     @Provides
-    CarTypeAdapter provideCarTypeAdapter(List<CarTypeEntry> beanList) {
+    CarTypeAdapter provideCarTypeAdapter(ArrayList<CarTypeEntry> beanList) {
         return new CarTypeAdapter(beanList);
     }
 
     @ActivityScope
     @Provides
-    List<CarTypeEntry> provideListCarTypeEntry() {
-        return  new ArrayList<>();
+    ArrayList<CarTypeEntry> provideListCarTypeEntry() {
+        return new ArrayList<>();
+    }
+
+    @ActivityScope
+    @Provides
+    List<String> provideList() {
+        return new ArrayList<>();
     }
 
 }

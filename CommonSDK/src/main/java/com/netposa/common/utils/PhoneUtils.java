@@ -11,7 +11,6 @@ import android.text.TextUtils;
 
 public class PhoneUtils {
     /**
-     *
      * @param phone 手机号
      * @return 返回隐藏中间4位的手机号
      */

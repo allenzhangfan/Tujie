@@ -39,7 +39,6 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import butterknife.ButterKnife;
-import me.jessyan.retrofiturlmanager.RetrofitUrlManager;
 
 
 /**
@@ -67,7 +66,7 @@ public final class GlobalConfiguration implements ConfigModule {
             builder.printHttpLogLevel(RequestInterceptor.Level.NONE);
         }
 
-        builder.baseurl(UrlConstant.APP_DOMAIN)
+        builder.baseurl(UrlConstant.sBaseUrl)
                 //强烈建议自己自定义图片加载逻辑, 因为 arms-imageloader-glide 提供的 GlideImageLoaderStrategy 并不能满足复杂的需求
                 //请参考 https://github.com/JessYanCoding/MVPArms/wiki#3.4
                 .imageLoaderStrategy(new GlideImageLoaderStrategy())
@@ -146,7 +145,7 @@ public final class GlobalConfiguration implements ConfigModule {
                     //使用一行代码监听 Retrofit／Okhttp 上传下载进度监听,以及 Glide 加载进度监听 详细使用方法查看 https://github.com/JessYanCoding/ProgressManager
 //                    ProgressManager.getInstance().with(okhttpBuilder);
                     //让 Retrofit 同时支持多个 BaseUrl 以及动态改变 BaseUrl. 详细使用请方法查看 https://github.com/JessYanCoding/RetrofitUrlManager
-                    RetrofitUrlManager.getInstance().with(okhttpBuilder);
+//                    RetrofitUrlManager.getInstance().with(okhttpBuilder);
                 })
                 .formatPrinter(new Log4jFormatPrinter())
                 .rxCacheConfiguration((context1, rxCacheBuilder) -> {//这里可以自己自定义配置 RxCache 的参数

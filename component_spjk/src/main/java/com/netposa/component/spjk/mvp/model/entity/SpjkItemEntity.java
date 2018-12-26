@@ -4,6 +4,7 @@ public class SpjkItemEntity {
     private String id;
     private String name;
     private String matchName;
+
     public String getId() {
         return id;
     }

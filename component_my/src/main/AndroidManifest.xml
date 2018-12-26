@@ -22,7 +22,9 @@
             android:value="ConfigModule" />
 
         <activity android:name=".mvp.ui.activity.PersonInfoActivity" />
-        <activity android:name=".mvp.ui.activity.AboutActivity" android:screenOrientation="portrait"/>
+        <activity
+            android:name=".mvp.ui.activity.AboutActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

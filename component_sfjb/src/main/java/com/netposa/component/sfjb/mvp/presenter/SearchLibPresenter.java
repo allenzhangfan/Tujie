@@ -14,24 +14,24 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
+import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
 
 import javax.inject.Inject;
 
 import com.netposa.common.log.Log;
-import com.netposa.component.room.dao.DbHelper;
-import com.netposa.component.room.entity.SpjkSearchHistoryEntity;
+import com.netposa.common.utils.NetworkUtils;
+import com.netposa.component.room.DbHelper;
+import com.netposa.component.sfjb.R;
 import com.netposa.component.sfjb.mvp.contract.SearchLibContract;
 import com.netposa.component.room.entity.SfjbSearchHistoryEntity;
-import com.netposa.component.sfjb.mvp.model.entity.SfjbSearchResultEntity;
+import com.netposa.component.sfjb.mvp.model.entity.SearchFaceLibRequestEntity;
+import com.netposa.component.sfjb.mvp.model.entity.SearchFaceLibResponseEntity;
 import com.trello.lifecycle2.android.lifecycle.AndroidLifecycle;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
-
-import static com.netposa.component.sfjb.app.SfjbConstants.NUMBER_OF_PAGE;
-
 
 @ActivityScope
 public class SearchLibPresenter extends BasePresenter<SearchLibContract.Model, SearchLibContract.View> {
@@ -46,11 +46,11 @@ public class SearchLibPresenter extends BasePresenter<SearchLibContract.Model, S
     @Inject
     List<SfjbSearchHistoryEntity> mBeanList;
     @Inject
-    List<SfjbSearchResultEntity> mSearchResultBeanList;
-    @Inject
     Context mContext;
+    @Inject
+    SearchFaceLibRequestEntity mEntity;
+
     private final DbHelper mDbHelper;
-    private int mPageSize = NUMBER_OF_PAGE;
 
     @Inject
     public SearchLibPresenter(SearchLibContract.Model model, SearchLibContract.View rootView) {
@@ -102,7 +102,7 @@ public class SearchLibPresenter extends BasePresenter<SearchLibContract.Model, S
                     @Override
                     public void onNext(List<SfjbSearchHistoryEntity> response) {
                         Log.e(TAG, "getAll :" + response.toString());
-                        mBeanList.addAll(removeDuplicateUser(response));
+                        mBeanList.addAll(removeDuplicateHistoryEntity(response));
                         mRootView.loadDataForFirstTimeSuccess();
                     }
 
@@ -117,12 +117,12 @@ public class SearchLibPresenter extends BasePresenter<SearchLibContract.Model, S
         return mBeanList;
     }
 
-    private static ArrayList<SfjbSearchHistoryEntity> removeDuplicateUser(List<SfjbSearchHistoryEntity> users) {
+    private static ArrayList<SfjbSearchHistoryEntity> removeDuplicateHistoryEntity(List<SfjbSearchHistoryEntity> SfjbSearchHistoryList) {
         Set<SfjbSearchHistoryEntity> set = new TreeSet<>((o1, o2) -> {
             //字符串,根据搜索结果来去重
             return o1.getName().compareTo(o2.getName());
         });
-        set.addAll(users);
+        set.addAll(SfjbSearchHistoryList);
         return new ArrayList<>(set);
     }
 
@@ -131,5 +131,41 @@ public class SearchLibPresenter extends BasePresenter<SearchLibContract.Model, S
                 .subscribeOn(Schedulers.io())
                 .compose(AndroidLifecycle.createLifecycleProvider((LifecycleOwner) mRootView).bindToLifecycle())
                 .subscribe();
+    }
+
+    /**
+     * 搜索结果获取的数据
+     */
+    public void getMatchData(String result, String id) {
+        if (!NetworkUtils.isConnected()) {
+            mRootView.showMessage(mContext.getString(R.string.network_disconnect));
+            mRootView.hideLoading();
+            return;
+        }
+        mEntity.setOrgId(id);
+        mEntity.setName(result);
+        mModel.getSearch(mEntity)
+                .subscribeOn(Schedulers.io())
+                .retryWhen(new RetryWithDelay(1, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .doOnSubscribe(disposable -> mRootView.showLoading(""))
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doFinally(() -> {
+                    if (mRootView != null) mRootView.hideLoading();
+                })
+                .compose(AndroidLifecycle.createLifecycleProvider((LifecycleOwner) mRootView).bindToLifecycle())
+                .subscribe(new ErrorHandleSubscriber<SearchFaceLibResponseEntity>(mErrorHandler) {
+                    @Override
+                    public void onNext(SearchFaceLibResponseEntity responseEntity) {
+                        Log.i("getMatchData:", responseEntity.toString());
+                        mRootView.getListSuccess(responseEntity);
+                    }
+
+                    @Override
+                    public void onError(Throwable t) {
+                        Log.i("getMatchData:", t.toString());
+                        mRootView.getListFailed();
+                    }
+                });
     }
 }

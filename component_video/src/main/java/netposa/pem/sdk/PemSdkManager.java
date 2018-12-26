@@ -3,13 +3,14 @@ package netposa.pem.sdk;
 import android.opengl.GLSurfaceView;
 import android.text.TextUtils;
 import android.util.Log;
-import com.netposa.common.utils.SPUtils;
+
+import com.netposa.common.constant.UrlConstant;
 import com.netposa.mp4v2.mp4encoder;
+
 import java.io.UnsupportedEncodingException;
+
 import netposa.pem.sdk.decode.DecodeManager;
 import netposa.pem.sdk.opengl.GLFrameRenderer;
-import static com.netposa.common.constant.GlobalConstants.IS_LOCAL_NET;
-import static com.netposa.common.constant.GlobalConstants.VIDEO_PLAY_OUTER_NET;
 
 public class PemSdkManager implements
         PEMSDK.OnMsgListener,
@@ -64,13 +65,8 @@ public class PemSdkManager implements
     private PemSdkManager() {
     }
 
-    private static PemSdkManager sInstance = null;
-
-    public static PemSdkManager getInstance() {
-        if (sInstance == null) {
-            sInstance = new PemSdkManager();
-        }
-        return sInstance;
+    public static PemSdkManager newInstance() {
+        return new PemSdkManager();
     }
 
     /**
@@ -111,7 +107,7 @@ public class PemSdkManager implements
             Log.e(TAG, "url is null ,please check !");
             return;
         }
-        url = interceptPlayUrl(url);
+        url = UrlConstant.parsePlayUrl(url);
         Log.e(TAG, "pemsdk call play url->" + url);
         this.streamMode = streamMode;
         byte[] b_url, b_gip = null;
@@ -126,30 +122,7 @@ public class PemSdkManager implements
     }
 
     /**
-     * 替换Ip
-     * 外网url案例(rtsp://58.49.28.186:58287/PVG/live/?PVG=172.16.90.151:2100/admin/admin/av/ONVIF/海康239)
-     * 内网url案例(rtsp://192.168.101.31:554/PVG/live/?PVG=172.16.90.151:2100/admin/admin/av/ONVIF/海康239)
-     *
-     * @param url
-     */
-    private String interceptPlayUrl(String url) {
-        String[] strs = url.split("//");
-        String[] temps = strs[1].split("/PVG");
-        boolean isLocal = SPUtils.getInstance().getBoolean(IS_LOCAL_NET);
-        if (!isLocal) {
-            url = new StringBuilder()
-                    .append(strs[0])
-                    .append("//")
-                    .append(VIDEO_PLAY_OUTER_NET)
-                    .append("/PVG")
-                    .append(temps[1])
-                    .toString();
-        }
-        return url;
-    }
-
-    /**
-     * 暂停
+     * 暂停(实时视频不能暂停，历史视频可以暂停)
      **/
     public void pause() {
         Log.e(TAG, "pemsdk call pause !");

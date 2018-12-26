@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--my-->
-    <item type="id" name="menu_face"/>
-    <item type="id" name="menu_clean"/>
-    <item type="id" name="menu_about"/>
-    <item type="id" name="menu_copy_db"/>
+    <item type="id" name="menu_face" />
+    <item type="id" name="menu_clean" />
+    <item type="id" name="menu_about" />
+    <item type="id" name="menu_copy_db" />
 </resources>

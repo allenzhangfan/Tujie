@@ -3,7 +3,7 @@
  */
 package com.netposa.common.utils;
 
-import com.netposa.common.constant.CommonConstant;
+import com.netposa.common.constant.GlobalConstants;
 
 import java.util.Locale;
 
@@ -17,6 +17,7 @@ import java.util.Locale;
 public class LanguageUtil {
     /**
      * 判断是否是英文
+     *
      * @return
      */
     public static String language() {
@@ -26,11 +27,12 @@ public class LanguageUtil {
 
     /**
      * 获取语言环境
+     *
      * @return
      */
     public static String getLanguage() {
         String language = language();
-        if (CommonConstant.INTERNATIONAL) {
+        if (GlobalConstants.INTERNATIONAL) {
             if (language.equals("en")) {
                 return "en";
             } else if (language.equals("ko")) {

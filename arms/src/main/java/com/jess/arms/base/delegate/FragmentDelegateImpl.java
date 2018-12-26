@@ -19,7 +19,9 @@ import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+
 import com.jess.arms.utils.ArmsUtils;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -104,7 +106,7 @@ public class FragmentDelegateImpl implements FragmentDelegate {
             } catch (IllegalStateException e) {
                 e.printStackTrace();
                 //fix Bindings already cleared
-                Log.w("FragmentDelegateImpl","onDestroyView: " + e.getMessage());
+                Log.w("FragmentDelegateImpl", "onDestroyView: " + e.getMessage());
             }
         }
     }

@@ -1,15 +1,18 @@
 package com.netposa.component.my.mvp.ui.fragment;
 
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Message;
 
 import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import butterknife.BindView;
 import butterknife.OnClick;
+import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +23,7 @@ import android.widget.TextView;
 import com.jess.arms.base.BaseFragment;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
+import com.jess.arms.utils.DeviceUtils;
 import com.netposa.common.constant.GlobalConstants;
 import com.netposa.common.log.Log;
 import com.netposa.common.utils.SPUtils;
@@ -34,7 +38,6 @@ import com.netposa.component.my.R;
 import com.netposa.component.my.mvp.ui.activity.AboutActivity;
 import com.netposa.component.my.mvp.ui.activity.PersonInfoActivity;
 import com.netposa.component.my.mvp.ui.adapter.MyMenuAdapter;
-
 import java.util.List;
 
 import javax.inject.Inject;
@@ -53,7 +56,11 @@ public class MyFragment extends BaseFragment<MyPresenter> implements MyContract.
     List<MenuEntity> mBeanList;
     @Inject
     MyMenuAdapter mAdapter;
+    @Inject
+    RxErrorHandler mErrorHandler;
+
     private boolean mIsOpen;
+    private Context mContext;
 
     public static MyFragment newInstance() {
         MyFragment fragment = new MyFragment();
@@ -69,7 +76,7 @@ public class MyFragment extends BaseFragment<MyPresenter> implements MyContract.
         DaggerMyComponent //如找不到该类,请编译一下项目
                 .builder()
                 .appComponent(appComponent)
-                .myModule(new MyModule(this))
+                .myModule(new MyModule(getActivity(), this))
                 .build()
                 .inject(this);
     }
@@ -81,18 +88,20 @@ public class MyFragment extends BaseFragment<MyPresenter> implements MyContract.
 
     @Override
     public void initView(@Nullable Bundle savedInstanceState) {
-        mIsOpen=SPUtils.getInstance().getBoolean(GlobalConstants.HAS_FACE, false);
+        mContext = getActivity();
+        mIsOpen = SPUtils.getInstance().getBoolean(GlobalConstants.HAS_FACE, false);
         MenuEntity menuEntity = new MenuEntity(R.id.menu_face);
         menuEntity.setType(MenuEntity.TYPE_TOGGLE);
         menuEntity.setResId(R.drawable.ic_face);
         menuEntity.setTitle(getString(R.string.face_login));
         menuEntity.setOnCheckedChangeListener(this);
-        if(mIsOpen){
+        if (mIsOpen) {
             menuEntity.setChecked(true);
-        }else {
+        } else {
             menuEntity.setChecked(false);
         }
         mBeanList.add(menuEntity);
+        mPresenter.getCacheSize();
 
         menuEntity = new MenuEntity(R.id.menu_clean);
         menuEntity.setType(MenuEntity.TYPE_TEXT);
@@ -118,54 +127,19 @@ public class MyFragment extends BaseFragment<MyPresenter> implements MyContract.
         mMenuLv.setOnItemClickListener((parent, view, position, id) -> {
             MenuEntity entity = (MenuEntity) mAdapter.getItem(position);
             if (entity.getId() == R.id.menu_about) {
-                launchActivity(new Intent(getActivity(), AboutActivity.class));
+                launchActivity(new Intent(mContext, AboutActivity.class));
             } else if (entity.getId() == R.id.menu_copy_db) {
                 if (mPresenter != null) {
-                    mPresenter.copyDbToSdCard(getActivity());
+                    mPresenter.copyDbToSdCard(mContext);
                 }
+            } else if (entity.getId() == R.id.menu_clean) {
+                mPresenter.clearCache();
             }
         });
-
-//        String username = SPUtils.getInstance().getString(GlobalConstants.USER_NAME);
-//        mNameTv.setText(username);
+        String username = SPUtils.getInstance().getString(GlobalConstants.CONFIG_LAST_USER_NICKNAME);
+        mNameTv.setText(username);
     }
 
-    /**
-     * 通过此方法可以使 Fragment 能够与外界做一些交互和通信, 比如说外部的 Activity 想让自己持有的某个 Fragment 对象执行一些方法,
-     * 建议在有多个需要与外界交互的方法时, 统一传 {@link Message}, 通过 what 字段来区分不同的方法, 在 {@link #setData(Object)}
-     * 方法中就可以 {@code switch} 做不同的操作, 这样就可以用统一的入口方法做多个不同的操作, 可以起到分发的作用
-     * <p>
-     * 调用此方法时请注意调用时 Fragment 的生命周期, 如果调用 {@link #setData(Object)} 方法时 {@link Fragment#onCreate(Bundle)} 还没执行
-     * 但在 {@link #setData(Object)} 里却调用了 Presenter 的方法, 是会报空的, 因为 Dagger 注入是在 {@link Fragment#onCreate(Bundle)} 方法中执行的
-     * 然后才创建的 Presenter, 如果要做一些初始化操作,可以不必让外部调用 {@link #setData(Object)}, 在 {@link #initData(Bundle)} 中初始化就可以了
-     * <p>
-     * Example usage:
-     * <pre>
-     * public void setData(@Nullable Object data) {
-     *     if (data != null && data instanceof Message) {
-     *         switch (((Message) data).what) {
-     *             case 0:
-     *                 loadData(((Message) data).arg1);
-     *                 break;
-     *             case 1:
-     *                 refreshUI();
-     *                 break;
-     *             default:
-     *                 //do something
-     *                 break;
-     *         }
-     *     }
-     * }
-     *
-     * // call setData(Object):
-     * Message data = new Message();
-     * data.what = 0;
-     * data.arg1 = 1;
-     * fragment.setData(data);
-     * </pre>
-     *
-     * @param data 当不需要参数时 {@code data} 可以为 {@code null}
-     */
     @Override
     public void setData(@Nullable Object data) {
 
@@ -199,6 +173,16 @@ public class MyFragment extends BaseFragment<MyPresenter> implements MyContract.
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         Log.i(TAG, "onCheckedChanged: isChecked = " + isChecked);
         SPUtils.getInstance().put(GlobalConstants.HAS_FACE, isChecked);
@@ -208,7 +192,7 @@ public class MyFragment extends BaseFragment<MyPresenter> implements MyContract.
     public void onViewClick(View view) {
         int id = view.getId();
         if (id == R.id.rl_go) {
-            launchActivity(new Intent(getActivity(), PersonInfoActivity.class));
+            launchActivity(new Intent(mContext, PersonInfoActivity.class));
         }
     }
 }

@@ -22,7 +22,7 @@
             android:paddingBottom="@dimen/size_8dp"
             android:scaleType="center"
             android:text="请联系管理员"
-            android:textColor="@color/black_common"
+            android:textColor="@color/color_44485A"
             android:textSize="@dimen/size_15dp" />
 
         <ImageView
@@ -35,8 +35,7 @@
             android:paddingLeft="@dimen/size_35dp"
             android:paddingTop="@dimen/size_12dp"
             android:paddingBottom="@dimen/size_8dp"
-            android:src="@drawable/close_dialog"
-             />
+            android:src="@drawable/close_dialog" />
 
 
     </RelativeLayout>
@@ -61,7 +60,7 @@
             android:drawablePadding="@dimen/size_5dp"
             android:paddingRight="@dimen/size_35dp"
             android:textSize="@dimen/text_size_16sp"
-            android:textColor="@color/black_common"
+            android:textColor="@color/color_44485A"
             android:scaleType="center"
             android:text="@string/tell_text" />
 
@@ -73,7 +72,7 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/size_12dp"
             android:text="@string/copy"
-            android:textColor="@color/copy_color"
+            android:textColor="@color/color_2D87F9"
             android:textSize="@dimen/text_size_16sp" />
     </RelativeLayout>
 
@@ -91,7 +90,7 @@
             android:drawableLeft="@drawable/mail"
             android:drawablePadding="@dimen/size_5dp"
             android:textSize="@dimen/text_size_16sp"
-            android:textColor="@color/black_common"
+            android:textColor="@color/color_44485A"
             android:paddingRight="@dimen/size_35dp"
             android:scaleType="center"
             android:text="@string/email_text" />
@@ -104,7 +103,7 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/size_12dp"
             android:text="@string/copy"
-            android:textColor="@color/copy_color"
+            android:textColor="@color/color_2D87F9"
             android:textSize="@dimen/text_size_16sp" />
     </RelativeLayout>
 

@@ -1,9 +1,9 @@
 package com.netposa.component.spjk.mvp.model.entity;
 
-public class OrgMainEntity{
+public class OrgMainEntity {
 
-    public static final int TYPE_GROUP=0x1;
-    public static final int TYPE_CAMERA=0X2;
+    public static final int TYPE_GROUP = 0x1;
+    public static final int TYPE_CAMERA = 0X2;
 
     private String parentId;
     private String ChildId;
@@ -12,10 +12,10 @@ public class OrgMainEntity{
     private String treeDesc;
     private boolean mIsRootOrg;
 
-    public OrgMainEntity(){
+    public OrgMainEntity() {
 
     }
-    
+
     public boolean isRootOrg() {
         return mIsRootOrg;
     }

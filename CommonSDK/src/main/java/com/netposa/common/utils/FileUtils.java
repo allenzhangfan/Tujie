@@ -363,6 +363,7 @@ public final class FileUtils {
     /**
      * 复制文件
      * 该方法可能会出现拷贝文件丢失数据的问题(文件拷贝不全)
+     *
      * @param srcFile  源文件
      * @param destFile 目标文件
      * @return {@code true}: 复制成功<br>{@code false}: 复制失败
@@ -470,6 +471,20 @@ public final class FileUtils {
      */
     public static boolean deleteFile(File file) {
         return file != null && (!file.exists() || file.isFile() && file.delete());
+    }
+
+    /**
+     * 删除目录下的所有文件
+     *
+     * @param dirs 多个目录
+     * @return {@code true}: 删除成功<br>{@code false}: 删除失败
+     */
+    public static boolean deleteFilesInDirs(File... dirs) {
+        boolean result = false;
+        for (File dir : dirs) {
+            result = deleteFilesInDir(dir);
+        }
+        return result;
     }
 
     /**
@@ -1086,6 +1101,20 @@ public final class FileUtils {
     }
 
     /**
+     * 获取多个目录大小
+     *
+     * @param dirs 多个目录
+     * @return 文件大小
+     */
+    public static String getDirsSize(File... dirs) {
+        long len = 0;
+        for (File dir : dirs) {
+            len += getDirLength(dir);
+        }
+        return len == -1 ? "" : byte2FitMemorySize(len);
+    }
+
+    /**
      * 获取文件大小
      *
      * @param filePath 文件路径
@@ -1392,13 +1421,13 @@ public final class FileUtils {
         if (byteNum < 0) {
             return "shouldn't be less than zero!";
         } else if (byteNum < MemoryConstants.KB) {
-            return String.format("%.3fB", (double) byteNum + 0.0005);
+            return String.format("%.2fB", (double) byteNum + 0.005);
         } else if (byteNum < MemoryConstants.MB) {
-            return String.format("%.3fKB", (double) byteNum / MemoryConstants.KB + 0.0005);
+            return String.format("%.2fKB", (double) byteNum / MemoryConstants.KB + 0.005);
         } else if (byteNum < MemoryConstants.GB) {
-            return String.format("%.3fMB", (double) byteNum / MemoryConstants.MB + 0.0005);
+            return String.format("%.2fMB", (double) byteNum / MemoryConstants.MB + 0.005);
         } else {
-            return String.format("%.3fGB", (double) byteNum / MemoryConstants.GB + 0.0005);
+            return String.format("%.2fGB", (double) byteNum / MemoryConstants.GB + 0.005);
         }
     }
 
@@ -1414,8 +1443,9 @@ public final class FileUtils {
 
     /**
      * 拷贝数据库到sd卡
+     *
      * @param context
-     * @param srcFile 具体file文件
+     * @param srcFile  具体file文件
      * @param destFile 具体file文件
      */
     public static void copyDataBaseToSD(Context context, File srcFile, File destFile) {

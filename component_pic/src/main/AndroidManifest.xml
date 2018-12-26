@@ -6,12 +6,21 @@
     <application
         android:theme="@style/AppTheme"
         tools:replace="android:theme">
-        <activity android:name="com.netposa.component.preview.mvp.ui.activity.PicPreViewActivity" android:screenOrientation="portrait"/>
+        <activity
+            android:name="com.netposa.component.preview.mvp.ui.activity.PicPreViewActivity"
+            android:screenOrientation="portrait" />
 
-        <!--知乎图片选择框架-->
-        <activity android:name="com.zhihu.matisse.ui.MatisseActivity" android:screenOrientation="portrait"/>
-        <activity android:name="com.zhihu.matisse.internal.ui.AlbumPreviewActivity" android:screenOrientation="portrait"/>
-        <activity android:name="com.zhihu.matisse.internal.ui.SelectedPreviewActivity" android:screenOrientation="portrait"/>
+        <!-- 知乎图片选择框架 -->
+        <activity
+            android:name="com.zhihu.matisse.ui.MatisseActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.zhihu.matisse.internal.ui.AlbumPreviewActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.zhihu.matisse.internal.ui.SelectedPreviewActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name="com.netposa.component.preview.mvp.ui.activity.SinglePicPreviewActivity"></activity>
     </application>
 
 </manifest>

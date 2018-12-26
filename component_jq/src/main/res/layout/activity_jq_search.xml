@@ -12,7 +12,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/size_8dp"
-        android:background="@color/item_view_divider_my" />
+        android:background="@color/color_F5F6FA" />
 
     <RelativeLayout
         android:id="@+id/rl_search_keywords"
@@ -30,7 +30,7 @@
             android:layout_centerVertical="true"
             android:gravity="left"
             android:text="@string/query_history"
-            android:textColor="@color/color_hint_text2"
+            android:textColor="@color/color_989FB0"
             android:textSize="@dimen/text_size_14sp" />
 
         <ImageView
@@ -62,7 +62,7 @@
                 android:id="@+id/rv_content_search_result"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/item_view_divider_my"
+                android:background="@color/color_F5F6FA"
                 android:visibility="gone"
                 tools:listitem="@layout/item_jq" />
         </LinearLayout>

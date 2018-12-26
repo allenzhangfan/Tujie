@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">component_clcx</string>
+    <string name="choose_car_type">请选择车辆类型</string>
+    <string name="choose_plate_type">请选择车牌类型</string>
 </resources>

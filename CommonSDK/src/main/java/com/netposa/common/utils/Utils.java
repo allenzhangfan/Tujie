@@ -5,9 +5,9 @@ package com.netposa.common.utils;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.util.Log;
 
-import com.netposa.common.constant.CommonConstant;
+import com.netposa.common.constant.GlobalConstants;
+import com.netposa.common.log.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,51 +42,6 @@ public class Utils {
      */
     public static void init(Context context) {
         Utils.context = context.getApplicationContext();
-        initDir();
-    }
-
-    private static void initDir() {
-        List<String> pathList = new ArrayList<>();
-        pathList.add(CommonConstant.ROOT_PATH);
-        pathList.add(CommonConstant.DB_PATH);
-        pathList.add(CommonConstant.LOG_PATH);
-        pathList.add(CommonConstant.DOWNLOAD_PATH);
-        pathList.add(CommonConstant.CACHE_PATH);
-        pathList.add(CommonConstant.PICTURE_PATH);
-        pathList.add(CommonConstant.VIDEO_PATH);
-
-        List<Boolean> mkdirResults = new ArrayList<>(pathList.size());
-        Observable
-                .fromIterable(pathList)
-                .flatMap((Function<String, ObservableSource<Boolean>>) path -> {
-                    boolean mkdirResult = FileUtils.createOrExistsDir(path);
-                    Log.i("Utils", "flatMap:" + path + ",mkdirResult:" + mkdirResult);
-                    mkdirResults.add(mkdirResult);
-                    return Observable.fromIterable(mkdirResults);
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<Boolean>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-
-                    }
-
-                    @Override
-                    public void onNext(Boolean result) {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        Log.e("Utils", "mkdirs onComplete");
-                    }
-                });
     }
 
     /**
@@ -98,6 +53,4 @@ public class Utils {
         if (context != null) return context;
         throw new NullPointerException("u should init first");
     }
-
-
 }

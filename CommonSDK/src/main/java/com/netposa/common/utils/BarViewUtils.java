@@ -3,6 +3,7 @@
  */
 
 package com.netposa.common.utils;
+
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
@@ -13,8 +14,11 @@ import android.provider.Settings;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+
 import com.jess.arms.utils.Preconditions;
+
 import java.lang.reflect.Method;
+
 import androidx.annotation.DrawableRes;
 
 /**

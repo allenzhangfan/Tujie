@@ -10,14 +10,13 @@
         android:layout_marginTop="@dimen/size_7dp"
         android:gravity="left|center_vertical"
         android:text="@string/plate_number"
-        android:textColor="@color/black_common"
-        android:textSize="@dimen/text_size_15sp" />
+        android:textColor="@color/color_44485A"
+        android:textSize="@dimen/text_size_14sp" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/size_0_5dp"
-        android:layout_marginTop="@dimen/size_10dp"
-        android:background="@color/item_view_divider" />
+        android:background="@color/color_E5E6EB" />
 
     <LinearLayout
         android:layout_width="match_parent"

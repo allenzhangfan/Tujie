@@ -4,6 +4,8 @@
     android:layout_height="wrap_content"
     android:layout_marginStart="@dimen/size_16dp"
     android:layout_marginEnd="@dimen/size_16dp"
+    android:background="?android:attr/selectableItemBackground"
+    android:clickable="true"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -18,17 +20,18 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:gravity="left"
-            android:textColor="@color/black_common" />
+            android:textColor="@color/color_44485A" />
+
         <TextView
             android:id="@+id/tv_item_end_time"
             style="@style/CommonTextItem"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_toRightOf="@id/tv_item_begin_time"
             android:layout_toLeftOf="@+id/iv_play"
+            android:layout_toRightOf="@id/tv_item_begin_time"
             android:gravity="left"
-            android:textColor="@color/black_common" />
+            android:textColor="@color/color_44485A" />
 
         <ImageView
             android:id="@+id/iv_play"

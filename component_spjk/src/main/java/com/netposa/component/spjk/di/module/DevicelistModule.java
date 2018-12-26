@@ -3,10 +3,10 @@ package com.netposa.component.spjk.di.module;
 import android.content.Context;
 
 import com.jess.arms.di.scope.ActivityScope;
-import com.netposa.commonres.modle.LoadingDialog;
+import com.netposa.commonres.widget.Dialog.LoadingDialogFragment;
+import com.netposa.commonres.widget.Dialog.LottieDialogFragment;
 import com.netposa.component.spjk.mvp.contract.DevicelistContract;
 import com.netposa.component.spjk.mvp.model.DevicelistModel;
-import com.netposa.component.spjk.mvp.model.entity.OrgMainEntity;
 import com.netposa.component.spjk.mvp.model.entity.SpjkListDeviceRequestEntity;
 import com.netposa.component.spjk.mvp.model.entity.SpjkListDeviceResponseEntity;
 import com.netposa.component.spjk.mvp.ui.adapter.DeviceParentAdapter;
@@ -31,8 +31,8 @@ public class DevicelistModule {
      *
      * @param view
      */
-    public DevicelistModule(Context context,DevicelistContract.View view) {
-        this.mContext=context;
+    public DevicelistModule(Context context, DevicelistContract.View view) {
+        this.mContext = context;
         this.view = view;
     }
 
@@ -62,31 +62,31 @@ public class DevicelistModule {
 
     @ActivityScope
     @Provides
-    Context provideContext(){
+    Context provideContext() {
         return mContext;
     }
 
     @ActivityScope
     @Provides
-    List<SpjkListDeviceResponseEntity.DeviceTreeListBean> provideBeanList(){
+    List<SpjkListDeviceResponseEntity.DeviceTreeListBean> provideBeanList() {
         return new ArrayList<>();
     }
 
     @ActivityScope
     @Provides
-    DeviceParentAdapter providerDeviceParentAdapter(List<SpjkListDeviceResponseEntity.DeviceTreeListBean> data){
+    DeviceParentAdapter providerDeviceParentAdapter(List<SpjkListDeviceResponseEntity.DeviceTreeListBean> data) {
         return new DeviceParentAdapter(data);
     }
 
     @ActivityScope
     @Provides
-    SpjkListDeviceRequestEntity provideRequestEntity(){
+    SpjkListDeviceRequestEntity provideRequestEntity() {
         return new SpjkListDeviceRequestEntity();
     }
 
     @ActivityScope
     @Provides
-    LoadingDialog provideLoadingDialog() {
-        return new LoadingDialog(mContext);
+    LottieDialogFragment provideDialogFragment() {
+        return new LoadingDialogFragment();
     }
 }

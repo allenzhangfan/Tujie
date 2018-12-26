@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
@@ -14,19 +15,27 @@ import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.util.SparseIntArray;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
+import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.google.android.material.animation.AnimationUtils;
 import com.google.android.material.tabs.TabLayout;
 import com.netposa.commonres.R;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.concurrent.ConcurrentHashMap;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.Dimension;
@@ -34,10 +43,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.Px;
 import androidx.annotation.RestrictTo;
+import androidx.annotation.StyleRes;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.core.view.ViewCompat;
+import androidx.core.widget.TextViewCompat;
 import androidx.viewpager.widget.ViewPager;
 
 /**
@@ -47,6 +58,201 @@ import androidx.viewpager.widget.ViewPager;
 public class TabLayoutHelper {
 
     private static final String TAG = "TabLayoutHelper";
+    private static final Logger LOGGER = LoggerFactory.getLogger(TAG);
+    private static ConcurrentHashMap<String, Field> sTabLayoutFieldByNameCache =
+            new ConcurrentHashMap<>();
+
+    /**
+     * 设置<tt>Tab</tt>之间的间隔
+     *
+     * @param tabLayout  待设置的tabLayout
+     * @param solidColor 纯色颜色，透明为0
+     * @param width      间隔宽度，单位dp
+     */
+    public static void setTabDivider(@NonNull TabLayout tabLayout, @ColorInt int solidColor,
+                                     @Dimension(unit = Dimension.DP) float width) {
+        final Context context = tabLayout.getContext();
+        int widthInPx = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, width,
+                context.getResources().getDisplayMetrics());
+        LinearLayout slidingTabIndicator = (LinearLayout) tabLayout.getChildAt(0);
+        int height = slidingTabIndicator.getHeight();
+        if (height > 0) {
+            GradientDrawable drawable = new GradientDrawable();
+            drawable.setColor(solidColor);
+            drawable.setSize(widthInPx, height);
+            slidingTabIndicator.setDividerDrawable(drawable);
+            slidingTabIndicator.setShowDividers(LinearLayout.SHOW_DIVIDER_MIDDLE);
+        } else {
+            slidingTabIndicator.getViewTreeObserver().addOnGlobalLayoutListener(
+                    new ViewTreeObserver.OnGlobalLayoutListener() {
+                        @Override
+                        public void onGlobalLayout() {
+                            int h = slidingTabIndicator.getHeight();
+                            if (h > 0) {
+                                slidingTabIndicator.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                                GradientDrawable drawable = new GradientDrawable();
+                                drawable.setColor(solidColor);
+                                drawable.setSize(widthInPx, h);
+                                slidingTabIndicator.setDividerDrawable(drawable);
+                                slidingTabIndicator.setShowDividers(LinearLayout.SHOW_DIVIDER_MIDDLE);
+                            }
+                        }
+                    });
+        }
+    }
+
+    /**
+     * 设置<tt>Tab</tt>选中时的字体样式
+     *
+     * @param tabLayout              待设置的tabLayout
+     * @param selectedTextAppearance <tt>Tab</tt>选中时的字体样式
+     */
+    public static void setTabSelectedTextAppearance(@NonNull TabLayout tabLayout,
+                                                    @StyleRes int selectedTextAppearance) {
+        CustomViewOnTabSelectedListener customViewOnTabSelectedListener =
+                new CustomViewOnTabSelectedListener(tabLayout, selectedTextAppearance);
+        tabLayout.addOnTabSelectedListener(customViewOnTabSelectedListener);
+        customViewOnTabSelectedListener.updateSelectedTab();
+    }
+
+    private static class CustomViewOnTabSelectedListener implements TabLayout.OnTabSelectedListener {
+
+        private final WeakReference<TabLayout> mTabLayoutRef;
+        private int mTabTextAppearance;
+        private ColorStateList mTabTextColors;
+        private int mSelectedTextAppearance;
+
+        private final SparseIntArray mTabTextSizes = new SparseIntArray();
+
+        public CustomViewOnTabSelectedListener(TabLayout tabLayout, int selectedTextAppearance) {
+            mTabLayoutRef = new WeakReference<>(tabLayout);
+            mTabTextAppearance = getTabLayoutFieldIntValue(tabLayout,
+                    "tabTextAppearance", 0);
+            mTabTextColors = getTabLayoutFieldValue(tabLayout,
+                    "tabTextColors", null);
+            mSelectedTextAppearance = selectedTextAppearance;
+        }
+
+        @Override
+        public void onTabSelected(TabLayout.Tab tab) {
+            updateTabTextAppearance(tab, true, mSelectedTextAppearance);
+        }
+
+        @Override
+        public void onTabUnselected(TabLayout.Tab tab) {
+            updateTabTextAppearance(tab, false, mTabTextAppearance);
+        }
+
+        @Override
+        public void onTabReselected(TabLayout.Tab tab) {
+
+        }
+
+        void updateSelectedTab() {
+            TabLayout tabLayout = mTabLayoutRef.get();
+            if (tabLayout != null) {
+                int position = tabLayout.getSelectedTabPosition();
+                TabLayout.Tab tab = tabLayout.getTabAt(position);
+                updateTabTextAppearance(tab, true, mSelectedTextAppearance);
+            }
+        }
+
+        private void updateTabTextAppearance(TabLayout.Tab tab, boolean selected, int resId) {
+            if (tab.getCustomView() == null) {
+                tab.setCustomView(R.layout.tab_layout_text);
+            }
+            View customView = tab.getCustomView();
+            TextView textView = customView.findViewById(android.R.id.text1);
+            TextViewCompat.setTextAppearance(textView, resId);
+            float curTextSize = textView.getTextSize();
+            if (mTabTextColors != null) {
+                textView.setTextColor(mTabTextColors);
+            }
+            textView.setSelected(selected);
+
+            int position = tab.getPosition();
+            TabLayout tabLayout = mTabLayoutRef.get();
+            if (tabLayout.getTabMode() == TabLayout.MODE_FIXED
+                    && tabLayout.getTabGravity() == TabLayout.GRAVITY_CENTER
+                    && curTextSize > mTabTextSizes.get(position)) {
+                ViewParent tabView = customView.getParent();
+                ViewParent slidingTabIndicator = tabView != null ? tabView.getParent() : null;
+                if (slidingTabIndicator instanceof LinearLayout) {
+                    View child = (View) tabView;
+                    LinearLayout.LayoutParams lp =
+                            (LinearLayout.LayoutParams) child.getLayoutParams();
+                    lp.width = LinearLayout.LayoutParams.WRAP_CONTENT;
+                    lp.weight = 0;
+                    child.setLayoutParams(lp);
+                }
+                // 向上取整保留最大的字体大小尺寸
+                mTabTextSizes.put(position, (int) Math.ceil(curTextSize));
+            }
+        }
+    }
+
+    /**
+     * 设置<tt>Tab</tt>选中时的文本加粗
+     *
+     * @param tabLayout 待设置的tabLayout
+     */
+    public static void setTabTextBoldOnSelected(@NonNull TabLayout tabLayout) {
+        TextBoldOnTabSelectedListener textBoldOnTabSelectedListener =
+                new TextBoldOnTabSelectedListener(tabLayout);
+        tabLayout.addOnTabSelectedListener(textBoldOnTabSelectedListener);
+        textBoldOnTabSelectedListener.updateSelectedTab();
+    }
+
+    private static class TextBoldOnTabSelectedListener implements TabLayout.OnTabSelectedListener {
+
+        private final WeakReference<TabLayout> mTabLayoutRef;
+        private LinearLayout mSlidingTabIndicator;
+
+        public TextBoldOnTabSelectedListener(TabLayout tabLayout) {
+            this.mTabLayoutRef = new WeakReference<>(tabLayout);
+            this.mSlidingTabIndicator = (LinearLayout) tabLayout.getChildAt(0);
+        }
+
+        @Override
+        public void onTabSelected(TabLayout.Tab tab) {
+            updateTabTextBold(tab, true);
+        }
+
+        @Override
+        public void onTabUnselected(TabLayout.Tab tab) {
+            updateTabTextBold(tab, false);
+        }
+
+        @Override
+        public void onTabReselected(TabLayout.Tab tab) {
+
+        }
+
+        void updateSelectedTab() {
+            TabLayout tabLayout = mTabLayoutRef.get();
+            if (tabLayout != null) {
+                int position = tabLayout.getSelectedTabPosition();
+                TabLayout.Tab tab = tabLayout.getTabAt(position);
+                updateTabTextBold(tab, true);
+            }
+        }
+
+        private void updateTabTextBold(TabLayout.Tab tab, boolean fakeBoldText) {
+            int position = tab.getPosition();
+            View tabView = mSlidingTabIndicator.getChildAt(position);
+            if (tabView instanceof ViewGroup) {
+                ViewGroup viewGroup = (ViewGroup) tabView;
+                final int childCount = viewGroup.getChildCount();
+                for (int i = 0; i < childCount; i++) {
+                    View child = viewGroup.getChildAt(i);
+                    if (child instanceof TextView && (child.getVisibility() == View.VISIBLE)) {
+                        ((TextView) child).getPaint().setFakeBoldText(fakeBoldText);
+                        ViewCompat.postInvalidateOnAnimation(child);
+                    }
+                }
+            }
+        }
+    }
 
     public static void setTabLayoutIndicatorWidth(@NonNull TabLayout tabLayout, @Nullable ViewPager viewPager) {
         setTabLayoutIndicatorWidth(tabLayout, viewPager, Indicator.MIN_INDICATOR_WIDTH);
@@ -76,6 +282,28 @@ public class TabLayoutHelper {
             // add tabLayout
             ConstraintLayout.LayoutParams params1 = new ConstraintLayout.LayoutParams(
                     ConstraintLayout.LayoutParams.MATCH_CONSTRAINT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            if (tabLayout.getTabGravity() == TabLayout.GRAVITY_CENTER) {
+                // tabGravity="center"，分两种情况，两个分支处理
+                if (params.width != ViewGroup.LayoutParams.WRAP_CONTENT) {
+                    // layout_width="match_parent"或者layout_width="0dp" && layout_weight="1"
+                    // 此时tabGravity="center"可能会不生效，必须调整为layout_width="wrap_content"
+                    params1.width = ViewGroup.LayoutParams.WRAP_CONTENT;
+
+                    // TabLayout不充满的情况下，需要把背景移至父布局显示，避免背景不一致导致的显示问题
+                    constraintLayout.setBackground(tabLayout.getBackground());
+                    tabLayout.setBackgroundResource(0);
+                } else {
+                    // layout_width="wrap_content"，需要调整下布局参数，否则测量宽度会有问题
+                    params1.width = ViewGroup.LayoutParams.WRAP_CONTENT;
+                }
+            } else {
+                // tabGravity="fill"，分两种情况，均不需要迁移背景至父布局
+                // 1，layout_width="match_parent"或者layout_width="0dp" && layout_weight="1"，没问题
+                // 2，layout_width="wrap_content"，需要调整下布局参数，否则测量宽度会有问题
+                if (params.width == ViewGroup.LayoutParams.WRAP_CONTENT) {
+                    params1.width = ViewGroup.LayoutParams.WRAP_CONTENT;
+                }
+            }
             params1.leftToLeft = 0;
             params1.rightToRight = 0;
             constraintLayout.addView(tabLayout, params1);
@@ -103,7 +331,7 @@ public class TabLayoutHelper {
         tabLayout.setSelectedTabIndicator(0);
 
         // get tabLayout tabIndicatorAnimationDuration
-        int tabIndicatorAnimationDuration = getReflectFieldIntValue(tabLayout,
+        int tabIndicatorAnimationDuration = getTabLayoutFieldIntValue(tabLayout,
                 "tabIndicatorAnimationDuration", 300);
 
         if (viewPager != null) {
@@ -118,13 +346,49 @@ public class TabLayoutHelper {
         }
     }
 
-    private static int getReflectFieldIntValue(Object obj, String name, int defValue) {
+    private static int getTabLayoutFieldIntValue(@NonNull TabLayout tabLayout,
+                                                 String fieldName, int defValue) {
         try {
-            Field field = obj.getClass().getDeclaredField(name);
-            field.setAccessible(true);
-            return field.getInt(obj);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            return defValue;
+            Field field = getTabLayoutField(fieldName);
+            if (field != null) {
+                return field.getInt(tabLayout);
+            }
+        } catch (Exception e) {
+            LOGGER.warn("Failed to get TabLayout#" + fieldName + " field", e);
+        }
+        return defValue;
+    }
+
+    @SuppressWarnings("unchecked")
+    private static <T> T getTabLayoutFieldValue(@NonNull TabLayout tabLayout,
+                                                String fieldName, T defValue) {
+        try {
+            Field field = getTabLayoutField(fieldName);
+            if (field != null) {
+                return (T) field.get(tabLayout);
+            }
+        } catch (Exception e) {
+            LOGGER.warn("Failed to get TabLayout#" + fieldName + " field", e);
+        }
+        return defValue;
+    }
+
+    @Nullable
+    private static Field getTabLayoutField(@NonNull String fieldName) {
+        try {
+            Field field = sTabLayoutFieldByNameCache.get(fieldName);
+            if (field == null) {
+                field = TabLayout.class.getDeclaredField(fieldName);
+                if (field != null) {
+                    field.setAccessible(true);
+                    // Cache update.
+                    sTabLayoutFieldByNameCache.put(fieldName, field);
+                }
+            }
+            return field;
+        } catch (Exception ex) {
+            LOGGER.warn("Failed to retrieve TabLayout#" + fieldName + " field", ex);
+            return null;
         }
     }
 

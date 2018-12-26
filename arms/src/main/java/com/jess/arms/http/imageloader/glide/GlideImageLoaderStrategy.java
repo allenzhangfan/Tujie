@@ -156,6 +156,6 @@ public class GlideImageLoaderStrategy implements BaseImageLoaderStrategy<ImageCo
 
     @Override
     public void applyGlideOptions(Context context, GlideBuilder builder) {
-        Log.w("GlideImageLoader","applyGlideOptions");
+        Log.w("GlideImageLoader", "applyGlideOptions");
     }
 }

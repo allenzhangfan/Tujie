@@ -14,19 +14,16 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
-import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
 
 import javax.inject.Inject;
 
-import com.netposa.common.constant.CommonConstant;
+import com.netposa.common.constant.GlobalConstants;
 import com.netposa.common.log.Log;
-import com.netposa.common.utils.NetworkUtils;
 import com.netposa.common.utils.ToastUtils;
-import com.netposa.component.room.dao.DbHelper;
-import com.netposa.component.room.entity.SpjkCollectionDeviceEntiry;
+import com.netposa.component.room.DbHelper;
+import com.netposa.component.room.entity.SpjkCollectionDeviceEntity;
 import com.netposa.component.spjk.R;
 import com.netposa.component.spjk.mvp.contract.HistoryVideoPlayContract;
-import com.netposa.component.spjk.mvp.model.entity.DeviceInfoResponseEntity;
 import com.trello.lifecycle2.android.lifecycle.AndroidLifecycle;
 
 import java.io.File;
@@ -69,6 +66,7 @@ public class HistoryVideoPlayPresenter extends BasePresenter<HistoryVideoPlayCon
         this.mImageLoader = null;
         this.mApplication = null;
     }
+
     /**
      * 截图
      */
@@ -78,7 +76,7 @@ public class HistoryVideoPlayPresenter extends BasePresenter<HistoryVideoPlayCon
             mLastClickTime = currentTime;
             Calendar calendar = Calendar.getInstance();
             String format = DATA_STRING;
-            File dir = new File(CommonConstant.PICTURE_PATH);
+            File dir = new File(GlobalConstants.PICTURE_PATH);
             if (!dir.exists()) {
                 dir.mkdirs();
             }
@@ -91,6 +89,7 @@ public class HistoryVideoPlayPresenter extends BasePresenter<HistoryVideoPlayCon
 
     /**
      * 根据id 删除存在数据库的一条数据 即取消关注
+     *
      * @param cameraId
      */
     public void deleteDevice(String cameraId) {
@@ -101,18 +100,20 @@ public class HistoryVideoPlayPresenter extends BasePresenter<HistoryVideoPlayCon
     }
 
     /**
-     *插入一条关注数据
+     * 插入一条关注数据
      *
      * @param deviceEntiry
      */
-    public void insterDevice(SpjkCollectionDeviceEntiry deviceEntiry) {
+    public void insterDevice(SpjkCollectionDeviceEntity deviceEntiry) {
         mDbHelper.insterOneDevice(deviceEntiry)
                 .subscribeOn(Schedulers.io())
                 .compose(AndroidLifecycle.createLifecycleProvider((LifecycleOwner) mRootView).bindToLifecycle())
                 .subscribe();
     }
+
     /**
      * 查看当前的设备是否被关注
+     *
      * @param cameraId
      */
     public void checkDevice(String cameraId) {

@@ -1,5 +1,7 @@
 package com.netposa.component.room.entity;
 
+import java.util.UUID;
+
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -13,9 +15,9 @@ import androidx.room.PrimaryKey;
 public class JqSearchHistoryEntity {
 
     @NonNull
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "uid")
-    private int uid;
+    @PrimaryKey
+    @ColumnInfo(name = "uuid")
+    private String uuid;
 
     @ColumnInfo(name = "name")
     private String name;
@@ -28,12 +30,16 @@ public class JqSearchHistoryEntity {
         this.name = name;
     }
 
-    @NonNull
-    public int getUid() {
-        return uid;
+    public JqSearchHistoryEntity() {
+        uuid = UUID.randomUUID().toString();
     }
 
-    public void setUid(@NonNull int uid) {
-        this.uid = uid;
+    @NonNull
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(@NonNull String uuid) {
+        this.uuid = uuid;
     }
 }
