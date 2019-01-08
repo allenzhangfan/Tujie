@@ -16,6 +16,7 @@ import com.netposa.commonres.widget.CustomerLoadMoreView;
 import com.netposa.commonres.widget.itemDecoration.SpacesItemDecoration;
 import com.netposa.component.clcx.mvp.contract.QueryResultContract;
 import com.netposa.component.clcx.mvp.model.QueryResultModel;
+import com.netposa.component.clcx.mvp.model.entity.QueryCarSearchEntity;
 import com.netposa.component.clcx.mvp.model.entity.QueryCarSearchResponseEntity;
 import com.netposa.component.clcx.mvp.ui.adapter.QueryResultAdapter;
 
@@ -79,6 +80,12 @@ public class QueryResultModule {
     @Provides
     List<QueryCarSearchResponseEntity> provideBeanList() {
         return new ArrayList<>();
+    }
+
+    @ActivityScope
+    @Provides
+    QueryCarSearchEntity provideRequestBean() {
+        return new QueryCarSearchEntity();
     }
 
     @ActivityScope

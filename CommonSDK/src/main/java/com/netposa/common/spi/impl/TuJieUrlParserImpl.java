@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import com.google.auto.service.AutoService;
 import com.netposa.common.constant.GlobalConstants;
 import com.netposa.common.log.Log;
+import com.netposa.common.mqtt.util.MqttHookPlugins;
 import com.netposa.common.spi.UrlParser;
 import com.netposa.common.utils.SPUtils;
 
@@ -106,6 +107,13 @@ public class TuJieUrlParserImpl implements UrlParser {
 
     @Override
     public String onGetMqttUrl(String originalUrl) {
-        return mMqttPrefix.concat(originalUrl);
+        boolean isLocal = SPUtils.getInstance().getBoolean(IS_LOCAL_NET);
+        String mqttUrl;
+        if (isLocal) {
+            mqttUrl = MqttHookPlugins.getServerUri();
+        } else {
+            mqttUrl = mMqttPrefix.concat(originalUrl);
+        }
+        return mqttUrl;
     }
 }

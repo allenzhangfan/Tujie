@@ -53,7 +53,6 @@ public class AMapLocationService extends Service implements LocationServiceProvi
                 EventBus.getDefault().postSticky(LocationEvent.obtain(integratedLocation));
             } else {
                 Log.e(TAG, String.format("AMapLocationError, ErrCode: {%d}, errInfo: {%s}", aMapLocation.getErrorCode(), aMapLocation.getErrorInfo()));
-                ;
             }
         }
     };

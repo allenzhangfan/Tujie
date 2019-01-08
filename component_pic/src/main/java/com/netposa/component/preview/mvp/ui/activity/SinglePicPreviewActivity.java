@@ -22,6 +22,7 @@ import com.netposa.common.constant.UrlConstant;
 import com.netposa.common.core.RouterHub;
 import com.netposa.common.log.Log;
 import com.netposa.common.utils.TimeUtils;
+import com.netposa.common.utils.TujieImageUtils;
 import com.netposa.commonres.widget.Dialog.LottieDialogFragment;
 import com.netposa.component.imagedownload.ImageDownloadUtil;
 import com.netposa.component.imagedownload.LoadErrorEntity;
@@ -33,6 +34,9 @@ import com.netposa.component.preview.mvp.contract.SinglePicPreviewContract;
 import com.netposa.component.preview.mvp.model.entity.FeatureByPathRequestEntity;
 import com.netposa.component.preview.mvp.model.entity.FeatureByPathResponseEntity;
 import com.netposa.component.preview.mvp.presenter.SinglePicPreviewPresenter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -49,7 +53,6 @@ import static com.netposa.common.constant.GlobalConstants.KEY_DATA_KEY;
 import static com.netposa.common.constant.GlobalConstants.KEY_DATA_TYPE;
 import static com.netposa.common.constant.GlobalConstants.KEY_FACE_NAME;
 import static com.netposa.common.constant.GlobalConstants.KEY_IV_DETAIL;
-import static com.netposa.common.constant.GlobalConstants.KEY_JIN_QING;
 import static com.netposa.common.constant.GlobalConstants.KEY_MOTIONNAME_DETAIL;
 import static com.netposa.common.constant.GlobalConstants.KEY_PICPATH;
 import static com.netposa.common.constant.GlobalConstants.KEY_POSITION;
@@ -57,7 +60,6 @@ import static com.netposa.common.constant.GlobalConstants.KEY_SEESION;
 import static com.netposa.common.constant.GlobalConstants.KEY_TIME_DETAIL;
 import static com.netposa.common.constant.GlobalConstants.KEY_TITLE;
 import static com.netposa.common.constant.GlobalConstants.KEY_TYPE_DETAIL;
-import static com.netposa.common.constant.GlobalConstants.KEY_TYPE_DETAIL_TO_YTST;
 import static com.netposa.common.constant.GlobalConstants.VEHICLE_TYPE;
 
 @Route(path = RouterHub.PIC_SINGLE_PIC_PREVIEW_ACTIVITY)
@@ -91,7 +93,6 @@ public class SinglePicPreviewActivity extends BaseActivity<SinglePicPreviewPrese
     private String mType;
     private String mPosition;
     private String mTitle;
-    private String mTag;
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -123,8 +124,6 @@ public class SinglePicPreviewActivity extends BaseActivity<SinglePicPreviewPrese
 
     @Override
     public void initView(@Nullable Bundle savedInstanceState) {
-//        BarViewUtils.hideNavigationBar(this);
-
     }
 
     private void getIntentData() {
@@ -132,13 +131,11 @@ public class SinglePicPreviewActivity extends BaseActivity<SinglePicPreviewPrese
         Intent dataIntent = getIntent();
         showLoading("");
         if (dataIntent != null) {
-            mTVtTitle.setText(dataIntent.getStringExtra(KEY_TITLE));
             mIvUrl = dataIntent.getStringExtra(KEY_IV_DETAIL);
             mName = dataIntent.getStringExtra(KEY_FACE_NAME);
             mType = dataIntent.getStringExtra(KEY_TYPE_DETAIL);
             mPosition = dataIntent.getStringExtra(KEY_POSITION);
             mTitle = dataIntent.getStringExtra(KEY_TITLE);
-            mTag = dataIntent.getStringExtra(KEY_JIN_QING);
             long time = dataIntent.getLongExtra(KEY_TIME_DETAIL, 0);
             if (time == 0) {
                 mTvTime.setText(mName);
@@ -151,8 +148,6 @@ public class SinglePicPreviewActivity extends BaseActivity<SinglePicPreviewPrese
         }
         if (TextUtils.isEmpty(mTitle)) {
             mTVtTitle.setText(getText(R.string.show_details));
-        } else if (!TextUtils.isEmpty(mTag)) {
-            mTVtTitle.setText(mTitle);
         } else {
             mTVtTitle.setText(mTitle);
             mRyNext.setVisibility(View.INVISIBLE);
@@ -163,12 +158,22 @@ public class SinglePicPreviewActivity extends BaseActivity<SinglePicPreviewPrese
     }
 
     private void showInfo() {
+        //根据url 画框
+        String point = mPosition;
+        //给图片中的人脸、车加框
+        String newUrl = mIvUrl;
+        List<String> list = new ArrayList<>();
+        if (!TextUtils.isEmpty(point)) {
+            point = point.replace(".", ",");
+            list.add(point);
+            newUrl = TujieImageUtils.circleTarget(mIvUrl, list);
+        }
         mImageLoader.loadImage(this, ImageConfigImpl
                 .builder()
                 .cacheStrategy(0)
                 .placeholder(R.drawable.ic_image_default)
                 .errorPic(R.drawable.ic_image_load_failed)
-                .url(UrlConstant.parseImageUrl(mIvUrl))
+                .url(UrlConstant.parseImageUrl(newUrl))
                 .imageView(mIvCapture)
                 .build());
         mTvAdddress.setText(mAdress);
@@ -188,6 +193,10 @@ public class SinglePicPreviewActivity extends BaseActivity<SinglePicPreviewPrese
     public void getDetectImgFeatureByPathSucess(FeatureByPathResponseEntity entity) {
         String sessionKey = entity.getSessionKey();
         Log.d(TAG, sessionKey);
+        if (TextUtils.isEmpty(sessionKey)) {
+            showMessage(getString(R.string.no_recognized));
+            return;
+        }
         String imgPath = entity.getImgPath();
         Log.d(TAG, sessionKey);
         String dataKey = entity.getDataKey();
@@ -202,8 +211,6 @@ public class SinglePicPreviewActivity extends BaseActivity<SinglePicPreviewPrese
                         .withString(KEY_DATA_TYPE, datatype)
                         .withString(KEY_POSITION, position)
                         .navigation(this);
-            } else {
-                showMessage(getString(R.string.no_tag));
             }
         } else {
             showMessage(getString(R.string.no_tag));
@@ -211,8 +218,8 @@ public class SinglePicPreviewActivity extends BaseActivity<SinglePicPreviewPrese
     }
 
     @Override
-    public void getDetectImgFeatureByPathFail() {
-
+    public void getDetectImgFeatureByPathFail(String message) {
+        showMessage(message);
     }
 
     @Override

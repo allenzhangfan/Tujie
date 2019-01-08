@@ -34,4 +34,5 @@ public interface YtstConstants {
     String KEY_INTENT_PIC="key_pic";
     String TYPE_FACE="face"; //人脸
     String TYPE_CAR="vehicle"; //车辆
+    String KEY_INTENT_TYPE="key_type";
 }

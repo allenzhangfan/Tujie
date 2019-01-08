@@ -10,6 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 
 import javax.inject.Inject;
+
 import androidx.annotation.Nullable;
 
 import static com.netposa.common.utils.TimeUtils.FORMAT10;
@@ -36,7 +37,6 @@ public class HistoryVideoAdapter extends BaseQuickAdapter<HistoryVideoResponseEn
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        helper.setText(R.id.tv_item_begin_time, begin_time + "  至  ");
-        helper.setText(R.id.tv_item_end_time, end_time);
+        helper.setText(R.id.tv_item_time, begin_time + "  -  " + end_time);
     }
 }

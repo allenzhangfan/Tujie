@@ -201,11 +201,6 @@ public class GztFragment extends BaseFragment<GztPresenter> implements GztContra
     }
 
     @Override
-    public void getFailed() {
-
-    }
-
-    @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         Log.i(TAG, "requestCode:" + requestCode + ",permissions:" +

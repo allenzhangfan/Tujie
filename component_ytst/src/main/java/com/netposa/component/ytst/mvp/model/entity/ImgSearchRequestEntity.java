@@ -2,12 +2,8 @@ package com.netposa.component.ytst.mvp.model.entity;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
 import java.util.List;
 
-import androidx.annotation.Keep;
-
-@Keep
 public class ImgSearchRequestEntity implements Parcelable {
     /**
      * excludedDataKeys : ["string"]

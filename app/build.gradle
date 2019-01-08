@@ -26,7 +26,6 @@ android {
                 includeCompileClasspath true
             }
         }
-        multiDexKeepProguard file('multiDexKeep.pro')
         ndk {
             abiFilters 'arm64-v8a', 'armeabi-v7a'
         }
@@ -55,7 +54,7 @@ android {
         }
 
         release {
-            buildConfigField "boolean", "LOG_DEBUG", "true"
+            buildConfigField "boolean", "LOG_DEBUG", "false"
             buildConfigField "boolean", "USE_CANARY", "false"
             buildConfigField "boolean", "LOG_SHOW_HIGH_PRIORITY", "false"
             //Proguard

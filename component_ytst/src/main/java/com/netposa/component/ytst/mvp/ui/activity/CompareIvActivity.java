@@ -21,7 +21,6 @@ import com.netposa.common.entity.FeatureByPathResponseEntity;
 import com.netposa.common.log.Log;
 import com.netposa.common.utils.StringUtils;
 import com.netposa.common.utils.TimeUtils;
-import com.netposa.common.utils.TujieImageUtils;
 import com.netposa.commonres.widget.CircleProgressView;
 import com.netposa.commonres.widget.Dialog.LottieDialogFragment;
 import com.netposa.component.ytst.R;
@@ -69,7 +68,6 @@ import static com.netposa.common.constant.GlobalConstants.TYPE_FAMALE;
 import static com.netposa.common.constant.GlobalConstants.TYPE_MALE;
 import static com.netposa.common.constant.GlobalConstants.VEHICLE_TYPE;
 import static com.netposa.component.ytst.app.YtstConstants.KEY_TO_COMPARE;
-import static com.netposa.component.ytst.app.YtstConstants.KEY_TO_COMPARE_CAR;
 import static com.netposa.component.ytst.app.YtstConstants.KEY_TO_COMPARE_CAR_IV;
 import static com.netposa.component.ytst.app.YtstConstants.KEY_TO_COMPARE_CAR_SCORE;
 import static com.netposa.component.ytst.app.YtstConstants.KEY_TO_COMPARE_PERSON;
@@ -154,38 +152,25 @@ public class CompareIvActivity extends BaseActivity<CompareIvPresenter> implemen
         if (mType.equals(TYPE_CAR)) {
             mScore = data.getIntExtra(KEY_TO_COMPARE_CAR_SCORE, 0);
             mRecordId = data.getStringExtra(KEY_TO_COMPARE_RECORD_ID);
-            mCarTrateImg =data.getStringExtra(KEY_TO_COMPARE_CAR_IV);
-            mPosition =data.getStringExtra(KEY_POSITION);
+            mCarTrateImg = data.getStringExtra(KEY_TO_COMPARE_CAR_IV);
+            mPosition = data.getStringExtra(KEY_POSITION);
             setCarInfo();
         } else if (mType.equals(TYPE_FACE)) {
             mPersonData = data.getParcelableExtra(KEY_TO_COMPARE_PERSON);
             mPosition = mPersonData.getLocation();
             if (!TextUtils.isEmpty(mPosition)) {
-                List<String> list = new ArrayList<>();
                 mPosition = mPosition.replace(".", ",");
-                list.add(mPosition);
-                mUrl = TujieImageUtils.circleTarget(mPersonData.getSceneImg(), list);
+                mUrl = mPersonData.getSceneImg();
             }
             setPersoninfo();
         }
         mAdapter.setOnItemChildClickListener((adapter, view, position) -> goSingleCameraLocationActivity());
     }
 
-
     @Override
     public void getDetailVehicleInfoSuc(List<CarDetailResponseEntity> entity) {
         if (entity != null && entity.size() > 0) {
-            mEntity = entity.get(0);
-            //根据url 画框
-            List<String> list = new ArrayList<>();
-            String str = mEntity.getLocation();
-            if (!TextUtils.isEmpty(str)) {
-                str = str.replace(".", ",");
-                list.add(str);
-                mUrl = TujieImageUtils.circleTarget(mEntity.getSceneImg(), list);
-            } else {
-                mUrl = mEntity.getSceneImg();
-            }
+            mUrl = entity.get(0).getSceneImg();
         }
         getCarDetails();
     }
@@ -474,7 +459,6 @@ public class CompareIvActivity extends BaseActivity<CompareIvPresenter> implemen
         String sessionKey = entity.getSessionKey();
         Log.d(TAG, sessionKey);
         String imgPath = entity.getImgPath();
-        Log.d(TAG, sessionKey);
         String dataKey = entity.getDataKey();
         String datatype = entity.getDataType();
         String position = mPosition.replace('.', ',');
@@ -556,9 +540,9 @@ public class CompareIvActivity extends BaseActivity<CompareIvPresenter> implemen
         if (id == R.id.head_left_iv) {
             killMyself();
         } else if (id == R.id.head_right_tv) {
-            if(mType.equals(TYPE_CAR)){
+            if (mType.equals(TYPE_CAR)) {
                 setRequest(VEHICLE_TYPE);
-            }else if(mType.equals(TYPE_FACE)){
+            } else if (mType.equals(TYPE_FACE)) {
                 setRequest(TYPE_FACE);
             }
         } else if (id == R.id.ll_detail) {
@@ -568,25 +552,25 @@ public class CompareIvActivity extends BaseActivity<CompareIvPresenter> implemen
                             .withString(KEY_IV_DETAIL, mUrl)
                             .withString(KEY_MOTIONNAME_DETAIL, mEntity.getDeviceName())
                             .withString(KEY_POSITION, mPosition)
-                            .withString(KEY_TYPE_DETAIL,TYPE_CAR)
+                            .withString(KEY_TYPE_DETAIL, TYPE_CAR)
                             .withLong(KEY_TIME_DETAIL, mEntity.getAbsTime())
                             .navigation(this);
                 }
             } else if (mType.equals(TYPE_FACE)) {
                 if (mPersonData != null) {
-                    if(!TextUtils.isEmpty(mUrl)){
+                    if (!TextUtils.isEmpty(mUrl)) {
                         ARouter.getInstance().build(RouterHub.PIC_SINGLE_PIC_PREVIEW_ACTIVITY)
                                 .withString(KEY_IV_DETAIL, mUrl)
                                 .withString(KEY_POSITION, mPosition)
                                 .withString(KEY_MOTIONNAME_DETAIL, mPersonData.getDeviceName())
-                                .withString(KEY_TYPE_DETAIL,TYPE_FACE)
+                                .withString(KEY_TYPE_DETAIL, TYPE_FACE)
                                 .withLong(KEY_TIME_DETAIL, mPersonData.getAbsTime())
                                 .navigation(this);
-                    }else{
+                    } else {
                         ARouter.getInstance().build(RouterHub.PIC_SINGLE_PIC_PREVIEW_ACTIVITY)
                                 .withString(KEY_IV_DETAIL, mPersonData.getSceneImg())
                                 .withString(KEY_POSITION, mPosition)
-                                .withString(KEY_TYPE_DETAIL,TYPE_FACE)
+                                .withString(KEY_TYPE_DETAIL, TYPE_FACE)
                                 .withString(KEY_MOTIONNAME_DETAIL, mPersonData.getDeviceName())
                                 .withLong(KEY_TIME_DETAIL, mPersonData.getAbsTime())
                                 .navigation(this);
@@ -598,9 +582,9 @@ public class CompareIvActivity extends BaseActivity<CompareIvPresenter> implemen
     }
 
     private void setRequest(String type) {
-        if(type.equals(VEHICLE_TYPE)){
+        if (type.equals(VEHICLE_TYPE)) {
             mFeatureByPathRequestEntity.setImgPath(mEntity.getSceneImg());
-        }else if(type.equals(TYPE_FACE)){
+        } else if (type.equals(TYPE_FACE)) {
             mFeatureByPathRequestEntity.setImgPath(mUrl);
         }
         mPresenter.getDetectImgFeatureByPath();

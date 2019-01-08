@@ -4,12 +4,18 @@ import android.app.Application;
 import android.content.Context;
 import android.text.TextUtils;
 
-import com.alibaba.android.arouter.launcher.ARouter;
-import com.google.gson.Gson;
-import com.jess.arms.integration.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
-import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.http.imageloader.ImageLoader;
+import com.jess.arms.integration.AppManager;
+import com.jess.arms.mvp.BasePresenter;
+import com.netposa.common.utils.NetworkUtils;
+import com.netposa.component.pic.R;
+import com.netposa.component.preview.mvp.contract.SinglePicPreviewContract;
+import com.netposa.component.preview.mvp.model.entity.FeatureByPathRequestEntity;
+import com.netposa.component.preview.mvp.model.entity.FeatureByPathResponseEntity;
+import com.trello.lifecycle2.android.lifecycle.AndroidLifecycle;
+
+import javax.inject.Inject;
 
 import androidx.lifecycle.LifecycleOwner;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -17,25 +23,6 @@ import io.reactivex.schedulers.Schedulers;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
-
-import javax.inject.Inject;
-
-import com.netposa.common.constant.GlobalConstants;
-import com.netposa.common.core.RouterHub;
-import com.netposa.common.log.Log;
-import com.netposa.common.utils.NetworkUtils;
-import com.netposa.common.utils.SPUtils;
-import com.netposa.component.pic.R;
-import com.netposa.component.preview.mvp.contract.SinglePicPreviewContract;
-import com.netposa.component.preview.mvp.model.entity.FeatureByPathRequestEntity;
-import com.netposa.component.preview.mvp.model.entity.FeatureByPathResponseEntity;
-import com.netposa.component.room.DbHelper;
-import com.trello.lifecycle2.android.lifecycle.AndroidLifecycle;
-
-import static com.netposa.common.constant.GlobalConstants.CONFIG_LAST_USER_GENDER;
-import static com.netposa.common.constant.GlobalConstants.CONFIG_LAST_USER_GROUP;
-import static com.netposa.common.constant.GlobalConstants.CONFIG_LAST_USER_POLICE_NO;
-import static com.netposa.common.constant.GlobalConstants.CONFIG_LAST_USER_TEL_NO;
 
 
 @ActivityScope
@@ -93,7 +80,10 @@ public class SinglePicPreviewPresenter extends BasePresenter<SinglePicPreviewCon
                     @Override
                     public void onError(Throwable t) {
                         super.onError(t);
-                        mRootView.getDetectImgFeatureByPathFail();
+                        String message=t.getMessage();
+                        if (!TextUtils.isEmpty(message)){
+                            mRootView.getDetectImgFeatureByPathFail(message);
+                        }
                     }
                 });
     }

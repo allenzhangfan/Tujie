@@ -4,6 +4,8 @@ import android.content.Context;
 
 import com.jess.arms.di.scope.ActivityScope;
 import com.netposa.common.utils.SystemUtil;
+import com.netposa.commonres.widget.Dialog.LoadingDialogFragment;
+import com.netposa.commonres.widget.Dialog.LottieDialogFragment;
 import com.netposa.component.spjk.mvp.contract.SpjkContract;
 import com.netposa.component.spjk.mvp.model.SpjkModel;
 import com.netposa.component.spjk.mvp.model.entity.OneKilometerCamerasRequestEntity;
@@ -62,5 +64,11 @@ public class SpjkModule {
     @Provides
     SystemUtil provideSystemUtil(){
         return new SystemUtil();
+    }
+
+    @ActivityScope
+    @Provides
+    LottieDialogFragment provideDialogFragment() {
+        return new LoadingDialogFragment();
     }
 }

@@ -1,7 +1,7 @@
 package netposa.pem.sdk;
 
 import android.os.Build;
-import android.util.Log;
+import com.netposa.common.log.Log;
 
 import com.netposa.ffmpeg.ffmpegkit;
 

@@ -36,7 +36,7 @@ public class SfjbCompareResultAdapter extends BaseQuickAdapter<FaceCompareRespon
     protected void convert(BaseViewHolder helper, FaceCompareResponseEntity.ListBean item) {
         double similarity=item.getPhotoInfoExts().get(0).getScore();
         helper.setText(R.id.tv_similarity_num, StringUtils.dealSimilarityBackStr(similarity)+"%");
-        int postion=helper.getAdapterPosition();
+
         //库
         String kuName=item.getLibName();
         if (TextUtils.isEmpty(kuName)){
@@ -44,7 +44,7 @@ public class SfjbCompareResultAdapter extends BaseQuickAdapter<FaceCompareRespon
         }
         helper.setText(R.id.tv_name, item.getName());
         RoundImageView picView = helper.getView(R.id.iv_avatar);
-        if (postion==0){//第一个位置
+        if (item.isSelect()){
             helper.setBackgroundRes(
                     R.id.tv_similarity_num,
                     R.drawable.tv_percentage_blue_bg);

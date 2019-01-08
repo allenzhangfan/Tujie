@@ -1,6 +1,5 @@
 package com.netposa.component.clcx.mvp.presenter;
 
-import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
 
@@ -24,22 +23,6 @@ import com.netposa.component.clcx.R;
 import com.netposa.component.clcx.mvp.contract.CarRecordContract;
 import com.netposa.component.clcx.mvp.model.entity.CarDetailRequestEntity;
 import com.netposa.component.clcx.mvp.model.entity.CarDetailResponseEntity;
-import com.netposa.component.room.DbHelper;
-import com.netposa.component.room.entity.DetectionInfoEntity;
-import com.netposa.component.room.entity.IsCallPhoneEntity;
-import com.netposa.component.room.entity.MarkerTypeEntity;
-import com.netposa.component.room.entity.MoveDirectionEntity;
-import com.netposa.component.room.entity.MoveSpeedEntity;
-import com.netposa.component.room.entity.PeccancyTypeEntity;
-import com.netposa.component.room.entity.PlateColorEntity;
-import com.netposa.component.room.entity.SafetyBeltNumEntity;
-import com.netposa.component.room.entity.SpecialCarEntity;
-import com.netposa.component.room.entity.VehicleBrandEntity;
-import com.netposa.component.room.entity.VehicleNKEntity;
-import com.netposa.component.room.entity.VehicleNKVMEntity;
-import com.netposa.component.room.entity.VehicleSubBrandEntity;
-import com.netposa.component.room.entity.VehicleSunVisorNumEntity;
-import com.netposa.component.room.entity.VehicleTypeEntity;
 import com.trello.lifecycle2.android.lifecycle.AndroidLifecycle;
 
 import java.util.ArrayList;
@@ -97,8 +80,8 @@ public class CarRecordPresenter extends BasePresenter<CarRecordContract.Model, C
                 .subscribe(new ErrorHandleSubscriber<List<CarDetailResponseEntity>>(mErrorHandler) {
                     @Override
                     public void onNext(List<CarDetailResponseEntity> responseEntity) {
-                        Log.d("getDetailInfo：", responseEntity.toString());
-                        mRootView.getSuceese(responseEntity);
+                        Log.d("getDetailInfo: ", responseEntity.toString());
+                        mRootView.getSuccess(responseEntity);
                     }
 
                     @Override
@@ -108,25 +91,4 @@ public class CarRecordPresenter extends BasePresenter<CarRecordContract.Model, C
                     }
                 });
     }
-
-//    //获取标志物
-//    @SuppressLint("CheckResult")
-//    public List<MarkerTypeEntity> getMakerList() {
-//        mDbHelper.getMarkerType()
-//                .subscribeOn(Schedulers.io())
-//                .doOnSubscribe(disposable -> {
-//                    mRootView.showLoading("");//显示下拉刷新的进度条
-//                })
-//                .subscribeOn(AndroidSchedulers.mainThread())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .doFinally(() -> {
-//                    mRootView.hideLoading();//隐藏下拉刷新的进度条
-//                })
-//                .compose(AndroidLifecycle.createLifecycleProvider((LifecycleOwner) mRootView).bindToLifecycle())
-//                .subscribe((List<MarkerTypeEntity> entities) -> {
-//                    Log.e(TAG, "getMakerList :" + entities);
-//                    mMakerList.addAll(entities);
-//                });
-//        return mMakerList;
-//    }
 }

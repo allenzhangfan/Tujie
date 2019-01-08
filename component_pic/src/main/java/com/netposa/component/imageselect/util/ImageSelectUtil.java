@@ -31,7 +31,7 @@ public class ImageSelectUtil {
 
     public static void selectImages(Activity activity, int maxSelectable) {
         Matisse.from(activity)
-                .choose(MimeType.ofAll(), false)
+                .choose(MimeType.ofImage(), false)//过滤视频
                 .countable(true)
                 .capture(true)
                 .captureStrategy(

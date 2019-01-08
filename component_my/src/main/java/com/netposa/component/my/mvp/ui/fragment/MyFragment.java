@@ -1,6 +1,5 @@
 package com.netposa.component.my.mvp.ui.fragment;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,7 +11,6 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +21,6 @@ import android.widget.TextView;
 import com.jess.arms.base.BaseFragment;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
-import com.jess.arms.utils.DeviceUtils;
 import com.netposa.common.constant.GlobalConstants;
 import com.netposa.common.log.Log;
 import com.netposa.common.utils.SPUtils;
@@ -38,11 +35,18 @@ import com.netposa.component.my.R;
 import com.netposa.component.my.mvp.ui.activity.AboutActivity;
 import com.netposa.component.my.mvp.ui.activity.PersonInfoActivity;
 import com.netposa.component.my.mvp.ui.adapter.MyMenuAdapter;
+import com.netposa.component.room.entity.LoginConfigEntity;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.List;
 
 import javax.inject.Inject;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
+import static com.netposa.common.constant.GlobalConstants.CONFIG_LAST_USER_LOGIN_NAME;
 
 @Keep
 public class MyFragment extends BaseFragment<MyPresenter> implements MyContract.View, CompoundButton.OnCheckedChangeListener {
@@ -61,6 +65,7 @@ public class MyFragment extends BaseFragment<MyPresenter> implements MyContract.
 
     private boolean mIsOpen;
     private Context mContext;
+    private boolean mIsChecked, mIsChanged;
 
     public static MyFragment newInstance() {
         MyFragment fragment = new MyFragment();
@@ -175,24 +180,50 @@ public class MyFragment extends BaseFragment<MyPresenter> implements MyContract.
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (mIsChanged) {
+            String username = SPUtils.getInstance().getString(CONFIG_LAST_USER_LOGIN_NAME);
+            mPresenter.updateFaceLoginCheckedState(username, mIsChecked);
+        }
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        mIsChecked = isChecked;
+        mIsChanged = true;
         Log.i(TAG, "onCheckedChanged: isChecked = " + isChecked);
         SPUtils.getInstance().put(GlobalConstants.HAS_FACE, isChecked);
     }
 
-    @OnClick({R2.id.rl_go})
+    @OnClick({R2.id.rl_person_info})
     public void onViewClick(View view) {
         int id = view.getId();
-        if (id == R.id.rl_go) {
+        if (id == R.id.rl_person_info) {
             launchActivity(new Intent(mContext, PersonInfoActivity.class));
         }
+    }
+
+    /**
+     * 有可能登录模块的sp还没来得及存，initview方法已经走完导致显示的依然是上一次的信息
+     * 此处用eventbus再刷新一次数据
+     * @param entity
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onHandleEvent(LoginConfigEntity entity) {
+        Log.d(TAG, "receive loginconfig information :" + entity);
+        mNameTv.setText(entity.getName());
+        mBeanList.get(0).setChecked(entity.isFaceLoginOpened());
+        mAdapter.notifyDataSetChanged();
     }
 }

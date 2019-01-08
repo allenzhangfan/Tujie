@@ -84,11 +84,9 @@ public class NeighbouringDevicesActivity extends BaseActivity<NeighbouringDevice
     ImageView mIvCamera;
     @BindView(R2.id.tv_location_gereral)
     TextView mTvLocationGeneral;
-    @BindView(R2.id.tv_location_detail)
-    TextView mTvLocationDetail;
     @BindView(R2.id.iv_follow)
     ImageView mIvFollow;
-    @BindView(R2.id.nearby_mapView)
+    @BindView(R2.id.mapView)
     MapView mMapView;
     @BindView(R2.id.tv_follow)
     TextView mTvFollow;
@@ -96,6 +94,10 @@ public class NeighbouringDevicesActivity extends BaseActivity<NeighbouringDevice
     LinearLayout mLlZoom;
     @BindView(R2.id.iv_location)
     ImageView mIvLocation;
+    @BindView(R2.id.rl_search_and_org)
+    RelativeLayout mRlSearchAndOrg;
+    @BindView(R2.id.iv_collection)
+    ImageView mIvCollection;
 
     @Inject
     SpjkCollectionDeviceEntity mSpjkCollectionDeviceEntity;
@@ -146,14 +148,15 @@ public class NeighbouringDevicesActivity extends BaseActivity<NeighbouringDevice
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Mapbox.getInstance(this, GlobalConstants.MAP_KEY);
-        setContentView(R.layout.activity_neighbouring_devices);
+        setContentView(R.layout.activity_spjk);
         mImmersionBar = ImmersionBar.with(this);
         mImmersionBar.statusBarColor(R.color.white)
                 .statusBarDarkFont(true, 0.2f)
                 .init();
         //绑定到butterknife
         ButterKnife.bind(this);
-
+        mRlSearchAndOrg.setVisibility(View.GONE);
+        mIvCollection.setVisibility(View.GONE);
         if (savedInstanceState != null) {
             mActiveCameraId = savedInstanceState.getString(mResumeCameraId);
         }
@@ -352,21 +355,22 @@ public class NeighbouringDevicesActivity extends BaseActivity<NeighbouringDevice
 
     @OnClick({
             R2.id.head_left_iv,
-            R2.id.nearby_iv_zoom_in,
-            R2.id.nearby_iv_zoom_out,
+            R2.id.iv_zoom_in,
+            R2.id.iv_zoom_out,
             R2.id.iv_location,
-            R2.id.iv_follow,
-            R2.id.ll_camera_info})
+            R2.id.rl_collect_device,
+            R2.id.ll_camera_info,
+            R2.id.rl_search_and_org})
     public void onViewClick(View view) {
         int id = view.getId();
         if (id == R.id.head_left_iv) {
             killMyself();
-        } else if (id == R.id.nearby_iv_zoom_in) {
+        } else if (id == R.id.iv_zoom_in) {
             if (mCurrentZoomValue < ZOOM_IN_MAX) {
                 mCurrentZoomValue++;
                 zoomInAndOut();
             }
-        } else if (id == R.id.nearby_iv_zoom_out) {
+        } else if (id == R.id.iv_zoom_out) {
             if (mCurrentZoomValue > ZOOM_OUT_MIN) {
                 mCurrentZoomValue--;
                 zoomInAndOut();
@@ -376,7 +380,7 @@ public class NeighbouringDevicesActivity extends BaseActivity<NeighbouringDevice
                 doLocation();
                 focusToCenterInMap();
             }
-        } else if (id == R.id.iv_follow) {
+        } else if (id == R.id.rl_collect_device) {
             mSpjkCollectionDeviceEntity.setCamerid(mActiveCameraId);
             mSpjkCollectionDeviceEntity.setCamername(mCarmeraName);
             String camerType = String.valueOf(mCameraTypeInt);
@@ -624,16 +628,10 @@ public class NeighbouringDevicesActivity extends BaseActivity<NeighbouringDevice
     public void showBottomSheet(int cameraType, OneKilometerCamerasResponseEntity camera) {
         mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         mCarmeraName = camera.getName();
-        String address = camera.getAddress();
         if (cameraType == CAMERA_QIANG_JI) {
             mIvCamera.setImageResource(R.drawable.ic_box_camera_circle);
         } else {
             mIvCamera.setImageResource(R.drawable.ic_dome_camera_circle);
-        }
-        if (TextUtils.isEmpty(address)) {
-            mTvLocationDetail.setVisibility(View.GONE);
-        } else {
-            mTvLocationDetail.setText(address);
         }
         mTvLocationGeneral.setText(mCarmeraName);
         setFollowImageResource(mIsFollow);

@@ -117,13 +117,13 @@ public class FaceDeployPresenter extends BasePresenter<FaceDeployContract.Model,
             String note = listEntity.getNote();
             String id = listEntity.getId();
             String imageUrl = listEntity.getImageUrl();
-            String scenneImg =listEntity.getSceneImg();
+            String scenneImg = listEntity.getSceneImg();
             String taskReason = listEntity.getTaskReason();
             String alarmLevel = listEntity.getAlarmLevel();
             String alarmStatus = listEntity.getAlarmStatus();
             String target = listEntity.getTarget();
 
-            if(!TextUtils.isEmpty(ext)){
+            if (!TextUtils.isEmpty(ext)) {
                 AlarmPeopleDetailResponseForExt peopleTemp = parseUrl(ext);
                 itemEntity.setDeployImgUrl(UrlConstant.parseImageUrl(peopleTemp.getTargetImage()));
                 if (TextUtils.isEmpty(peopleTemp.getSex())) {
@@ -160,7 +160,7 @@ public class FaceDeployPresenter extends BasePresenter<FaceDeployContract.Model,
             if (!TextUtils.isEmpty(imageUrl)) {
                 itemEntity.setCaptureImgUrl(UrlConstant.parseImageUrl(imageUrl));
             }
-            if(!TextUtils.isEmpty(scenneImg)){
+            if (!TextUtils.isEmpty(scenneImg)) {
                 itemEntity.setScenneImg(UrlConstant.parseImageUrl(scenneImg));
             }
             if (!TextUtils.isEmpty(taskReason)) {
@@ -175,7 +175,7 @@ public class FaceDeployPresenter extends BasePresenter<FaceDeployContract.Model,
                 itemEntity.setItemHandleType(
                         Integer.valueOf(alarmStatus));
             }
-            if(!TextUtils.isEmpty(target)){
+            if (!TextUtils.isEmpty(target)) {
                 itemEntity.setTarget(target); //目标
             }
             itemEntity.setLatitude(listEntity.getLatitudeX());

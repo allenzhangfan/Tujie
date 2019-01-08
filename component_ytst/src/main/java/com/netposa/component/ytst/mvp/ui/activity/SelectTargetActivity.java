@@ -58,10 +58,9 @@ public class SelectTargetActivity extends BaseActivity<SelectTargetPresenter> im
     @BindView(R2.id.btn_sumit)
     MaterialButton mSumitBtn;
     @BindView(R2.id.iv_no_content)
-    ImageView mNoContentImg;
+    ImageView mIvNoContent;
     @BindView(R2.id.tv_no_content)
-    TextView mNoContentText;
-
+    TextView mTvNoCOntent;
 
     @Inject
     RecyclerView.LayoutManager mLayoutManager;
@@ -103,6 +102,8 @@ public class SelectTargetActivity extends BaseActivity<SelectTargetPresenter> im
     @Override
     public void initView(@Nullable Bundle savedInstanceState) {
         mTitleTv.setText(getString(R.string.select_target));
+        mTvNoCOntent.setText(R.string.not_discern);
+        mIvNoContent.setImageResource(R.drawable.ic_no_comparison_result);
         Intent data = getIntent();
         if (data == null) {
             Log.e(TAG, "intent data is null,please check !");
@@ -161,7 +162,11 @@ public class SelectTargetActivity extends BaseActivity<SelectTargetPresenter> im
                     PonitEntity entity = new PonitEntity();
                     entity.setImgPath(getPicUrl(mPicPath, mPointList.get(i).getPosition()));
 //                    entity.setPosition(TujieImageUtils.getPicUrl());
-                    entity.setSelected(false);
+                    if (i==0){
+                        entity.setSelected(true);
+                    }else {
+                        entity.setSelected(false);
+                    }
                     entity.setDataKey(mPointList.get(i).getDataKey());
                     entity.setDataType(mPointList.get(i).getDataType());
                     mBeanList.add(entity);
@@ -169,6 +174,7 @@ public class SelectTargetActivity extends BaseActivity<SelectTargetPresenter> im
                     excludedDataKeys.add(mPointList.get(i).getDataKey());
                 }
             }
+            mChooseBeanList.add(0);
         }else{
             hideOrShowView(true);
         }
@@ -226,6 +232,7 @@ public class SelectTargetActivity extends BaseActivity<SelectTargetPresenter> im
                 mIntent.putExtra(KEY_IMGSEARCH, imgSearchRequestEntity);
                 mIntent.putExtra(KEY_INTENT_PIC, mBeanList.get(mChooseBeanList.get(0)).getImgPath());
                 launchActivity(mIntent);
+                killMyself();
             } else {
                 showMessage(getString(R.string.choose_aim));
             }
@@ -236,8 +243,6 @@ public class SelectTargetActivity extends BaseActivity<SelectTargetPresenter> im
             mSumitBtn.setVisibility(View.GONE);
             mNoContentLayout.setVisibility(View.VISIBLE);
             mRvContent.setVisibility(View.GONE);
-            mNoContentImg.setImageResource(R.drawable.ic_no_comparison_result);
-            mNoContentText.setText(R.string.not_discern);
         }else {
             mSumitBtn.setVisibility(View.VISIBLE);
             mNoContentLayout.setVisibility(View.GONE);

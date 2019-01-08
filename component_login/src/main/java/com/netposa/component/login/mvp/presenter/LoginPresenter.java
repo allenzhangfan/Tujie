@@ -1,8 +1,8 @@
 package com.netposa.component.login.mvp.presenter;
 
+import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
-import android.text.TextUtils;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.google.gson.Gson;
@@ -41,7 +41,10 @@ import com.netposa.component.login.mvp.contract.LoginContract;
 import com.netposa.component.login.mvp.model.entity.LoginRequestEntity;
 import com.netposa.common.entity.login.LoginResponseEntity;
 import com.netposa.component.room.DbHelper;
+import com.netposa.component.room.entity.LoginConfigEntity;
 import com.trello.lifecycle2.android.lifecycle.AndroidLifecycle;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,6 +72,8 @@ public class LoginPresenter extends BasePresenter<LoginContract.Model, LoginCont
     @Inject
     LoginRequestEntity mRequestEntity;
     @Inject
+    LoginConfigEntity mLoginConfigEntity;
+    @Inject
     Gson mGson;
 
     @Inject
@@ -91,12 +96,14 @@ public class LoginPresenter extends BasePresenter<LoginContract.Model, LoginCont
      * @param username
      * @param password
      */
+    @SuppressLint("CheckResult")
     public void login(String username, String password) {
         if (!NetworkUtils.isConnected()) {
             mRootView.showMessage(mContext.getString(R.string.network_disconnect));
             mRootView.hideLoading();
             return;
         }
+
         String encryptPassword = EncryptUtils.encryptMD5ToString(password);
         mRequestEntity.setUsername(username);
         mRequestEntity.setPassword(encryptPassword);
@@ -113,18 +120,64 @@ public class LoginPresenter extends BasePresenter<LoginContract.Model, LoginCont
                 })
                 .compose(AndroidLifecycle.createLifecycleProvider((LifecycleOwner) mRootView).bindToLifecycle())
                 .subscribe(new ErrorHandleSubscriber<LoginResponseEntity>(mErrorHandler) {
+                    @SuppressLint("CheckResult")
                     @Override
                     public void onNext(LoginResponseEntity response) {
-                        Log.d(TAG, new Gson().toJson(response));
-                        Log.i(TAG, "onNext: token = " + response.getTokenId());
-                        // 登录成功 判断是否切换用户 切换了用户 把 HAS_LOGIN 设置false
-                        String saveName = SPUtils.getInstance().getString(GlobalConstants.CONFIG_LAST_USER_LOGIN_NAME);
-                        if (!TextUtils.isEmpty(saveName) && !(saveName.equals(username))) {
-                            SPUtils.getInstance().put(GlobalConstants.HAS_FACE, false);
-                        }
-                        SPUtils.getInstance().put(GlobalConstants.TOKEN, response.getTokenId());
+                        Log.i(TAG, "login response: " + response.toString());
                         LoginResponseEntity.UserEntity loginUserEntity = response.getUser();
-//                        SPUtils.getInstance().put(GlobalConstants.HAS_LOGIN, true);
+                        SPUtils.getInstance().put(GlobalConstants.TOKEN, response.getTokenId());
+                        LoginConfigEntity loginConfigEntityInDb = DbHelper.getInstance().findByUsername(username);
+                        LoginConfigEntity temp;
+                        Log.i(TAG, "loginConfigEntityInDb: " + loginConfigEntityInDb);
+                        if (null != loginConfigEntityInDb) {
+                            temp = loginConfigEntityInDb;
+                            //人脸登录开关与每个人的个人信息绑定在一起
+                            SPUtils.getInstance().put(GlobalConstants.HAS_FACE, loginConfigEntityInDb.isFaceLoginOpened());
+                        } else {
+                            mLoginConfigEntity.setUsername(username);
+                            mLoginConfigEntity.setPassword(encryptPassword);
+                            mLoginConfigEntity.setId(loginUserEntity.getId());
+                            mLoginConfigEntity.setIdCardNumber(loginUserEntity.getIdCardNumber());
+                            mLoginConfigEntity.setGender(loginUserEntity.getGender());
+                            mLoginConfigEntity.setAdmin(loginUserEntity.isAdmin());
+                            mLoginConfigEntity.setPhoneNo(loginUserEntity.getPhoneNo());
+                            mLoginConfigEntity.setUserOrg(loginUserEntity.getUserOrg());
+                            mLoginConfigEntity.setOrgName(loginUserEntity.getOrgName());
+                            mLoginConfigEntity.setName(loginUserEntity.getName());
+                            mLoginConfigEntity.setRegisterTime(loginUserEntity.getRegisterTime());
+                            mLoginConfigEntity.setPoliceNo(loginUserEntity.getPoliceNo());
+                            mLoginConfigEntity.setStatus(loginUserEntity.getStatus());
+                            mLoginConfigEntity.setFaceLoginOpened(false);
+                            temp = mLoginConfigEntity;
+                            SPUtils.getInstance().put(GlobalConstants.HAS_FACE, false);
+                            DbHelper
+                                    .getInstance()
+                                    .insertLoginConfig(mLoginConfigEntity)
+                                    .subscribeOn(Schedulers.io())
+                                    .observeOn(AndroidSchedulers.mainThread())
+                                    .compose(AndroidLifecycle.createLifecycleProvider((LifecycleOwner) mRootView).bindToLifecycle())
+                                    .subscribe(new Observer<Boolean>() {
+                                        @Override
+                                        public void onSubscribe(Disposable d) {
+                                            Log.d(TAG, "insertLoginConfig onSubscribe");
+                                        }
+
+                                        @Override
+                                        public void onNext(Boolean result) {
+                                            Log.d(TAG, "insertLoginConfig onNext");
+                                        }
+
+                                        @Override
+                                        public void onError(Throwable e) {
+                                            Log.d(TAG, "insertLoginConfig onError");
+                                        }
+
+                                        @Override
+                                        public void onComplete() {
+                                            Log.d(TAG, "insertLoginConfig onComplete");
+                                        }
+                                    });
+                        }
                         SPUtils.getInstance().put(GlobalConstants.CONFIG_LAST_USER_LOGIN_NAME, username);
                         SPUtils.getInstance().put(GlobalConstants.CONFIG_LAST_USER_NICKNAME, loginUserEntity.getName());
                         SPUtils.getInstance().put(CONFIG_LAST_USER_GENDER, loginUserEntity.getGender());
@@ -132,6 +185,8 @@ public class LoginPresenter extends BasePresenter<LoginContract.Model, LoginCont
                         SPUtils.getInstance().put(CONFIG_LAST_USER_POLICE_NO, loginUserEntity.getPoliceNo());
                         SPUtils.getInstance().put(CONFIG_LAST_USER_TEL_NO, loginUserEntity.getPhoneNo());
                         SPUtils.getInstance().put(CONFIG_LAST_USER_LOGIN_ID, loginUserEntity.getId());
+                        //刷新我的模块个人信息
+                        EventBus.getDefault().post(temp);
                         //各种url配置
                         SPUtils.getInstance().put(MqttConstants.MQTT_SERVER_URI, UrlConstant.parseMqttUrl(response.getMqttOuterIp()));
                         SPUtils.getInstance().put(GlobalConstants.IMAGE_URL, response.getPictureOuterIp());

@@ -1,19 +1,24 @@
 package com.netposa.camera.mvp.presenter;
 
 import android.app.Application;
+import android.graphics.Bitmap;
 import android.text.TextUtils;
+
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.jess.arms.integration.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.http.imageloader.ImageLoader;
+
 import androidx.lifecycle.LifecycleOwner;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 import okhttp3.MultipartBody;
+
 import javax.inject.Inject;
+
 import com.netposa.camera.mvp.contract.CropPictureContract;
 import com.netposa.camera.mvp.model.entity.UploadResponseEntity;
 import com.netposa.common.constant.GlobalConstants;
@@ -22,9 +27,14 @@ import com.netposa.common.entity.HttpResponseEntity;
 import com.netposa.common.entity.login.LoginResponseEntity;
 import com.netposa.common.log.Log;
 import com.netposa.common.service.mqtt.PushService;
+import com.netposa.common.utils.ImageUtils;
+import com.netposa.common.utils.RequestUtils;
 import com.netposa.common.utils.SPUtils;
 import com.netposa.component.room.DbHelper;
 import com.trello.lifecycle2.android.lifecycle.AndroidLifecycle;
+
+import static com.netposa.common.constant.GlobalConstants.MAX_UPLOAD_IMAGE_SIZE;
+import static com.netposa.common.constant.GlobalConstants.PART_NAME_IMAGE;
 
 @ActivityScope
 public class CropPicturePresenter extends BasePresenter<CropPictureContract.Model, CropPictureContract.View> {
@@ -49,6 +59,18 @@ public class CropPicturePresenter extends BasePresenter<CropPictureContract.Mode
         this.mAppManager = null;
         this.mImageLoader = null;
         this.mApplication = null;
+    }
+
+    public void faceLoginOrCropImage(Bitmap cropBitMap, String typeStr) {
+        if (ImageUtils.getBitmapSize(cropBitMap) > MAX_UPLOAD_IMAGE_SIZE) {//压缩完了保存成jpg的图片
+            cropBitMap = ImageUtils.compressScale(cropBitMap);
+        }
+        MultipartBody.Part part = RequestUtils.prepareFilePart(PART_NAME_IMAGE, ImageUtils.saveBitmap(cropBitMap));
+        if (!TextUtils.isEmpty(typeStr)) {
+            faceLogin(part, typeStr);
+        } else {// 身份鉴别的上传图片
+            uploadImage(part);
+        }
     }
 
     /**
@@ -105,8 +127,6 @@ public class CropPicturePresenter extends BasePresenter<CropPictureContract.Mode
                     @Override
                     public void onNext(LoginResponseEntity entity) {
                         Log.i(TAG, "faceLogin :" + entity);
-                        SPUtils.getInstance().put(GlobalConstants.TOKEN, entity.getTokenId());
-                        SPUtils.getInstance().put(GlobalConstants.HAS_LOGIN, true);
                         SPUtils.getInstance().put(GlobalConstants.CONFIG_LAST_USER_LOGIN_NAME, entity.getUser().getLoginName());
                         // 登录的时候删除上次缓存的推送消息
                         DbHelper
@@ -122,13 +142,8 @@ public class CropPicturePresenter extends BasePresenter<CropPictureContract.Mode
                     @Override
                     public void onError(Throwable t) {
                         super.onError(t);
-                        String str = t.getMessage();
                         Log.e(TAG, "faceLogin Failed");
-                        if (!TextUtils.isEmpty(str)) {
-                            mRootView.faceLoginFailed(str);
-                        }
                     }
                 });
     }
-
 }

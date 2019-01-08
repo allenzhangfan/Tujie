@@ -15,7 +15,6 @@ import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
 import com.netposa.common.log.Log;
-import com.netposa.common.utils.ToastUtils;
 import com.netposa.component.clcx.R2;
 import com.netposa.component.clcx.di.component.DaggerCarTypeComponent;
 import com.netposa.component.clcx.di.module.CarTypeModule;
@@ -29,7 +28,6 @@ import java.util.List;
 import javax.inject.Inject;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 import static com.netposa.component.clcx.app.ClcxConstants.KEY_LIST_TYPE;
-import static com.netposa.component.clcx.app.ClcxConstants.KEY_QUANBU;
 import static com.netposa.component.clcx.app.ClcxConstants.KEY_SELECT_RESULT;
 import static com.netposa.component.clcx.app.ClcxConstants.KEY_SINGLE_TYPE;
 import static com.netposa.component.clcx.app.ClcxConstants.REQUESTCODE_CAR_PLATE;
@@ -83,26 +81,26 @@ public class CarTypeActivity extends BaseActivity<CarTypePresenter> implements C
             return;
         }
         mType = data.getStringExtra(KEY_SINGLE_TYPE);
-        mAdapterList= data.getParcelableArrayListExtra(KEY_LIST_TYPE);
+        mAdapterList = data.getParcelableArrayListExtra(KEY_LIST_TYPE);
         mRecyclerview.setLayoutManager(mLayoutManager);
         mRecyclerview.setItemAnimator(mItemAnimator);
         //如果可以确定每个item的高度是固定的，设置这个选项可以提高性能
         mRecyclerview.setHasFixedSize(true);
         mRecyclerview.setAdapter(mAdapter);
-        if (mAdapterList.size()>0){
+        if (mAdapterList.size() > 0) {
             if (mType.equals(mType_plate)) {
                 mTitle_txt.setText(this.getString(R.string.plate_type));
             }
             if (mType.equals(mType_car)) {
                 mTitle_txt.setText(this.getString(R.string.car_type));
             }
-            for (int i=0;i<mAdapterList.size();i++){
-                if (mAdapterList.get(i).isSelect){
+            for (int i = 0; i < mAdapterList.size(); i++) {
+                if (mAdapterList.get(i).isSelect) {
                     mSelectList.add(mAdapterList.get(i).getTitle());
                 }
             }
             mAdapter.addData(mAdapterList);
-        }else {
+        } else {
             if (mType.equals(mType_plate)) {
                 source = getResources().getStringArray(R.array.plate_type_item);
                 mTitle_txt.setText(this.getString(R.string.plate_type));
@@ -179,15 +177,15 @@ public class CarTypeActivity extends BaseActivity<CarTypePresenter> implements C
     public void onViewClicked(View view) {
         int id = view.getId();
         if (id == R.id.head_left_iv) {
-            killMyself();
+            noDataReturnback();
         } else if (id == R.id.btn_sure) {
-            if (mSelectList.size()>0){
+            if (mSelectList.size() > 0) {
                 goBackQueryCarActivity(mType);
-            }else {
+            } else {
                 // 没有做选择提示
-                if (mType.equals(mType_plate)){
+                if (mType.equals(mType_plate)) {
                     showMessage(getString(R.string.choose_plate_type));
-                }else if (mType.equals(mType_car)){
+                } else if (mType.equals(mType_car)) {
                     showMessage(getString(R.string.choose_car_type));
                 }
             }
@@ -230,5 +228,18 @@ public class CarTypeActivity extends BaseActivity<CarTypePresenter> implements C
     @Override
     public void killMyself() {
         finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        noDataReturnback();
+    }
+
+    private void noDataReturnback() {
+        if (mType.equals(mType_plate)) {
+            goBackQueryCarActivity(mType_plate);
+        } else if (mType.equals(mType_car)) {
+            goBackQueryCarActivity(mType_car);
+        }
     }
 }

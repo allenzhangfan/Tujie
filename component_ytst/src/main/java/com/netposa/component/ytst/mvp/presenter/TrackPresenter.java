@@ -141,17 +141,9 @@ public class TrackPresenter extends BasePresenter<TrackContract.Model, TrackCont
     }
 
     public void  intentPathActivity(ArrayList<String> mSelectList,List<YtstCarAndPeopleEntity> mBeanList,String mPicPath){
-        ArrayList<String> list = new ArrayList();
-        if (mSelectList.size() > 5) {
-            for (int i = 0; i < 5; i++) {
-                list.add(mSelectList.get(i));
-            }
-        } else {
-            list = mSelectList;
-        }
         TrackEnity trackEnity=new TrackEnity();
         trackEnity.setCropPic(mPicPath);
-        trackEnity.setPoint(list);
+        trackEnity.setPoint(mSelectList);
         trackEnity.setSceneImg(mBeanList.get(0).getSceneImg());
         trackEnity.setStartTime(mBeanList.get(0).getAbsTime());
         trackEnity.setLocation(mBeanList.get(0).getLocation());

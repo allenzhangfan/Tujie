@@ -13,6 +13,7 @@ import com.netposa.commonres.widget.Dialog.LottieDialogFragment;
 import com.netposa.component.login.mvp.contract.LoginContract;
 import com.netposa.component.login.mvp.model.LoginModel;
 import com.netposa.component.login.mvp.model.entity.LoginRequestEntity;
+import com.netposa.component.room.entity.LoginConfigEntity;
 
 @Module
 public class LoginModule {
@@ -65,5 +66,11 @@ public class LoginModule {
     @Provides
     LottieDialogFragment provideDialogFragment() {
         return new LoadingDialogFragment();
+    }
+
+    @ActivityScope
+    @Provides
+    LoginConfigEntity provideLoginConfigEntity() {
+        return new LoginConfigEntity();
     }
 }

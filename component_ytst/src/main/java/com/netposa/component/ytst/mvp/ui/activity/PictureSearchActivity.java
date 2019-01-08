@@ -1,7 +1,7 @@
 package com.netposa.component.ytst.mvp.ui.activity;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -12,47 +12,37 @@ import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.google.android.cameraview.CameraView;
+import com.google.android.cameraview.PlayVoice;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
 import com.netposa.common.core.RouterHub;
-import com.netposa.common.entity.HttpResponseEntity;
 import com.netposa.common.log.Log;
-import com.netposa.common.net.HttpConstant;
 import com.netposa.common.utils.Configuration;
 import com.netposa.common.utils.ImageUtils;
-import com.netposa.common.utils.RequestUtils;
 import com.netposa.common.utils.TimeUtils;
-import com.netposa.commonres.widget.Dialog.LottieDialogFragment;
 import com.netposa.component.imageselect.util.ImageSelectUtil;
 import com.netposa.component.ytst.R;
 import com.netposa.component.ytst.R2;
 import com.netposa.component.ytst.di.component.DaggerPictureSearchComponent;
 import com.netposa.component.ytst.di.module.PictureSearchModule;
 import com.netposa.component.ytst.mvp.contract.PictureSearchContract;
-import com.netposa.component.ytst.mvp.model.entity.UploadPicResponseEntity;
 import com.netposa.component.ytst.mvp.presenter.PictureSearchPresenter;
 import com.zhihu.matisse.Matisse;
 
 import java.io.File;
-import java.util.ArrayList;
-
-
-import javax.inject.Inject;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import butterknife.BindView;
 import butterknife.OnClick;
-import okhttp3.MultipartBody;
 
+import static com.google.android.cameraview.PlayVoice.getAudioManagerType;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
+import static com.netposa.camera.mvp.app.Constants.CAMERRA_FLAG;
 import static com.netposa.common.constant.GlobalConstants.FACE_CAPTURE_PIC;
-import static com.netposa.common.constant.GlobalConstants.KEY_PICPATH;
-import static com.netposa.common.constant.GlobalConstants.KEY_POSITION;
-import static com.netposa.common.constant.GlobalConstants.KEY_SEESION;
-import static com.netposa.common.constant.GlobalConstants.PART_NAME_IMAGE;
 import static com.netposa.component.imageselect.util.ImageSelectUtil.REQUEST_CODE_CHOOSE;
+import static com.netposa.component.ytst.app.YtstConstants.KEY_INTENT_PIC;
+import static com.netposa.component.ytst.app.YtstConstants.KEY_INTENT_TYPE;
 import static com.netposa.component.ytst.app.YtstConstants.TYPE_CAR;
 import static com.netposa.component.ytst.app.YtstConstants.TYPE_FACE;
 
@@ -68,15 +58,10 @@ public class PictureSearchActivity extends BaseActivity<PictureSearchPresenter> 
     @BindView(R2.id.camera_view_image)
     CameraView mCameraView;
 
-    @Inject
-    LottieDialogFragment mLoadingDialogFragment;
-
     private int mFacing;
     private Handler mBackgroundHandler;
-    private String path = null;
-
     private String mType;//搜车或者人的标识
-
+    private int mAudioManagerMode;
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
         DaggerPictureSearchComponent //如找不到该类,请编译一下项目
@@ -109,7 +94,8 @@ public class PictureSearchActivity extends BaseActivity<PictureSearchPresenter> 
             R2.id.tv_tab_search_face,
             R2.id.tv_tab_search_car,
             R2.id.capture_btn,
-            R2.id.album_btn})
+            R2.id.album_btn,
+            R2.id.change_camera})
     public void onViewClicked(View view) {
         int id = view.getId();
         if (id == R.id.head_left_iv) {
@@ -130,8 +116,17 @@ public class PictureSearchActivity extends BaseActivity<PictureSearchPresenter> 
             ImageSelectUtil.selectImages(this, 1);
         } else if (id == R.id.capture_btn) {
             Log.d(TAG, "takePicture");
-            showLoading("");
+            mAudioManagerMode= getAudioManagerType(this);
+            if (mAudioManagerMode==AudioManager.RINGER_MODE_NORMAL){
+                PlayVoice.play(this);
+            }
             mCameraView.takePicture();
+        }else if (id==R.id.change_camera){
+            if (mCameraView != null) {
+                mFacing = mFacing == CameraView.FACING_FRONT ? CameraView.FACING_BACK : CameraView.FACING_FRONT;
+                mCameraView.setFacing(mFacing);
+                Log.i(TAG, mFacing == CameraView.FACING_FRONT ? "已切换至前置摄像头!" : "已切换至后置摄像头!");
+            }
         }
     }
 
@@ -156,34 +151,29 @@ public class PictureSearchActivity extends BaseActivity<PictureSearchPresenter> 
             getBackgroundHandler().post(new Runnable() {
                 @Override
                 public void run() {
-                    int kb = 524288;// 1M=1024k=1048576  500kb 就压缩
-                    Bitmap dealBitMap = null;
+                    if (mAudioManagerMode==AudioManager.RINGER_MODE_NORMAL){
+                        PlayVoice.stop();
+                    }
                     String picName = TimeUtils.millis2String(System.currentTimeMillis(), TimeUtils.LONG_DATE_FORMAT)
                             .concat("_")
                             .concat(FACE_CAPTURE_PIC);
                     File file = new File(Configuration.getPictureDirectoryPath(), picName);
                     boolean result = ImageUtils.save(data, file);
                     Log.i(TAG, "back camera , save picture result:" + result);
-                    // 根据摄像头前置选择处理
-                    Bitmap bmap = ImageUtils.rotateBitmap(file.getAbsolutePath(), mFacing);
-                    int size = ImageUtils.getBitmapSize(bmap);
-                    if (size > kb) {//压缩完了保存成jpg的图片
-                        dealBitMap = ImageUtils.compressScale(bmap);
-                        path = ImageUtils.saveBitmap(dealBitMap);
-                    } else {
-                        path = ImageUtils.saveBitmap(bmap);
-                    }
                     runOnUiThread(() -> {
-                        startUpload(path);
+                        goShowTakePictureActivity(file.getAbsolutePath());
                     });
                 }
             });
         }
     };
 
-    private void startUpload(String path) {
-        MultipartBody.Part part = RequestUtils.prepareFilePart(PART_NAME_IMAGE, path);
-        mPresenter.uploadImage(part);
+    private void goShowTakePictureActivity(String path){
+        Intent mIntent= new Intent(PictureSearchActivity.this,ShowTakePictureActivity.class);
+        mIntent.putExtra(KEY_INTENT_PIC,path);
+        mIntent.putExtra(CAMERRA_FLAG,mFacing);
+        mIntent.putExtra(KEY_INTENT_TYPE,mType);
+        launchActivity(mIntent);
     }
 
     private Handler getBackgroundHandler() {
@@ -197,12 +187,12 @@ public class PictureSearchActivity extends BaseActivity<PictureSearchPresenter> 
 
     @Override
     public void showLoading(String message) {
-        mLoadingDialogFragment.show(getSupportFragmentManager(), "LoadingDialog");
+
     }
 
     @Override
     public void hideLoading() {
-        mLoadingDialogFragment.dismissAllowingStateLoss();
+
     }
 
     @Override
@@ -240,50 +230,8 @@ public class PictureSearchActivity extends BaseActivity<PictureSearchPresenter> 
         if (requestCode == REQUEST_CODE_CHOOSE && resultCode == RESULT_OK) {
             String pathStr = Matisse.obtainPathResult(data).get(0);
             if (!TextUtils.isEmpty(pathStr)) {
-                showLoading("");
-                startUpload(pathStr);
+                goShowTakePictureActivity(pathStr);
             }
         }
-    }
-
-    @Override
-    public void uploadImageSuccess(HttpResponseEntity<UploadPicResponseEntity> entity) {
-        if (entity.code == HttpConstant.IS_SUCCESS) {
-            String sessionKey = entity.data.getSessionKey();
-            if (TextUtils.isEmpty(sessionKey)) {
-                showMessage(getString(R.string.no_recognized));
-                return;
-            }
-            Log.d(TAG, sessionKey);
-            String imgPath = entity.data.getImgPath();
-            Log.d(TAG, sessionKey);
-            ArrayList<UploadPicResponseEntity.DetectResultMapEntity> DetectResult = entity.data.getDetectResultMap();
-            // 添加接口返回 是人是车的判断
-            String dataType = DetectResult.get(0).getDataType().toLowerCase();
-            if (!TextUtils.isEmpty(dataType) && mType.equals(dataType)) {
-                Intent mIntent = new Intent(this, SelectTargetActivity.class);
-                mIntent.putExtra(KEY_SEESION, sessionKey);
-                mIntent.putExtra(KEY_PICPATH, imgPath);
-                mIntent.putParcelableArrayListExtra(KEY_POSITION, DetectResult);
-                launchActivity(mIntent);
-            } else {
-                if (mType.equals(TYPE_CAR)) {
-                    showMessage(getString(R.string.take_pic_face));
-                } else {
-                    showMessage(getString(R.string.take_pic_car));
-                }
-            }
-
-        } else {
-            String message = entity.message;
-            if (!TextUtils.isEmpty(message)) {
-                showMessage(message);
-            }
-        }
-    }
-
-    @Override
-    public void uploadImageFail() {
-        showMessage(getString(R.string.update_failed));
     }
 }

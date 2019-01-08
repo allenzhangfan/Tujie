@@ -209,6 +209,7 @@ public class ChooseCompareLibActivity extends BaseActivity<ChooseCompareLibPrese
         if (entity.getDirectlyLibraryList() == null && entity.getOrgList() == null) {
             showNoDataPage(true);
         } else {
+            showNoDataPage(false);
             for (LibTreeResponseEntity.OrgListBean mOrgEntity : entity.getOrgList()) {
                 mOrgChoseEntity = new OrgChoseEntity();
                 mOrgChoseEntity.setChoose(false);

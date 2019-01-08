@@ -2,13 +2,10 @@ package com.netposa.component.rltk.mvp.model.entity;
 
 import java.util.List;
 
-import androidx.annotation.Keep;
-
 /**
  * Author：yeguoqiang
  * Created time：2018/12/3 14:14
  */
-@Keep
 public class FaceLibraryResponseEntity {
 
     /**

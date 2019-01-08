@@ -2,13 +2,9 @@ package com.netposa.component.clcx.mvp.model.entity;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.annotation.Keep;
-
-@Keep
 public class VehicleTrackResponseEntity implements Parcelable {
     /**
      * count : 10

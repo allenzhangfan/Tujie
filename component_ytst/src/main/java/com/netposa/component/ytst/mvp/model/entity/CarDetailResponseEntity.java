@@ -1,8 +1,5 @@
 package com.netposa.component.ytst.mvp.model.entity;
 
-import androidx.annotation.Keep;
-
-@Keep
 public class CarDetailResponseEntity {
     /**
      * recordId : 963b59c3-8e4a-434c-bdba-3bcebff11cca

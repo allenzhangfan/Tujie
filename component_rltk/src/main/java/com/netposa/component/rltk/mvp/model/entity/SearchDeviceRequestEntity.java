@@ -1,8 +1,5 @@
 package com.netposa.component.rltk.mvp.model.entity;
 
-import androidx.annotation.Keep;
-
-@Keep
 public class SearchDeviceRequestEntity {
     private String id;
 

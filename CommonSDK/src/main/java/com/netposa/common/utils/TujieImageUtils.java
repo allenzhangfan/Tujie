@@ -2,6 +2,7 @@ package com.netposa.common.utils;
 
 import android.annotation.SuppressLint;
 import android.text.TextUtils;
+import android.util.Base64;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -9,30 +10,36 @@ import com.google.gson.Gson;
 import com.netposa.common.constant.UrlConstant;
 
 import java.net.URLEncoder;
-import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 
 public class TujieImageUtils {
 
+    private static final String sImgUrl ="http://172.16.90.168:6551/DownLoadFile?filename=";
+
     /**
      * 获取车辆图片显示路径
      *
      * @param resUrl   车辆大图url
-     * @param basePath 图片根路径
+     *  basePath 图片根路径
      * @return sceneImg  --resUrl     location --> point
      */
-    @SuppressLint("NewApi")
     public static String getDisplayUrl(String resUrl,String location) {
         String destUrl = "";
         String basePath= UrlConstant.parseLocationImageUrlSuffix();
         if (TextUtils.isEmpty(basePath)){
             return destUrl;
         }
+        if(!(resUrl.startsWith("http"))){
+            resUrl= sImgUrl +resUrl;
+        }
+        if (TextUtils.isEmpty(location)){
+            return destUrl;
+        }
         final String[] split = location.split("\\.");
         final int[] coorFaces = {Integer.parseInt(split[0]), Integer.parseInt(split[1]), Integer.parseInt(split[2]), Integer.parseInt(split[3])};
         try {
-            String s = URLEncoder.encode(new String(Base64.getEncoder().encode(resUrl.getBytes())), "utf-8");
+            String s = URLEncoder.encode(Base64.encodeToString(resUrl.getBytes(),Base64.NO_WRAP), "utf-8");//Base64.NO_WRAP 这个参数意思是略去所有的换行符
             Map<String, Integer> result = calculationPosition(coorFaces[0], coorFaces[1], coorFaces[2], coorFaces[3], 1.6);
             Integer tLeft = result.get("tLeft");
             Integer tTop = result.get("tTop");
@@ -45,17 +52,23 @@ public class TujieImageUtils {
         return destUrl;
     }
 
-    @SuppressLint("NewApi")
+
     public static String getPicUrl(String resUrl, String location) {
         String destUrl = "";
         String basePath= UrlConstant.parseLocationImageUrlSuffix();
         if (TextUtils.isEmpty(basePath)){
             return destUrl;
         }
+        if(!(resUrl.startsWith("http"))){
+            resUrl= sImgUrl +resUrl;
+        }
+        if (TextUtils.isEmpty(location)){
+            return destUrl;
+        }
         final String[] split = location.split(",");
         final int[] coorFaces = {Integer.parseInt(split[0]), Integer.parseInt(split[1]), Integer.parseInt(split[2]), Integer.parseInt(split[3])};
         try {
-            String s = URLEncoder.encode(new String(Base64.getEncoder().encode(resUrl.getBytes())), "utf-8");
+            String s = URLEncoder.encode(Base64.encodeToString(resUrl.getBytes(),Base64.NO_WRAP), "utf-8");
             Map<String, Integer> result = calculationPosition(coorFaces[0], coorFaces[1], coorFaces[2], coorFaces[3], 1.6);
             Integer tLeft = result.get("tLeft");
             Integer tTop = result.get("tTop");
@@ -116,8 +129,14 @@ public class TujieImageUtils {
     @SuppressLint("NewApi")
     public static String circleTarget(String resUrl, List<String> location) {
         String destUrl = "";
+        if(!(resUrl.startsWith("http"))){
+            resUrl= sImgUrl +resUrl;
+        }
+        if (location == null || location.size() == 0) {
+            return destUrl;
+        }
         try {
-            String encodePath = URLEncoder.encode(new String(Base64.getEncoder().encode(resUrl.getBytes())), "utf-8");
+            String encodePath = URLEncoder.encode(Base64.encodeToString(resUrl.getBytes(),Base64.NO_WRAP), "utf-8");
             List<Map<String, Object>> params = Lists.newArrayList();
             location.forEach(s -> {
                 Map<String, Object> map = Maps.newHashMap();
@@ -130,7 +149,7 @@ public class TujieImageUtils {
             });
             Map<String, Object> pathParam = Maps.newHashMap();
             pathParam.put("rects", params);
-            String s = new String(Base64.getEncoder().encode(new Gson().toJson(pathParam).getBytes()), "utf-8");
+            String s = Base64.encodeToString(new Gson().toJson(pathParam).getBytes(),Base64.NO_WRAP);
             destUrl = UrlConstant.parseLocationImageUrlSuffix() + encodePath + "&encode=1&osd=" + s;
         } catch (Exception e) {
             e.printStackTrace();

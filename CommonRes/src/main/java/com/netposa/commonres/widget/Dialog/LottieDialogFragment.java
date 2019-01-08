@@ -78,6 +78,15 @@ public abstract class LottieDialogFragment extends AppCompatDialogFragment {
     }
 
     @Override
+    public void dismissAllowingStateLoss() {
+        try {
+            super.dismissAllowingStateLoss();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     public void showNow(FragmentManager manager, String tag) {
         try {
             manager.beginTransaction().remove(this).commit();

@@ -1,12 +1,8 @@
 package com.netposa.component.rltk.mvp.model.entity;
 
 import com.netposa.common.modle.BaseBean;
-
 import java.util.List;
 
-import androidx.annotation.Keep;
-
-@Keep
 public class SearchDeviceResponseEntity extends BaseBean {
     private List<DeviceTreeListBean> deviceTreeList;
 

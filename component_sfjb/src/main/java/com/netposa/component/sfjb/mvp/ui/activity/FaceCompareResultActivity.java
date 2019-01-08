@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SimpleItemAnimator;
 import butterknife.BindView;
 import butterknife.OnClick;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -96,7 +97,7 @@ public class FaceCompareResultActivity extends BaseActivity<FaceCompareResultPre
     private String mZhuaPaiUrl;
     private ImageLoader mImageLoader;
     private int postion = 0;
-
+    private List<Integer> mChooseBeanList = new ArrayList<>();// 选择的处理
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
         DaggerFaceCompareResultComponent //如找不到该类,请编译一下项目
@@ -120,11 +121,34 @@ public class FaceCompareResultActivity extends BaseActivity<FaceCompareResultPre
         // 点击adapter里数据 切换界面右上角的图片
         mAdapter.setOnItemClickListener((adapter, view, position) -> {
             postion = position;
-            String tempUrl = mBeanList.get(position).getPhotoInfoExts().get(0).getUrl();
-            runOnUiThread(() -> {
-                showIvImg(tempUrl, mControlImg);
-            });
-
+            String tempUrl=null;
+            if (mChooseBeanList.size() > 0) {
+                if (position == mChooseBeanList.get(0)) { //如果同一个位置
+                    mBeanList.get(position).setSelect(false);
+                    mChooseBeanList.clear();
+                } else {
+                    mBeanList.get(mChooseBeanList.get(0)).setSelect(false);
+                    mBeanList.get(position).setSelect(true);
+                    mChooseBeanList.clear();
+                    mChooseBeanList.add(position);
+                    tempUrl = mBeanList.get(position).getPhotoInfoExts().get(0).getUrl();
+                    // 相似度
+                    double similarity= mBeanList.get(position).getPhotoInfoExts().get(0).getScore();
+                    mCircleProgressView.setScore(StringUtils.dealSimilarity(similarity), true, "%");
+                    // 人名
+                    mName.setText(mBeanList.get(position).getName());
+                    // 库名
+                    mKuName.setText( mBeanList.get(position).getLibName());
+                }
+            }else {
+                mChooseBeanList.add(position);
+                mBeanList.get(mChooseBeanList.get(0)).setSelect(true);
+                tempUrl = mBeanList.get(position).getPhotoInfoExts().get(0).getUrl();
+            }
+           if (!TextUtils.isEmpty(tempUrl)){
+               showIvImg(tempUrl, mControlImg);
+           }
+            mAdapter.notifyItemRangeChanged(0, mBeanList.size());
         });
     }
 
@@ -133,12 +157,12 @@ public class FaceCompareResultActivity extends BaseActivity<FaceCompareResultPre
         mTvNoContent.setText(R.string.no_result_message);
         mTitle_txt.getPaint().setFakeBoldText(true);
         mRecyclerView.setLayoutManager(mLayoutManager);
+        ((SimpleItemAnimator) mItemAnimator).setSupportsChangeAnimations(false);
         mRecyclerView.setItemAnimator(mItemAnimator);
         //如果可以确定每个item的高度是固定的，设置这个选项可以提高性能
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setAdapter(mAdapter);
         mImageLoader = ArmsUtils.obtainAppComponentFromContext(this).imageLoader();
-
     }
 
     private void getIntentDate() {
@@ -238,6 +262,15 @@ public class FaceCompareResultActivity extends BaseActivity<FaceCompareResultPre
         if (responseEntityList.size() > 0) {
             showNoDataPage(false);
             showIvImg(mZhuaPaiUrl, mZhuaPaiImg);
+            for (int i=0;i<responseEntity.getList().size();i++){
+                //默认第一个元素select true
+                if (i==0){
+                    responseEntityList.get(0).setSelect(true);
+                }else {
+                    responseEntityList.get(i).setSelect(false);
+                }
+            }
+            mChooseBeanList.add(0);// 默认第一个选中
             // 右上角图片信息
             List<FaceCompareResponseEntity.ListBean.PhotoInfoExtsBean> PhotoInfoExtsBean = responseEntityList.get(0).getPhotoInfoExts();
             //右边的布控图片url

@@ -1,7 +1,5 @@
 package com.netposa.common.entity;
 
-import androidx.annotation.Keep;
-
 import static com.netposa.common.net.HttpConstant.IS_INVALID;
 import static com.netposa.common.net.HttpConstant.IS_KICK_OFF;
 import static com.netposa.common.net.HttpConstant.IS_OUT_OF_DATE;
@@ -9,7 +7,6 @@ import static com.netposa.common.net.HttpConstant.IS_PERMISSION_DENIED;
 import static com.netposa.common.net.HttpConstant.IS_SUCCESS;
 
 @SuppressWarnings({"WeakerAccess", "unused"})
-@Keep
 public class HttpResponseEntity<T> {
 
     public int code;

@@ -1,8 +1,5 @@
 package com.netposa.common.entity;
 
-import androidx.annotation.Keep;
-
-@Keep
 public class FeatureByPathRequestEntity {
 
     /**

@@ -178,7 +178,7 @@ ext {
             "material"                          : "com.google.android.material:material:${version["material"]}",
 
             //map
-            "mapbox"                            : "com.mapbox.mapboxsdk:mapbox-android-sdk:6.7.2",
+            "mapbox"                            : "com.mapbox.mapboxsdk:mapbox-android-sdk:6.8.1",
             "photoView"                         :"com.github.chrisbanes:PhotoView:${version["photoview"]}"
     ]
 }

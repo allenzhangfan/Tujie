@@ -75,6 +75,11 @@ public final class GlobalConstants {
     public static final String DB_PATH = ROOT_PATH + "db/";
 
     /**
+     * 图片大小大于512K{@value MAX_UPLOAD_IMAGE_SIZE}时就需要压缩图片才能上传以提高性能，单位为byte
+     */
+    public static final int MAX_UPLOAD_IMAGE_SIZE = 524288;
+
+    /**
      * 图片压缩后的最大文件大小，单位为KB
      */
     public static final int MAX_IMAGE_SIZE = 300;
@@ -125,7 +130,6 @@ public final class GlobalConstants {
      * 网络读写超时时间，单位为毫秒(15s)
      */
     public static final int READ_TIMEOUT_MILLIS = 15 * 1000;
-
 
     /**
      * session
@@ -201,8 +205,6 @@ public final class GlobalConstants {
     /// 首次启动标志键名(值为boolean类型）
     public static final String CONFIG_FIRST_START_APP = "first_start_app";
 
-    public static final String CONFIG_LAST_LY_TOKEN = "last_ly_token";
-
     public static final String CONFIG_LAST_LOGIN_USER_ACCOUNT = "config_last_login_user_account";
     //头像
     public static final String CONFIG_LAST_USER_AVATAR = "config_last_user_avatar";
@@ -220,26 +222,15 @@ public final class GlobalConstants {
     public static final String CONFIG_LAST_USER_POLICE_NO = "config_last_user_police_no";
     // 电话
     public static final String CONFIG_LAST_USER_TEL_NO = "config_last_user_tel_no";
-    // 密码
-    public static final String LOGIN_PASSWORD = "login_password";
-    // 是否登陆 标志位
-    public static final String HAS_LOGIN = "has_login";
-    // 是否第一次获取字典表
-    public static final String HAS_FIRST_DICTIONARY = "has_first_dictionary";
     // 是否刷脸 标志位
     public static final String HAS_FACE = "has_face";
     //类型 人脸/车辆
     public static final String FACE_TYPE = "FACE";
     public static final String VEHICLE_TYPE = "VEHICLE";
-    //  消息开关
-    public static final String CONFIG_MESSAGE_SWITCH = "config_message_switch";
-
-    public static final String GOTO_MAIN = "goto_main";
 
     public static final String DEFAULT_IMAGE_SUFFIX = ".jpeg";
     public static final String DEFAULT_VIDEO_SUFFIX = ".mp4";
     public static final String DEFAULT_IMAGE_GIF_SUFFIX = ".gif";
-
     public static final String DEFAULT_VIDEO_MIME_TYPE = "video/mp4";
     public static final String DEFAULT_PICTURE_MIME_TYPE = "image/jpeg";
 

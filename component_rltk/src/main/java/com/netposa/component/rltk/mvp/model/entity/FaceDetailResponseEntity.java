@@ -1,8 +1,5 @@
 package com.netposa.component.rltk.mvp.model.entity;
 
-import androidx.annotation.Keep;
-
-@Keep
 public class FaceDetailResponseEntity {
         /**
          * recordId : d1f551a2-a38d-4ac5-bb64-0ed82fbcf696

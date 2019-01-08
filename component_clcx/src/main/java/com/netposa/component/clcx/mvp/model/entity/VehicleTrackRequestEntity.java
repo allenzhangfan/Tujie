@@ -3,9 +3,6 @@ package com.netposa.component.clcx.mvp.model.entity;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import androidx.annotation.Keep;
-
-@Keep
 public class VehicleTrackRequestEntity implements Parcelable {
 
     /**

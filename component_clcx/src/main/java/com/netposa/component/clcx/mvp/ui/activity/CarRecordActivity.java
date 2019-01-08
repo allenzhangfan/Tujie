@@ -20,7 +20,6 @@ import com.netposa.common.constant.UrlConstant;
 import com.netposa.common.core.RouterHub;
 import com.netposa.common.log.Log;
 import com.netposa.common.utils.TimeUtils;
-import com.netposa.common.utils.TujieImageUtils;
 import com.netposa.commonres.widget.Dialog.LottieDialogFragment;
 import com.netposa.component.clcx.R;
 import com.netposa.component.clcx.R2;
@@ -35,34 +34,14 @@ import com.netposa.component.clcx.mvp.model.entity.CarNameEntity;
 import com.netposa.component.clcx.mvp.model.entity.VehicleTrackRequestEntity;
 import com.netposa.component.clcx.mvp.presenter.CarRecordPresenter;
 import com.netposa.component.clcx.mvp.ui.adapter.CarRecordAdapter;
-import com.netposa.component.room.entity.DetectionInfoEntity;
-import com.netposa.component.room.entity.IsCallPhoneEntity;
-import com.netposa.component.room.entity.MarkerTypeEntity;
-import com.netposa.component.room.entity.MoveDirectionEntity;
-import com.netposa.component.room.entity.MoveSpeedEntity;
-import com.netposa.component.room.entity.PeccancyTypeEntity;
-import com.netposa.component.room.entity.PlateColorEntity;
-import com.netposa.component.room.entity.SafetyBeltNumEntity;
-import com.netposa.component.room.entity.SpecialCarEntity;
-import com.netposa.component.room.entity.VehicleBrandEntity;
-import com.netposa.component.room.entity.VehicleNKEntity;
-import com.netposa.component.room.entity.VehicleNKVMEntity;
-import com.netposa.component.room.entity.VehicleSubBrandEntity;
-import com.netposa.component.room.entity.VehicleSunVisorNumEntity;
-import com.netposa.component.room.entity.VehicleTypeEntity;
-
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.List;
-
 import javax.inject.Inject;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.OnClick;
-
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 import static com.netposa.common.constant.GlobalConstants.CAMERA_QIANG_JI;
 import static com.netposa.common.constant.GlobalConstants.CAMERA_QIU_JI;
@@ -77,8 +56,6 @@ import static com.netposa.component.clcx.app.ClcxConstants.KEY_DICTIONARY_TYPE_S
 import static com.netposa.component.clcx.app.ClcxConstants.KEY_PIC_PATH;
 import static com.netposa.component.clcx.app.ClcxConstants.KEY_POSITION;
 import static com.netposa.component.clcx.app.ClcxConstants.KEY_VEHICLE_TRACK;
-import static com.netposa.component.clcx.app.ClcxConstants.VEHICLE_YEAR_TYPE_DEEPLINT;
-import static com.netposa.component.clcx.app.ClcxConstants.VEHICLE_YEAR_TYPE_PCC;
 
 
 public class CarRecordActivity extends BaseActivity<CarRecordPresenter> implements CarRecordContract.View {
@@ -158,7 +135,7 @@ public class CarRecordActivity extends BaseActivity<CarRecordPresenter> implemen
     }
 
     @Override
-    public void getSuceese(List<CarDetailResponseEntity> entity) {
+    public void getSuccess(List<CarDetailResponseEntity> entity) {
         if (null != entity && entity.size() > 0) {
             mEntity = entity.get(0);
             showCarIv();
@@ -411,19 +388,8 @@ public class CarRecordActivity extends BaseActivity<CarRecordPresenter> implemen
             launchActivity(intent);
         } else if (id == R.id.ll_detail) {
             if (mEntity != null) {
-                String url = null;
-                //根据url 画框
-                List<String> list = new ArrayList<>();
-                String str = mEntity.getLocation();
-                if (!TextUtils.isEmpty(str)) {
-                    str = str.replace(".", ",");
-                    list.add(str);
-                    url = TujieImageUtils.circleTarget(mEntity.getSceneImg(), list);
-                } else {
-                    url = mEntity.getSceneImg();
-                }
                 ARouter.getInstance().build(RouterHub.PIC_SINGLE_PIC_PREVIEW_ACTIVITY)
-                        .withString(KEY_IV_DETAIL, url)
+                        .withString(KEY_IV_DETAIL, mEntity.getSceneImg())
                         .withString(KEY_MOTIONNAME_DETAIL, mEntity.getDeviceName())
                         .withString(GlobalConstants.KEY_POSITION,mPosition)
                         .withLong(KEY_TIME_DETAIL, mEntity.getAbsTime())

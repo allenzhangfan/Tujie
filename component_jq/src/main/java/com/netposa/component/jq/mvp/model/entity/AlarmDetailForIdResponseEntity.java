@@ -73,6 +73,8 @@ public class AlarmDetailForIdResponseEntity implements Parcelable {
     private String receiveUser;
     private String sceneImg;
     private String position;
+    private String vehicleBrand;
+    private String vehicleType;
 
     public String getId() {
         return id;
@@ -321,6 +323,24 @@ public class AlarmDetailForIdResponseEntity implements Parcelable {
     public void setPosition(String position) {
         this.position = position;
     }
+    public String getVehicleBrand() {
+        return vehicleBrand;
+    }
+
+    public void setVehicleBrand(String vehicleBrand) {
+        this.vehicleBrand = vehicleBrand;
+    }
+
+    public String getVehicleType() {
+        return vehicleType;
+    }
+
+    public void setVehicleType(String vehicleType) {
+        this.vehicleType = vehicleType;
+    }
+
+    public AlarmDetailForIdResponseEntity() {
+    }
 
     @Override
     public int describeContents() {
@@ -360,9 +380,8 @@ public class AlarmDetailForIdResponseEntity implements Parcelable {
         dest.writeString(this.receiveUser);
         dest.writeString(this.sceneImg);
         dest.writeString(this.position);
-    }
-
-    public AlarmDetailForIdResponseEntity() {
+        dest.writeString(this.vehicleBrand);
+        dest.writeString(this.vehicleType);
     }
 
     protected AlarmDetailForIdResponseEntity(Parcel in) {
@@ -397,9 +416,11 @@ public class AlarmDetailForIdResponseEntity implements Parcelable {
         this.receiveUser = in.readString();
         this.sceneImg = in.readString();
         this.position = in.readString();
+        this.vehicleBrand = in.readString();
+        this.vehicleType = in.readString();
     }
 
-    public static final Parcelable.Creator<AlarmDetailForIdResponseEntity> CREATOR = new Parcelable.Creator<AlarmDetailForIdResponseEntity>() {
+    public static final Creator<AlarmDetailForIdResponseEntity> CREATOR = new Creator<AlarmDetailForIdResponseEntity>() {
         @Override
         public AlarmDetailForIdResponseEntity createFromParcel(Parcel source) {
             return new AlarmDetailForIdResponseEntity(source);

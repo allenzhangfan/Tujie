@@ -1,8 +1,5 @@
 package com.netposa.component.spjk.mvp.model.entity;
 
-import androidx.annotation.Keep;
-
-@Keep
 public class SpjkSearchRequestEntity {
     /**
      * id : 097888615362930250

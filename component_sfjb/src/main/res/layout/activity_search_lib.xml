@@ -70,49 +70,22 @@
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cl_no_content"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone">
+    <include layout="@layout/common_no_content" />
 
-        <ImageView
-            android:id="@+id/iv_nocontent"
-            android:layout_width="@dimen/size_240dp"
-            android:layout_height="@dimen/size_240dp"
-            android:background="@drawable/ic_no_comparison_result"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.144" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/iv_nocontent"
-            android:text="@string/search_no_result"
-            android:textColor="@color/color_697084"
-            android:textSize="@dimen/text_size_16sp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/iv_nocontent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
     <com.google.android.material.button.MaterialButton
-        android:visibility="gone"
-        android:layout_marginLeft="@dimen/size_16dp"
-        android:layout_marginRight="@dimen/size_16dp"
-        android:layout_gravity="center_horizontal"
         android:id="@+id/btn_sure"
         style="@style/MaterialTextButton.Confirm"
         android:layout_width="@dimen/size_327dp"
         android:layout_height="@dimen/size_48dp"
         android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="@dimen/size_16dp"
+        android:layout_marginRight="@dimen/size_16dp"
         android:layout_marginBottom="@dimen/size_24dp"
         android:background="@drawable/common_bt_bg"
         android:gravity="center"
         android:text="@string/confirm_bt"
         android:textColor="@color/white"
-        android:textSize="@dimen/text_size_16sp" />
+        android:textSize="@dimen/text_size_16sp"
+        android:visibility="gone" />
 </LinearLayout>

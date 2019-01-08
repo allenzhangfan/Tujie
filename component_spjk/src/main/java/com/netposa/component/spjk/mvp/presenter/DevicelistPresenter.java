@@ -74,12 +74,13 @@ public class DevicelistPresenter extends BasePresenter<DevicelistContract.Model,
                 .subscribe(new ErrorHandleSubscriber<SpjkListDeviceResponseEntity>(mErrorHandler) {
                     @Override
                     public void onNext(SpjkListDeviceResponseEntity responseEntity) {
-                        Log.d("responseEntity", responseEntity.toString());
+                        Log.d("getSpjkDevicelistsuc", responseEntity.toString());
                         mRootView.getListSuccess(responseEntity);
                     }
 
                     @Override
                     public void onError(Throwable t) {
+                        Log.d("getSpjkDevicelistfail", t.toString());
                         mRootView.getListFailed();
                     }
                 });

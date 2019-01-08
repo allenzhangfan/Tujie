@@ -20,7 +20,6 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import butterknife.BindView;
@@ -29,7 +28,6 @@ import butterknife.OnClick;
 import netposa.pem.sdk.PemSdkListener;
 import netposa.pem.sdk.PemSdkManager;
 import netposa.pem.sdk.PemSdkUtils;
-
 import com.google.android.material.button.MaterialButton;
 import com.gyf.barlibrary.ImmersionBar;
 import com.jess.arms.base.BaseActivity;
@@ -39,7 +37,6 @@ import com.jess.arms.utils.ArmsUtils;
 import com.netposa.common.log.Log;
 import com.netposa.common.net.NetWorkBroadcastReceiver;
 import com.netposa.common.net.NetWorkEventInterface;
-import com.netposa.common.utils.StringUtils;
 import com.netposa.common.utils.SystemUtil;
 import com.netposa.component.room.entity.SpjkCollectionDeviceEntity;
 import com.netposa.component.spjk.R2;
@@ -50,13 +47,10 @@ import com.netposa.component.spjk.mvp.model.entity.PtzDirectionRequestEntity;
 import com.netposa.component.spjk.mvp.presenter.VideoPlayPresenter;
 import com.netposa.component.spjk.R;
 import com.netposa.component.spjk.mvp.model.entity.DeviceInfoResponseEntity;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
-
 import javax.inject.Inject;
-
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 import static com.netposa.common.constant.GlobalConstants.CAMERA_QIANG_JI;
@@ -98,26 +92,10 @@ public class VideoPlayActivity extends BaseActivity<VideoPlayPresenter> implemen
     View mView;
     @BindView(R2.id.progress)
     ProgressBar mProgress;
-    @BindView(R2.id.tv_bianhao)
-    TextView mTvDeviceNum;
     @BindView(R2.id.tv_devicetype)
     TextView mTvDeviceType;
     @BindView(R2.id.tv_orgname)
     TextView mTvOrgName;
-    @BindView(R2.id.tv_lat_long)
-    TextView mTvLatlongitude;
-    @BindView(R2.id.tv_equipment_factory)
-    TextView mTvEquipmentFactory;
-    @BindView(R2.id.tv_monit_direction)
-    TextView mTvMonitDirect;
-    @BindView(R2.id.tv_angle)
-    TextView mTvAngle;
-    @BindView(R2.id.tv_unit)
-    TextView mTvUnit;
-    @BindView(R2.id.tv_contact)
-    TextView mTvContact;
-    @BindView(R2.id.tv_contact_num)
-    TextView mTvContactNum;
     @BindView(R2.id.rl_surface_layout)
     RelativeLayout mRlSurface;//视频显示栏的layout
     @BindView(R2.id.rl_middle_Layout)
@@ -264,8 +242,8 @@ public class VideoPlayActivity extends BaseActivity<VideoPlayPresenter> implemen
             R2.id.iv_screenshot,
             R2.id.history_cardView,
             R2.id.nearby_carview,
-            R2.id.tv_device_adrress,
-            R2.id.iv_follow,
+            R2.id.ll_device_adrress,
+            R2.id.rl_collect_tv,
             R2.id.iv_attention,
             R2.id.iv_finish_activity})
     public void onViewClicked(View view) {
@@ -321,7 +299,7 @@ public class VideoPlayActivity extends BaseActivity<VideoPlayPresenter> implemen
                 dataIntent.putExtra(KEY_NEIGHBOURING_DEVICES, mCurrentDevice);
                 launchActivity(dataIntent);
             }
-        } else if (i == R.id.tv_device_adrress) {
+        } else if (i == R.id.ll_device_adrress) {
             if (mCurrentDevice == null) {
                 showMessage(getString(R.string.device_info_do_not_receive_yet));
                 return;
@@ -330,7 +308,7 @@ public class VideoPlayActivity extends BaseActivity<VideoPlayPresenter> implemen
             dataIntent.putExtra(KEY_SINGLE_CAMERA_LOCATION_LATITUDE, mCurrentDevice.getLatitude());
             dataIntent.putExtra(KEY_SINGLE_CAMERA_LOCATION_LONGITUDE, mCurrentDevice.getLongitude());
             launchActivity(dataIntent);
-        } else if (i == R.id.iv_follow) {
+        } else if (i == R.id.rl_collect_tv) {
             // true 表示关注状态，进行删除 即取消关注
             if (mCollected) {
                 mPresenter.deleteDevice(mCameraId);
@@ -687,7 +665,7 @@ public class VideoPlayActivity extends BaseActivity<VideoPlayPresenter> implemen
         super.onResume();
         Log.d(TAG, "onResume count:" + mCount + ",isPlaying:" + mIsPlaying);
         if (!mIsPlaying && mCount > 0) {
-            replay();
+            play();
         }
         if (!TextUtils.isEmpty(mCameraId)) {
             mCollected = false;
@@ -700,7 +678,7 @@ public class VideoPlayActivity extends BaseActivity<VideoPlayPresenter> implemen
         super.onStop();
         Log.d(TAG, "onStop count:" + mCount + ",isPlaying:" + mIsPlaying);
         if (mIsPlaying) {
-            pause();
+            stopPlay();
             if (mCount == Integer.MAX_VALUE - 2) {
                 mCount = 0;
             }
@@ -740,11 +718,6 @@ public class VideoPlayActivity extends BaseActivity<VideoPlayPresenter> implemen
             mTvName.setText(mCarmeraName);
             mIvTitleName.setText(mCarmeraName);
         }
-        // 设备编号
-        String deviceid = reponse.getDeviceId();
-        if (!TextUtils.isEmpty(deviceid)) {
-            mTvDeviceNum.setText(deviceid);
-        }
         // 1 球机
         String cameraType = reponse.getCameraType();
         if (!TextUtils.isEmpty(cameraType) && cameraType.equals("1")) {
@@ -757,12 +730,6 @@ public class VideoPlayActivity extends BaseActivity<VideoPlayPresenter> implemen
         String orgname = reponse.getOrgname();
         if (!TextUtils.isEmpty(orgname)) {
             mTvOrgName.setText(orgname);
-        }
-        // 经纬度
-        String latitude = reponse.getLatitude();
-        String longitude = reponse.getLongitude();
-        if (!TextUtils.isEmpty(latitude) && !TextUtils.isEmpty(longitude)) {
-            mTvLatlongitude.setText(StringUtils.cutParse(2, latitude) + " " + StringUtils.cutParse(4, longitude));
         }
         //能力类型
         String ability = reponse.getAbility();
@@ -797,36 +764,6 @@ public class VideoPlayActivity extends BaseActivity<VideoPlayPresenter> implemen
                 mIvFaceType.setImageResource(getPicType(abilityData.get(2)));
                 mIvBodyType.setImageResource(getPicType(abilityData.get(3)));
             }
-        }
-        // 设备厂商
-        String manufacture = reponse.getManufacturer();
-        if (!TextUtils.isEmpty(manufacture)) {
-            mTvEquipmentFactory.setText(manufacture);
-        }
-        //监控方向
-        String direction = reponse.getDirection();
-        if (!TextUtils.isEmpty(direction)) {
-            mTvMonitDirect.setText(direction);
-        }
-        //照射角度
-        String angle = reponse.getAngle();
-        if (!TextUtils.isEmpty(angle)) {
-            mTvAngle.setText(angle);
-        }
-        // 维护单位
-        String repairunit = reponse.getRepairunit();
-        if (!TextUtils.isEmpty(repairunit)) {
-            mTvUnit.setText(reponse.getRepairunit());
-        }
-        //联系人
-        String linkman = reponse.getLinkman();
-        if (!TextUtils.isEmpty(linkman)) {
-            mTvContact.setText(reponse.getLinkman());
-        }
-        //联系方式
-        String linkno = reponse.getLinkno();
-        if (!TextUtils.isEmpty(linkno)) {
-            mTvContactNum.setText(reponse.getLinkno());
         }
         String type = reponse.getCameraType();
         if (TextUtils.isEmpty(type)) {

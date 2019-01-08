@@ -46,9 +46,5 @@ public class PictureSearchModule {
         return mContext;
     }
 
-    @ActivityScope
-    @Provides
-    LottieDialogFragment provideDialogFragment() {
-        return new LoadingDialogFragment();
-    }
+
 }

@@ -2,8 +2,6 @@ package com.netposa.component.rltk.mvp.model.entity;
 
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 
-import androidx.annotation.Keep;
-
 public class PersonInfoEntity implements MultiItemEntity {
     public static final int TYPE_ITEM_INFO = 0x2;
     public String title;

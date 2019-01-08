@@ -1,11 +1,8 @@
 package com.netposa.camera.mvp.model.entity;
 
-import androidx.annotation.Keep;
-
 /**
  * Created by yidong0418 on 2018/12/4.
  */
-@Keep
 public class UploadResponseEntity {
         /**
          * sourceUrl : PFSB:/viasbimg/bimg/data/20181204/14_0/8a5b3d5402b8e863cad75ff58c9120eb

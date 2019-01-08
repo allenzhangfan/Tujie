@@ -77,14 +77,14 @@ public class FaceLibraryPresenter extends BasePresenter<FaceLibraryContract.Mode
                 .subscribe(new ErrorHandleSubscriber<FaceLibraryResponseEntity>(mErrorHandler) {
                     @Override
                     public void onNext(FaceLibraryResponseEntity response) {
-                        Log.d(TAG,"getDataSuccess: "+ response.toString());
+                        Log.i(TAG,"getDataSuccess: "+ response.toString());
                         mRootView.getDataSuccess(response);
                     }
 
                     @Override
                     public void onError(Throwable t) {
                         super.onError(t);
-                        Log.d(TAG,"onError: "+t.toString());
+                        Log.e(TAG,"onError: "+t.toString());
                         mRootView.getDataFailed();
                     }
                 });

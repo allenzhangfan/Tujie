@@ -127,29 +127,9 @@ public class CropPictureActivity extends BaseActivity<CropPicturePresenter> impl
 
     @OnClick({R2.id.crop_pic, R2.id.toolbar})
     public void onViewClicked(View view) {
-        int kb = 524288;// 1M=1024k=1048576
-        Bitmap cropBitMap = null;
-        MultipartBody.Part part=null;
         int id = view.getId();
         if (id == R.id.crop_pic) {
-            //获取裁剪的图片
-            cropBitMap = mCropImageView.getCroppedImage();
-            int size = ImageUtils.getBitmapSize(cropBitMap);
-            if (size > kb) {//压缩完了保存成jpg的图片
-//                cropBitMap=ImageUtils.compressByQuality(cropBitMap,new Long((long)kb));
-                cropBitMap = ImageUtils.compressScale(cropBitMap);
-                mUrlPath = ImageUtils.saveBitmap(cropBitMap);
-            }
-            if (!TextUtils.isEmpty(mAlbumPath)){
-                part = RequestUtils.prepareFilePart(PART_NAME_IMAGE, mAlbumPath);
-            }else{
-                part = RequestUtils.prepareFilePart(PART_NAME_IMAGE, mUrlPath);
-            }
-            if (!TextUtils.isEmpty(mTypeStr)) {
-                mPresenter.faceLogin(part, mTypeStr);
-            } else {// 身份鉴别的
-                mPresenter.uploadImage(part);
-            }
+            mPresenter.faceLoginOrCropImage(mCropImageView.getCroppedImage(),mTypeStr);
         } else if (id == R.id.toolbar) {
             killMyself();
         }
@@ -159,11 +139,6 @@ public class CropPictureActivity extends BaseActivity<CropPicturePresenter> impl
     public void goToHomeActivity() {
         ARouter.getInstance().build(RouterHub.APP_HOME_ACTIVITY).navigation(this);
         AppManager.getAppManager().killAll();//登录成功后kill掉之前的所有activity
-    }
-
-    @Override
-    public void faceLoginFailed(String message) {
-        showMessage(message);
     }
 
     @Override

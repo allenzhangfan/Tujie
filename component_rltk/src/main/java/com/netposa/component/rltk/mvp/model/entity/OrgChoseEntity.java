@@ -1,7 +1,5 @@
 package com.netposa.component.rltk.mvp.model.entity;
 
-import androidx.annotation.Keep;
-
 public class OrgChoseEntity {
 
     public static final int TYPE_GROUP = 0x1;

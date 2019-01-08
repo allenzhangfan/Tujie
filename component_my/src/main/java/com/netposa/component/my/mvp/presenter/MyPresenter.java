@@ -30,9 +30,10 @@ import com.netposa.common.utils.FileUtils;
 import com.netposa.common.utils.ToastUtils;
 import com.netposa.component.my.R;
 import com.netposa.component.my.mvp.contract.MyContract;
-import com.netposa.component.my.mvp.contract.PersonInfoContract;
 import com.netposa.component.my.mvp.model.entity.MenuEntity;
 import com.netposa.component.my.mvp.ui.adapter.MyMenuAdapter;
+import com.netposa.component.room.DbHelper;
+import com.netposa.component.room.entity.LoginConfigEntity;
 import com.trello.lifecycle2.android.lifecycle.AndroidLifecycle;
 
 import java.io.File;
@@ -202,8 +203,46 @@ public class MyPresenter extends BasePresenter<MyContract.Model, MyContract.View
                 });
     }
 
-    private void refreshCacheSize(String cacheSize){
+    private void refreshCacheSize(String cacheSize) {
         mBeanList.get(1).setValue(cacheSize);
         mAdapter.notifyDataSetChanged();
     }
+
+    public void updateFaceLoginCheckedState(String username, boolean isChecked) {
+        LoginConfigEntity loginConfigEntityInDb = DbHelper.getInstance().findByUsername(username);
+        loginConfigEntityInDb.setFaceLoginOpened(isChecked);
+        updateLoginUserInfo(loginConfigEntityInDb);
+    }
+
+    private void updateLoginUserInfo(LoginConfigEntity loginConfigEntity) {
+        DbHelper
+                .getInstance()
+                .updateLoginEntity(loginConfigEntity)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .compose(AndroidLifecycle.createLifecycleProvider((LifecycleOwner) mRootView).bindToLifecycle())
+                .subscribe(new Observer<Integer>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        Log.d(TAG, "updateLoginUserInfo onSubscribe");
+                    }
+
+                    @Override
+                    public void onNext(Integer countNum) {//更新条数
+                        Log.d(TAG, "updateLoginUserInfo onNext");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.d(TAG, "updateLoginUserInfo onError");
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        Log.d(TAG, "updateLoginUserInfo onComplete");
+                    }
+                });
+    }
+
+
 }

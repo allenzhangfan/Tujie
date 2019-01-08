@@ -3,9 +3,6 @@ package com.netposa.component.spjk.mvp.model.entity;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import androidx.annotation.Keep;
-
-@Keep
 public class DeviceInfoResponseEntity implements Parcelable {
     /**
      * id : fxSJ000139MWIx2

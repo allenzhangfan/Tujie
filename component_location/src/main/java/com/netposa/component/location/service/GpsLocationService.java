@@ -78,7 +78,18 @@ public class GpsLocationService extends Service implements LocationServiceProvid
      * 开始请求位置更新
      */
     private void startRequestLocationUpdates() {
-        String bestProvider = mLocationManager.getBestProvider(getCriteria(), true);
+//        String bestProvider = mLocationManager.getBestProvider(getCriteria(), true);
+        List<String> allProviders = mLocationManager.getAllProviders();
+        Log.i(TAG, String.format("allProviders = {%s}", allProviders));
+        String bestProvider;
+        if (allProviders.contains(LocationManager.NETWORK_PROVIDER)) {
+            bestProvider = LocationManager.NETWORK_PROVIDER;
+        } else {
+            bestProvider = LocationManager.GPS_PROVIDER;
+        }
+        mLocationManager.requestLocationUpdates(bestProvider,
+                MIN_TIME, MIN_DISTANCE, mLocationListener);
+        mRequestLocationUpdates = true;
         Log.i(TAG, String.format("bestProvider = {%s}", bestProvider));
         Location location = getLastKnownLocation();
         if (location != null) {
@@ -86,9 +97,6 @@ public class GpsLocationService extends Service implements LocationServiceProvid
             Log.i(TAG, String.format("lastKnownLocation = {%s}", location.toString()));
             Log.i(TAG, String.format("lastKnownLocation = {%s}", LocationUtils.getAddress(location.getLatitude(), location.getLongitude())));
         }
-        mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
-                MIN_TIME, MIN_DISTANCE, mLocationListener);
-        mRequestLocationUpdates = true;
     }
 
     /**

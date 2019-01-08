@@ -15,8 +15,11 @@
         <activity
             android:name=".mvp.ui.activity.SearchResultActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".mvp.ui.activity.TrackActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".mvp.ui.activity.TrackActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".mvp.ui.activity.ShowTakePictureActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    android:keepScreenOn="true"
     android:fitsSystemWindows="false"
+    android:keepScreenOn="true"
     android:orientation="vertical">
 
     <FrameLayout
@@ -101,9 +101,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
-                    android:paddingLeft="@dimen/size_12dp"
-                    android:layout_toRightOf="@+id/iv_leftback"
                     android:layout_marginTop="@dimen/size_14dp"
+                    android:layout_toRightOf="@+id/iv_leftback"
+                    android:paddingLeft="@dimen/size_12dp"
                     android:src="@drawable/ic_close_activity" />
 
                 <ImageView
@@ -189,18 +189,17 @@
         android:id="@+id/rl_middle_Layout"
         android:layout_width="match_parent"
         android:layout_height="@dimen/size_60dp"
-        android:layout_marginTop="@dimen/size_15dp"
+        android:layout_marginTop="@dimen/size_16dp"
         android:layout_marginBottom="@dimen/size_5dp"
         android:orientation="vertical"
-        android:paddingLeft="@dimen/size_15dp"
-        android:paddingRight="@dimen/size_15dp">
+        android:paddingBottom="@dimen/size_10dp">
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/size_1dp"
-            android:layout_marginBottom="@dimen/size_10dp"
-            android:layout_toLeftOf="@id/rl_collect_tv"
+            android:id="@+id/ll_device_adrress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginStart="@dimen/size_16dp"
             android:orientation="vertical">
 
             <TextView
@@ -215,6 +214,7 @@
                 android:id="@+id/tv_device_adrress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+
                 android:layout_marginTop="@dimen/size_5dp"
                 android:drawableRight="@drawable/ic_list_go"
                 android:text="查看设备点位"
@@ -228,13 +228,14 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_marginLeft="@dimen/size_16dp"
-            android:layout_marginBottom="@dimen/size_10dp">
+            android:layout_marginEnd="@dimen/size_16dp">
 
             <ImageView
                 android:id="@+id/iv_follow"
                 android:layout_width="@dimen/size_24dp"
                 android:layout_height="@dimen/size_24dp"
                 android:layout_centerHorizontal="true"
+                android:layout_marginEnd="@dimen/size_16dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/ic_cancel_follow" />
 
@@ -246,8 +247,8 @@
                 android:layout_below="@+id/iv_follow"
                 android:layout_marginTop="@dimen/size_3dp"
                 android:gravity="left|center_vertical"
-                android:textColor="@color/color_989FB0"
                 android:text="@string/subscribe"
+                android:textColor="@color/color_989FB0"
                 android:textSize="@dimen/text_size_12sp" />
         </RelativeLayout>
     </RelativeLayout>
@@ -383,124 +384,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-
-                <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/size_44dp"
-                    android:layout_marginLeft="@dimen/size_18dp"
-                    android:layout_marginRight="@dimen/size_18dp"
-                    android:gravity="center_vertical">
-
-                    <TextView
-                        style="@style/Alarm_detail_left_text_style"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/size_3dp"
-                        android:text="@string/enquipment_num" />
-
-                    <TextView
-                        android:id="@+id/tv_bianhao"
-                        style="@style/Alarm_detail_right_text_style"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingLeft="@dimen/size_5dp"
-                        android:text="@string/enquipment_num_123" />
-                </RelativeLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/size_0_5dp"
-                    android:layout_marginLeft="@dimen/size_18dp"
-                    android:layout_marginRight="@dimen/size_18dp"
-                    android:background="@color/color_E5E6EB" />
-
-                <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/size_44dp"
-                    android:layout_marginLeft="@dimen/size_18dp"
-                    android:layout_marginRight="@dimen/size_18dp"
-                    android:gravity="center_vertical">
-
-                    <TextView
-                        style="@style/Alarm_detail_left_text_style"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/size_3dp"
-                        android:text="@string/enquipment_type" />
-
-                    <TextView
-                        android:id="@+id/tv_devicetype"
-                        style="@style/Alarm_detail_right_text_style"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingLeft="@dimen/size_5dp"
-                        android:text="@string/qiangji" />
-                </RelativeLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/size_0_5dp"
-                    android:layout_marginLeft="@dimen/size_18dp"
-                    android:layout_marginRight="@dimen/size_18dp"
-                    android:background="@color/color_E5E6EB" />
-
-                <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/size_44dp"
-                    android:layout_marginLeft="@dimen/size_18dp"
-                    android:layout_marginRight="@dimen/size_18dp"
-                    android:gravity="center_vertical">
-
-                    <TextView
-                        style="@style/Alarm_detail_left_text_style"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/size_3dp"
-                        android:text="@string/organizational" />
-
-                    <TextView
-                        android:id="@+id/tv_orgname"
-                        style="@style/Alarm_detail_right_text_style"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingLeft="@dimen/size_5dp"
-                        android:text="@string/groupaddress" />
-                </RelativeLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/size_0_5dp"
-                    android:layout_marginLeft="@dimen/size_18dp"
-                    android:layout_marginRight="@dimen/size_18dp"
-                    android:background="@color/color_E5E6EB" />
-
-                <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/size_44dp"
-                    android:layout_marginLeft="@dimen/size_18dp"
-                    android:layout_marginRight="@dimen/size_18dp"
-                    android:gravity="center_vertical">
-
-                    <TextView
-                        style="@style/Alarm_detail_left_text_style"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/size_3dp"
-                        android:text="@string/latitude" />
-
-                    <TextView
-                        android:id="@+id/tv_lat_long"
-                        style="@style/Alarm_detail_right_text_style"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/jingdu" />
-                </RelativeLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/size_8dp"
-                    android:background="@color/color_F5F6FA" />
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/size_44dp"
@@ -588,45 +471,15 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/size_3dp"
-                        android:text="@string/enquipment_name" />
+                        android:text="@string/enquipment_type" />
 
                     <TextView
-                        android:id="@+id/tv_equipment_factory"
-                        style="@style/Alarm_detail_right_text_style"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingLeft="@dimen/size_5dp" />
-
-                </RelativeLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/size_0_5dp"
-                    android:layout_marginLeft="@dimen/size_18dp"
-                    android:layout_marginRight="@dimen/size_18dp"
-                    android:background="@color/color_E5E6EB" />
-
-                <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/size_44dp"
-                    android:layout_marginLeft="@dimen/size_18dp"
-                    android:layout_marginRight="@dimen/size_18dp"
-                    android:gravity="center_vertical">
-
-                    <TextView
-                        style="@style/Alarm_detail_left_text_style"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/size_3dp"
-                        android:text="@string/monitoring_direction" />
-
-                    <TextView
-                        android:id="@+id/tv_monit_direction"
+                        android:id="@+id/tv_devicetype"
                         style="@style/Alarm_detail_right_text_style"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingLeft="@dimen/size_5dp"
-                        android:text="@string/control_angle" />
+                        android:text="@string/qiangji" />
                 </RelativeLayout>
 
                 <View
@@ -648,104 +501,15 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/size_3dp"
-                        android:text="@string/angle" />
+                        android:text="@string/organizational" />
 
                     <TextView
-                        android:id="@+id/tv_angle"
+                        android:id="@+id/tv_orgname"
                         style="@style/Alarm_detail_right_text_style"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingLeft="@dimen/size_5dp" />
-
-                </RelativeLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/size_0_5dp"
-                    android:layout_marginLeft="@dimen/size_18dp"
-                    android:layout_marginRight="@dimen/size_18dp"
-                    android:background="@color/color_E5E6EB" />
-
-                <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/size_44dp"
-                    android:layout_marginLeft="@dimen/size_18dp"
-                    android:layout_marginRight="@dimen/size_18dp"
-                    android:gravity="center_vertical">
-
-                    <TextView
-                        style="@style/Alarm_detail_left_text_style"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/size_3dp"
-                        android:text="@string/unitgroup" />
-
-                    <TextView
-                        android:id="@+id/tv_unit"
-                        style="@style/Alarm_detail_right_text_style"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingLeft="@dimen/size_5dp" />
-
-                </RelativeLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/size_0_5dp"
-                    android:layout_marginLeft="@dimen/size_18dp"
-                    android:layout_marginRight="@dimen/size_18dp"
-                    android:background="@color/color_E5E6EB" />
-
-                <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/size_44dp"
-                    android:layout_marginLeft="@dimen/size_18dp"
-                    android:layout_marginRight="@dimen/size_18dp"
-                    android:gravity="center_vertical">
-
-                    <TextView
-                        style="@style/Alarm_detail_left_text_style"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/size_3dp"
-                        android:text="@string/contact" />
-
-                    <TextView
-                        android:id="@+id/tv_contact"
-                        style="@style/Alarm_detail_right_text_style"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingLeft="@dimen/size_5dp" />
-                </RelativeLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/size_0_5dp"
-                    android:layout_marginLeft="@dimen/size_18dp"
-                    android:layout_marginRight="@dimen/size_18dp"
-                    android:background="@color/color_E5E6EB" />
-
-                <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/size_44dp"
-                    android:layout_marginLeft="@dimen/size_18dp"
-                    android:layout_marginRight="@dimen/size_18dp"
-                    android:gravity="center_vertical">
-
-                    <TextView
-                        style="@style/Alarm_detail_left_text_style"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/size_3dp"
-                        android:text="@string/contactnumber" />
-
-                    <TextView
-                        android:id="@+id/tv_contact_num"
-                        style="@style/Alarm_detail_right_text_style"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingLeft="@dimen/size_5dp" />
-
+                        android:paddingLeft="@dimen/size_5dp"
+                        android:text="@string/groupaddress" />
                 </RelativeLayout>
             </LinearLayout>
         </LinearLayout>

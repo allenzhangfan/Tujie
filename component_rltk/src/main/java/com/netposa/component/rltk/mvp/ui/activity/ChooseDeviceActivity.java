@@ -9,10 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
-
 import com.google.android.material.button.MaterialButton;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
@@ -28,12 +28,9 @@ import com.netposa.component.rltk.mvp.model.entity.OrgChoseEntity;
 import com.netposa.component.rltk.mvp.model.entity.SearchDeviceResponseEntity;
 import com.netposa.component.rltk.mvp.presenter.ChooseDevicePresenter;
 import com.netposa.component.rltk.mvp.ui.adapter.ChooseDeviceAdapter;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.inject.Inject;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -41,7 +38,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
 import butterknife.OnClick;
-
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 import static com.netposa.component.rltk.app.RltkConstants.CHILD_COUNT;
 import static com.netposa.component.rltk.app.RltkConstants.KEY_TO_CHOSE_DEVICE;
@@ -74,6 +70,10 @@ public class ChooseDeviceActivity extends BaseActivity<ChooseDevicePresenter> im
     ConstraintLayout mClNoContent;
     @BindView(R2.id.bt_compare)
     MaterialButton mBt_compare;
+    @BindView(R2.id.iv_no_content)
+    ImageView mIvNoContent;
+    @BindView(R2.id.tv_no_content)
+    TextView mTvNoCOntent;
 
     @Inject
     RecyclerView.LayoutManager mLayoutManager;
@@ -112,6 +112,8 @@ public class ChooseDeviceActivity extends BaseActivity<ChooseDevicePresenter> im
     public void initView(@Nullable Bundle savedInstanceState) {
         mAllOrgChoseEntities = new ArrayList<>();
         mTitleTv.setText(R.string.rltk_choce_device);
+        mTvNoCOntent.setText(R.string.no_device_choose);
+        mIvNoContent.setImageResource(R.drawable.ic_no_follow);
         mOrgRecyview.setLayoutManager(mLayoutManager);
         mOrgRecyview.setItemAnimator(mItemAnimator);
         mOrgRecyview.setAdapter(mAdapter);

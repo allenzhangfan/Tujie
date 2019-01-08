@@ -7,18 +7,21 @@
     <LinearLayout
         android:id="@+id/ll_botttom_sheet"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/size_96dp"
+        android:layout_height="@dimen/size_70dp"
         android:background="@color/white"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         app:behavior_hideable="true"
-        app:behavior_peekHeight="@dimen/size_96dp"
+        app:behavior_peekHeight="@dimen/size_70dp"
         app:layout_behavior="@string/bottom_sheet_behavior">
 
         <LinearLayout
             android:id="@+id/ll_camera_info"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <ImageView
@@ -30,59 +33,41 @@
                 android:scaleType="centerCrop"
                 android:src="@drawable/ic_dome_camera_online" />
 
-            <LinearLayout
-                android:id="@+id/ll_location"
-                android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/tv_location_gereral"
+                style="@style/CommonTextItem"
+                android:layout_width="@dimen/size_200dp"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="@dimen/size_17dp"
                 android:layout_toRightOf="@+id/iv_camera"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/tv_location_gereral"
-                    style="@style/CommonTextItem"
-                    android:layout_width="@dimen/size_200dp"
-                    android:layout_height="wrap_content"
-                    android:gravity="left|center_vertical"
-                    android:text="保利国际中心15F B区办公区"
-                    android:textColor="@color/color_333333"
-                    android:textSize="@dimen/text_size_14sp" />
-
-                <TextView
-                    android:id="@+id/tv_location_detail"
-                    style="@style/CommonTextItem"
-                    android:layout_width="@dimen/size_200dp"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/tv_location_gereral"
-                    android:layout_marginTop="@dimen/size_3dp"
-                    android:gravity="left|center_vertical"
-                    android:text="湖北省武汉市洪山区关山街道424号"
-                    android:textColor="@color/color_989FB0"
-                    android:textSize="@dimen/text_size_12sp" />
-            </LinearLayout>
+                android:gravity="left|center_vertical"
+                android:text="保利国际中心15F B区办公区"
+                android:textColor="@color/color_333333"
+                android:textSize="@dimen/text_size_14sp" />
         </LinearLayout>
 
         <View
             android:id="@+id/view_divider"
             android:layout_width="@dimen/size_1dp"
-            android:layout_height="@dimen/size_64dp"
+            android:layout_height="@dimen/size_38dp"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/size_17dp"
             android:layout_toRightOf="@+id/ll_location"
             android:background="@drawable/device_location_divier_bg" />
 
         <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/rl_collect_device"
+            android:layout_width="@dimen/size_80dp"
+            android:layout_height="match_parent"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/size_16dp"
-            android:layout_toRightOf="@+id/view_divider">
+            android:layout_toRightOf="@+id/view_divider"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:gravity="center">
 
             <ImageView
                 android:id="@+id/iv_follow"
-                android:layout_width="@dimen/size_24dp"
-                android:layout_height="@dimen/size_24dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:scaleType="centerCrop"
                 android:src="@drawable/ic_cancel_follow" />
@@ -93,10 +78,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/iv_follow"
+                android:layout_centerHorizontal="true"
                 android:layout_marginTop="@dimen/size_3dp"
                 android:gravity="left|center_vertical"
-                android:textColor="@color/color_989FB0"
                 android:text="@string/subscribe"
+                android:textColor="@color/color_989FB0"
                 android:textSize="@dimen/text_size_12sp" />
         </RelativeLayout>
     </LinearLayout>

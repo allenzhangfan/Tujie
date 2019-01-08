@@ -1,11 +1,9 @@
 package com.netposa.camera.mvp.ui.activity;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.text.TextUtils;
@@ -14,14 +12,9 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
-import butterknife.BindView;
-import butterknife.OnClick;
-
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.google.android.cameraview.CameraView;
+import com.google.android.cameraview.PlayVoice;
 import com.google.android.cameraview.R;
 import com.google.android.cameraview.R2;
 import com.jess.arms.base.BaseActivity;
@@ -43,6 +36,13 @@ import java.io.File;
 
 import javax.inject.Inject;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
+import butterknife.BindView;
+import butterknife.OnClick;
+
+import static com.google.android.cameraview.PlayVoice.getAudioManagerType;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 import static com.netposa.camera.mvp.app.Constants.ALBUM_PIC_PATH;
 import static com.netposa.camera.mvp.app.Constants.CAMERRA_FLAG;
@@ -76,6 +76,7 @@ public class FaceLoginActivity extends BaseActivity<FaceLoginPresenter> implemen
     private Handler mBackgroundHandler;
     private String mTypeStr;
     private int mFacing;//记录当前camera是前置还是后置的状态
+    private int mAudioManagerMode;
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -104,14 +105,15 @@ public class FaceLoginActivity extends BaseActivity<FaceLoginPresenter> implemen
         if (!TextUtils.isEmpty(mTypeStr)) {
             mTitle.setText(getString(R.string.face_login));
             mAlbumBtn.setVisibility(View.INVISIBLE);
-            mChangeCamera.setVisibility(View.INVISIBLE);
+            mChangeCamera.setVisibility(View.VISIBLE);
+            mCameraView.setFacing(CameraView.FACING_FRONT);
         } else {// 身份鉴别
             mPresenter.initLatestAlbum(this, mAlbumBtn);
             mTitle.setText(getString(R.string.sfjb));
             mAlbumBtn.setVisibility(View.VISIBLE);
             mChangeCamera.setVisibility(View.VISIBLE);
+            mCameraView.setFacing(CameraView.FACING_BACK);
         }
-        mCameraView.setFacing(CameraView.FACING_BACK);
         if (mCameraView != null) {
             mCameraView.addCallback(mCallback);
         }
@@ -165,7 +167,11 @@ public class FaceLoginActivity extends BaseActivity<FaceLoginPresenter> implemen
             }
         } else if (id == R.id.album_btn) {
             ImageSelectUtil.selectImages(this, 1);
-        } else if (id == R.id.capture_btn) {
+        } else if (id == R.id.capture_btn) {//振动模式  静音模式不播放
+            mAudioManagerMode= getAudioManagerType(this);
+            if (mAudioManagerMode==AudioManager.RINGER_MODE_NORMAL){
+                PlayVoice.play(this);
+            }
             mCameraView.takePicture();
         }
     }
@@ -191,6 +197,9 @@ public class FaceLoginActivity extends BaseActivity<FaceLoginPresenter> implemen
             getBackgroundHandler().post(new Runnable() {
                 @Override
                 public void run() {
+                    if (mAudioManagerMode==AudioManager.RINGER_MODE_NORMAL){
+                        PlayVoice.stop();
+                    }
                     String picName = TimeUtils.millis2String(System.currentTimeMillis(), TimeUtils.LONG_DATE_FORMAT)
                             .concat("_")
                             .concat(FACE_CAPTURE_PIC);

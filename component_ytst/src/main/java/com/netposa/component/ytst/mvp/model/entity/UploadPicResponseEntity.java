@@ -2,17 +2,12 @@ package com.netposa.component.ytst.mvp.model.entity;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
 import java.util.ArrayList;
-import java.util.List;
-
-import androidx.annotation.Keep;
 
 /**
  * Author：yeguoqiang
  * Created time：2018/12/7 16:20
  */
-@Keep
 public class UploadPicResponseEntity {
 
     /**

@@ -22,6 +22,8 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/size_40dp"
         android:layout_marginTop="@dimen/size_16dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:orientation="horizontal">
 
         <TextView
@@ -37,7 +39,7 @@
             android:paddingTop="@dimen/size_9dp"
             android:paddingRight="@dimen/size_8dp"
             android:paddingBottom="@dimen/size_9dp"
-            android:text="京"
+            android:text="@string/all"
             android:textColor="@color/color_19233C"
             android:textSize="@dimen/text_size_15sp" />
 

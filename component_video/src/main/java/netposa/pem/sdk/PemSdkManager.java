@@ -2,7 +2,7 @@ package netposa.pem.sdk;
 
 import android.opengl.GLSurfaceView;
 import android.text.TextUtils;
-import android.util.Log;
+import com.netposa.common.log.Log;
 
 import com.netposa.common.constant.UrlConstant;
 import com.netposa.mp4v2.mp4encoder;
@@ -108,7 +108,7 @@ public class PemSdkManager implements
             return;
         }
         url = UrlConstant.parsePlayUrl(url);
-        Log.e(TAG, "pemsdk call play url->" + url);
+        Log.e(TAG, "pemsdk call play url->" + url + ",decodeManger isOpen:" + mDecodeManger.isOpen());
         this.streamMode = streamMode;
         byte[] b_url, b_gip = null;
         try {
@@ -116,6 +116,7 @@ public class PemSdkManager implements
             b_gip = gateway_ip.getBytes("gb2312");
 
         } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
             return;
         }
         mPemsdk.Play(b_url, streamMode, b_gip, gateway_port);
@@ -228,17 +229,10 @@ public class PemSdkManager implements
         }
     }
 
-    @Override
-    public void _onstream(byte[] data, int len, boolean iskey, long pts) {
-        mDecodeManger.startDecode(data, len);
-    }
-
-
     /**
      * 手动或抛异常时调用此方法，停止解码
      */
     public void stopDecoder() {
-        Log.d(TAG, "pemsdk call stopDecoder !");
         mDecodeManger.closeDecode();
     }
 
@@ -262,20 +256,24 @@ public class PemSdkManager implements
         videoHandle.release();
     }
 
+    @Override
+    public void _onstream(byte[] data, int len, boolean iskey, long pts) {
+        mDecodeManger.startDecode(data, len);
+    }
 
     @Override
     public void onMsg(int what, int arg1, int arg2) {
-        Log.i(TAG, "pemsdk get stream msg from native:" + what + ",arg1:" + arg1 + ",arg2:" + arg2);
+        Log.i(TAG, "pemsdk get stream msg from native:" + what + ",arg1:" + arg1 + ",arg2:" + arg2 + ",decodeManger isOpen:" + mDecodeManger.isOpen());
         switch (what) {
             case PEM_MSG_PLAY_START:
                 if (arg1 != PEM_MSG_PLAY_SUCCESS) {
                     _playStatus = playStatus.play_failture;
                     mListener.onError(what, arg1, arg2);
                 } else {
-                    videoHandle.onStart();
-                    if (!mDecodeManger.isOpen) {
+                    if (!mDecodeManger.isOpen()) {
                         mDecodeManger.initDecoder();
                     }
+                    videoHandle.onStart();
                     mIsFirstPts = false;
                     _playStatus = playStatus.play_success;
                     mListener.prePlay(arg2);

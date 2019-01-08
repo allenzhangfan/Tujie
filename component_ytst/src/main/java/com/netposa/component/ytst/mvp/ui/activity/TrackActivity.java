@@ -122,10 +122,14 @@ public class TrackActivity extends BaseActivity<TrackPresenter> implements Track
             YtstCarAndPeopleEntity bean = mBeanList.get(position);
             boolean isSelect = bean.isSelect();
             if (!isSelect) {
+                if (mSelectList.size()==10){//最多只能选10个
+                    showMessage(getString(R.string.choose_num));
+                    return;
+                }
                 countIndex++;
                 mBeanList.get(position).setSelect(true);
                 mSelectList.add(bean.getLongitude()+","+bean.getLatitude());
-                if (countIndex == mBeanList.size()) {
+                if (countIndex == 10) {//mBeanList.size()->10
                     isSelectAll = true;
                 }
             } else {
@@ -164,18 +168,29 @@ public class TrackActivity extends BaseActivity<TrackPresenter> implements Track
             mSortSimilarityFlag = !mSortSimilarityFlag;
             mAdapter.notifyDataSetChanged();
         } else if (id == R.id.head_right_tv) {
-            selectAll();
+            if (mSelectList.size()==10){//如果已经选择了10个 取消操作
+                cancelChoose();
+            }else {
+                selectAll();
+            }
         } else if (id == R.id.btn_sumit) {
             if (mSelectList.size() > 0) {
                mPresenter.intentPathActivity(mSelectList,mBeanList,mPicPath);
+            }else{
+                showMessage(getString(R.string.please_choose_iv));
             }
         } else if (id == R.id.btn_cancel) {
-            for (int i = 0; i < mBeanList.size(); i++) {
-                mBeanList.get(i).setSelect(false);
-            }
-            mSelectList.clear();
-            mAdapter.notifyDataSetChanged();
+            cancelChoose();
         }
+    }
+
+    private void cancelChoose(){
+        for (int i = 0; i < mBeanList.size(); i++) {
+            mBeanList.get(i).setSelect(false);
+        }
+        isSelectAll = false;
+        mSelectList.clear();
+        mAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -244,17 +259,24 @@ public class TrackActivity extends BaseActivity<TrackPresenter> implements Track
     }
 
     /**
-     * 全选和反选
+     * 全选和反选 最多选10个处理
      */
     private void selectAll() {
         if (mAdapter == null) return;
+        if (mSelectList.size()>0){
+            for (int i=0;i<mBeanList.size();i++){
+                mBeanList.get(i).setSelect(false);
+            }
+        }
         mSelectList.clear();
+        int size=(mBeanList.size()>=10)?10:(mBeanList.size());
         if (!isSelectAll) { // 全选
-            for (int i = 0; i < mBeanList.size(); i++) {
+            for (int i = 0; i < size; i++) {
                 mBeanList.get(i).setSelect(true);
                 mSelectList.add(mBeanList.get(i).getLongitude()+","+mBeanList.get(i).getLatitude());
             }
-            countIndex = mBeanList.size();
+
+            countIndex = size;
             isSelectAll = true;
         } else { // 取消全选
             for (int i = 0; i < mBeanList.size(); i++) {

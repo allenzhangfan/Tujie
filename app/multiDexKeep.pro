@@ -1,5 +1,0 @@
--keep class com.jess.arms.** { *; }
--keep class com.netposa.common.** { *; }
--keep class com.netposa.commonres.** { *; }
--keep class * extends com.jess.arms.integration.ConfigModule
--keep class * extends com.jess.arms.base.delegate.AppLifecycles

@@ -1,8 +1,5 @@
 package com.netposa.component.preview.mvp.model.entity;
 
-import androidx.annotation.Keep;
-
-@Keep
 public class FeatureByPathResponseEntity {
         /**
          * sessionKey : 99fd0b2bf8d643fb9798e1b170a57b29

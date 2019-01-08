@@ -100,6 +100,10 @@ public class FaceLibraryActivity extends BaseActivity<FaceLibraryPresenter> impl
     MaterialButton mBtConfirm;
     @BindView(R2.id.view_bottom)
     View mViewBottom;
+    @BindView(R2.id.iv_no_content)
+    ImageView mIvNoContent;
+    @BindView(R2.id.tv_no_content)
+    TextView mTvNoCOntent;
 
     @Inject
     RecyclerView.LayoutManager mLayoutManager;
@@ -126,6 +130,8 @@ public class FaceLibraryActivity extends BaseActivity<FaceLibraryPresenter> impl
     private int mCurrentPage = 1;
     private ArrayList<String> mdeviceIds;
     private ArrayList<String> mOrgIds;
+    private long mStartTime = TimeUtils.getBeforHour(-24);// 默认当前时间的前24小时;
+    private String mRequestId;
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -146,6 +152,8 @@ public class FaceLibraryActivity extends BaseActivity<FaceLibraryPresenter> impl
     public void initView(@Nullable Bundle savedInstanceState) {
         mTitleTv.setText(getString(R.string.rltk));
         mIvHeadRight.setVisibility(View.VISIBLE);
+        mTvNoCOntent.setText(R.string.lib_no_data);
+        mIvNoContent.setImageResource(R.drawable.ic_no_follow);
         mIvHeadRight.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_tree));
         mIcFilterDefault = ContextCompat.getDrawable(this, R.drawable.ic_filter);
         mIcFilterSelected = ContextCompat.getDrawable(this, R.drawable.ic_filter_blue);
@@ -343,6 +351,8 @@ public class FaceLibraryActivity extends BaseActivity<FaceLibraryPresenter> impl
     })
     public void onViewClick(View view) {
         int id = view.getId();
+        boolean selected;
+        boolean sexAllSelected;//性别全选
         if (id == R.id.head_left_iv) {
             killMyself();
         } else if (id == R.id.head_right_iv) {
@@ -355,63 +365,126 @@ public class FaceLibraryActivity extends BaseActivity<FaceLibraryPresenter> impl
             startActivityForResult(intent, KEY_TO_CHOSE_DEVICE);
             hidePopFilterLayout();
         } else if (id == R.id.tv_male) {
-            setChecked(R.id.tv_male);
-            resetRequest();
-            mRequest.setGender(TYPE_MALE);
-            mPresenter.getFaceList();
+            selected = !mTvMale.isSelected();
+            sexAllSelected = selected && mTvFamale.isSelected();
+            mFilterSexBeanList.get(0).setSelect(sexAllSelected);
+            mFilterSexBeanList.get(1).setSelect(selected);
+            mFilterSexBeanList.get(2).setSelect(mTvFamale.isSelected());
+            mFilterSexAdapter.notifyDataSetChanged();
+            setTvState(mTvMale, selected);
+            setTvState(mTvFilter, false);
+            getFaceList();
             hidePopFilterLayout();
         } else if (id == R.id.tv_famale) {
-            setChecked(R.id.tv_famale);
-            resetRequest();
-            mRequest.setGender(TYPE_FAMALE);
-            mPresenter.getFaceList();
+            selected = !mTvFamale.isSelected();
+            sexAllSelected = selected && mTvMale.isSelected();
+            mFilterSexBeanList.get(0).setSelect(sexAllSelected);
+            mFilterSexBeanList.get(1).setSelect(mTvMale.isSelected());
+            mFilterSexBeanList.get(2).setSelect(selected);
+            mFilterSexAdapter.notifyDataSetChanged();
+            setTvState(mTvFamale, selected);
+            setTvState(mTvFilter, false);
+            getFaceList();
             hidePopFilterLayout();
         } else if (id == R.id.tv_wear_glasses) {
-            setChecked(R.id.tv_wear_glasses);
-            resetRequest();
-            mRequest.setEyeGlass(TYPE_WEAR_GLASS);
-            mPresenter.getFaceList();
+            selected = !mTvWearGlasses.isSelected();
+            mFilterGlassesBeanList.get(0).setSelect(selected);
+            mFilterGlassesBeanList.get(1).setSelect(!selected);
+            mFilterGlassesAdapter.notifyDataSetChanged();
+            setTvState(mTvWearGlasses, selected);
+            setTvState(mTvNoWearGlasses, false);
+            setTvState(mTvFilter, false);
+            getFaceList();
             hidePopFilterLayout();
         } else if (id == R.id.tv_no_wear_glasses) {
-            setChecked(R.id.tv_no_wear_glasses);
-            resetRequest();
-            mRequest.setEyeGlass(TYPE_NO_WEAR_GLASS);
-            mPresenter.getFaceList();
+            selected = !mTvNoWearGlasses.isSelected();
+            mFilterGlassesBeanList.get(0).setSelect(!selected);
+            mFilterGlassesBeanList.get(1).setSelect(selected);
+            mFilterGlassesAdapter.notifyDataSetChanged();
+            setTvState(mTvNoWearGlasses, selected);
+            setTvState(mTvWearGlasses, false);
+            setTvState(mTvFilter, false);
+            getFaceList();
             hidePopFilterLayout();
         } else if (id == R.id.ll_filter) {
-            setChecked(R.id.tv_filter);
-            mLlPopFilter.startAnimation(mTopIn);
-            mLlPopFilter.setVisibility(View.VISIBLE);
+            selected = true;
+            setTvState(mTvFilter, selected);
+            if (mLlPopFilter.getVisibility() == View.GONE) {
+                mLlPopFilter.startAnimation(mTopIn);
+                mLlPopFilter.setVisibility(View.VISIBLE);
+            } else {
+                mLlPopFilter.startAnimation(mTopOut);
+                mLlPopFilter.setVisibility(View.GONE);
+            }
         }
+    }
+
+    private void getFaceList() {
+        mCurrentPage = 1;
+        mRequest.setCurrentPage(mCurrentPage);
+        mRequest.setRequestId(null);
+        String gender = "";
+        if (mTvMale.isSelected()) {
+            gender = TYPE_MALE;
+        }
+        if (mTvFamale.isSelected()) {
+            gender = TYPE_FAMALE;
+        }
+        if (mTvMale.isSelected() && mTvFamale.isSelected()) {
+            gender = TYPE_ALL;
+        }
+        String eyeGlass = "";
+        if (mTvWearGlasses.isSelected()) {
+            eyeGlass = TYPE_WEAR_GLASS;
+        }
+        if (mTvNoWearGlasses.isSelected()) {
+            eyeGlass = TYPE_NO_WEAR_GLASS;
+        }
+        mRequest.setGender(gender);
+        mRequest.setEyeGlass(eyeGlass);
+        mRequest.setStartTime(mStartTime);
+        mRequest.setEndTime(TimeUtils.getBeforHour(0));//当前时间
+        mPresenter.getFaceList();
+    }
+
+    public void resetRequest() {
+        mRequest.setRequestId(null);
+        mCurrentPage = 1;
+        mRequest.setCurrentPage(mCurrentPage);
+        mRequest.setGender(TYPE_ALL);
+        mRequest.setEyeGlass(TYPE_ALL);
+        mRequest.setStartTime(TimeUtils.getBeforHour(-24));// 当前时间的前24小时
+        mRequest.setEndTime(TimeUtils.getBeforHour(0));//当前时间
     }
 
     /**
      * 设置textview选中与否的状态
      *
-     * @param checkedViewId textview id
+     * @param tv
+     * @param select
      */
-    private void setChecked(int checkedViewId) {
-        for (int i = 0; i < mTvTitles.size(); i++) {
-            TextView textView = mTvTitles.get(i);
-            int id = textView.getId();
-            if (id == checkedViewId) {
-                if (id == R.id.tv_filter) {
-                    textView.setCompoundDrawables(mIcFilterSelected, null, null, null);
-                }
-                textView.getPaint().setFakeBoldText(true);
-                textView.setTextColor(mCheckedViewcolor);
-            } else {
-                if (id == R.id.tv_filter) {
-                    textView.setCompoundDrawables(mIcFilterDefault, null, null, null);
-                }
-                textView.getPaint().setFakeBoldText(false);
-                textView.setTextColor(mDefaultViewcolor);
+    private void setTvState(TextView tv, boolean select) {
+        if (select) {
+            tv.setSelected(true);
+            tv.getPaint().setFakeBoldText(true);
+            tv.setTextColor(mCheckedViewcolor);
+            if (tv.getId() == R.id.tv_filter) {
+                tv.setCompoundDrawables(mIcFilterSelected, null, null, null);
+            }
+        } else {
+            tv.setSelected(false);
+            tv.getPaint().setFakeBoldText(false);
+            tv.setTextColor(mDefaultViewcolor);
+            if (tv.getId() == R.id.tv_filter) {
+                tv.setCompoundDrawables(mIcFilterDefault, null, null, null);
             }
         }
     }
 
     @Override
     public void getDataSuccess(FaceLibraryResponseEntity response) {
+        //上拉加载更多的时候需要带上requestId,第一次不需要
+        mRequestId = response.getRequestId();
         //移除刷新圈
         mSrfl.setRefreshing(false);
         mAdapter.setEnableLoadMore(true);
@@ -459,6 +532,7 @@ public class FaceLibraryActivity extends BaseActivity<FaceLibraryPresenter> impl
     @Override
     public void onRefresh() {
         mCurrentPage = 1;
+        mRequest.setRequestId(null);
         mRequest.setCurrentPage(mCurrentPage);
         mPresenter.getFaceList();
         Log.i(TAG, "onRefresh:" + mCurrentPage);
@@ -467,6 +541,7 @@ public class FaceLibraryActivity extends BaseActivity<FaceLibraryPresenter> impl
     @Override
     public void onLoadMoreRequested() {
         mCurrentPage++;
+        mRequest.setRequestId(mRequestId);
         mRequest.setCurrentPage(mCurrentPage);
         mPresenter.getFaceList();
         Log.i(TAG, "onLoadMoreRequested:" + mCurrentPage);
@@ -489,39 +564,49 @@ public class FaceLibraryActivity extends BaseActivity<FaceLibraryPresenter> impl
                 mFilterGlassesBeanList.get(i).setSelect(false);
             }
             mFilterGlassesAdapter.notifyDataSetChanged();
+            setTvState(mTvMale,false);
+            setTvState(mTvFamale,false);
+            setTvState(mTvWearGlasses, false);
+            setTvState(mTvNoWearGlasses, false);
             hidePopFilterLayout();
             //重置之后重新请求一下
             resetRequest();
             mPresenter.getFaceList();
         } else if (id == R.id.bt_confirm) {
+            mRequest.setRequestId(null);
             mCurrentPage = 1;
             mRequest.setCurrentPage(mCurrentPage);
-            long startTime = TimeUtils.getBeforHour(-24);
             //时间
             for (int i = 0; i < mFiltertimeBeanList.size(); i++) {
                 if (mFiltertimeBeanList.get(i).isSelect()) {
                     if (i == 0) {
-                        startTime = TimeUtils.getBeforHour(-24);// 当前时间的前24小时
+                        mStartTime = TimeUtils.getBeforHour(-24);// 当前时间的前24小时
                     } else if (i == 1) {
-                        startTime = TimeUtils.getBeforHour(-24 * 3);// 当前时间的前3天
+                        mStartTime = TimeUtils.getBeforHour(-24 * 3);// 当前时间的前3天
                     } else if (i == 2) {
-                        startTime = TimeUtils.getBeforHour(-24 * 7);// 当前时间的前7天
+                        mStartTime = TimeUtils.getBeforHour(-24 * 7);// 当前时间的前7天
                     }
                 }
             }
             long endTime = TimeUtils.getBeforHour(0);// 当前时间
-            mRequest.setStartTime(startTime);
+            mRequest.setStartTime(mStartTime);
             mRequest.setEndTime(endTime);
             //性别
             for (int i = 0; i < mFilterSexBeanList.size(); i++) {
                 if (mFilterSexBeanList.get(i).isSelect()) {
                     if (i == 0) {//全部
                         mRequest.setGender(TYPE_ALL);
+                        setTvState(mTvMale, true);
+                        setTvState(mTvFamale, true);
                         break;
                     } else if (i == 1) {//男性
                         mRequest.setGender(TYPE_MALE);
+                        setTvState(mTvMale, true);
+                        setTvState(mTvFamale, false);
                     } else if (i == 2) {//女性
                         mRequest.setGender(TYPE_FAMALE);
+                        setTvState(mTvMale, false);
+                        setTvState(mTvFamale, true);
                     }
                 }
             }
@@ -530,9 +615,13 @@ public class FaceLibraryActivity extends BaseActivity<FaceLibraryPresenter> impl
             for (int i = 0; i < mFilterGlassesBeanList.size(); i++) {
                 if (mFilterGlassesBeanList.get(i).isSelect()) {
                     if (i == 0) {//戴眼镜 1
+                        setTvState(mTvWearGlasses, true);
+                        setTvState(mTvNoWearGlasses, false);
                         mRequest.setEyeGlass(TYPE_WEAR_GLASS);
                     } else if (i == 1) {//未戴眼镜 0
                         mRequest.setEyeGlass(TYPE_NO_WEAR_GLASS);
+                        setTvState(mTvWearGlasses, false);
+                        setTvState(mTvNoWearGlasses, true);
                     } else if (i == 2) {//其它 -1
                         mRequest.setEyeGlass(TYPE_OTHER);
                     }
@@ -543,16 +632,6 @@ public class FaceLibraryActivity extends BaseActivity<FaceLibraryPresenter> impl
         } else if (id == R.id.view_bottom) {
             hidePopFilterLayout();
         }
-    }
-
-
-    public void resetRequest() {
-        mCurrentPage = 1;
-        mRequest.setCurrentPage(mCurrentPage);
-        mRequest.setGender(TYPE_ALL);
-        mRequest.setEyeGlass(TYPE_ALL);
-        mRequest.setStartTime(TimeUtils.getBeforHour(-24));// 当前时间的前24小时
-        mRequest.setEndTime(TimeUtils.getBeforHour(0));//当前时间
     }
 
     private void hidePopFilterLayout() {

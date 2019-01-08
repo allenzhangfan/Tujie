@@ -145,8 +145,6 @@
     @androidx.annotation.Keep <init>(...);
 }
 
-
-
 ################support###############
 -keep class android.support.** { *; }
 -keep interface android.support.** { *; }
@@ -280,7 +278,6 @@
 -dontwarn io.reactivex.internal.util.unsafe.**
 
 
-
 ################espresso###############
 -keep class android.support.test.espresso.** { *; }
 -keep interface android.support.test.espresso.** { *; }
@@ -372,5 +369,13 @@
 -keep class com.netposa.ffmpeg.** { *; }
 -keep class com.netposa.mp4v2.** { *; }
 
-
-
+# http request response entity
+-keep class com.netposa.common.entity.**{ *; }
+-keep class com.netposa.camera.mvp.model.entity.**{ *; }
+-keep class com.netposa.component.preview.mvp.model.entity.**{ *; }
+-keep class com.netposa.component.jq.mvp.model.entity.**{ *; }
+-keep class com.netposa.component.rltk.mvp.model.entity.**{ *; }
+-keep class com.netposa.component.sfjb.mvp.model.entity.**{ *; }
+-keep class com.netposa.component.spjk.mvp.model.entity.**{ *; }
+-keep class com.netposa.component.clcx.mvp.model.entity.**{ *; }
+-keep class com.netposa.component.ytst.mvp.model.entity.**{ *; }

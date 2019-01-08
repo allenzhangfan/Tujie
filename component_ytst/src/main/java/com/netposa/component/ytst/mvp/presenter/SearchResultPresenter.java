@@ -1,20 +1,12 @@
 package com.netposa.component.ytst.mvp.presenter;
 
+import android.annotation.SuppressLint;
 import android.app.Application;
 
-import com.jess.arms.integration.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
-import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.http.imageloader.ImageLoader;
-
-import androidx.lifecycle.LifecycleOwner;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
-import me.jessyan.rxerrorhandler.core.RxErrorHandler;
-import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
-import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
-
-import javax.inject.Inject;
+import com.jess.arms.integration.AppManager;
+import com.jess.arms.mvp.BasePresenter;
 import com.netposa.common.log.Log;
 import com.netposa.common.utils.TimeUtils;
 import com.netposa.component.room.DbHelper;
@@ -23,10 +15,21 @@ import com.netposa.component.ytst.mvp.contract.SearchResultContract;
 import com.netposa.component.ytst.mvp.model.entity.ImgSearchRequestEntity;
 import com.netposa.component.ytst.mvp.model.entity.ImgSearchResponseEntity;
 import com.trello.lifecycle2.android.lifecycle.AndroidLifecycle;
+
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+
+import javax.inject.Inject;
+
+import androidx.lifecycle.LifecycleOwner;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
+import me.jessyan.rxerrorhandler.core.RxErrorHandler;
+import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
+import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
 
 
 @ActivityScope
@@ -55,8 +58,10 @@ public class SearchResultPresenter extends BasePresenter<SearchResultContract.Mo
         this.mImageLoader = null;
         this.mApplication = null;
     }
+
     /**
      * 图片上传
+     *
      * @param
      */
     public void imgSearch(ImgSearchRequestEntity entity) {
@@ -86,7 +91,8 @@ public class SearchResultPresenter extends BasePresenter<SearchResultContract.Mo
                     }
                 });
     }
-    public void  comparatorDate(List<ImgSearchResponseEntity.DataBean> mBeanList,boolean flag){
+
+    public void comparatorDate(List<ImgSearchResponseEntity.DataBean> mBeanList, boolean flag) {
         Collections.sort(mBeanList, new Comparator<ImgSearchResponseEntity.DataBean>() {
             /**
              *
@@ -96,15 +102,15 @@ public class SearchResultPresenter extends BasePresenter<SearchResultContract.Mo
              *         equal, and > 0 if lhs is greater than rhs,比较数据大小时,这里比的是时间
              */
             public int compare(ImgSearchResponseEntity.DataBean parm1, ImgSearchResponseEntity.DataBean parm2) {
-                Date date1 =  TimeUtils.millis2Date(parm1.get_absTime());
+                Date date1 = TimeUtils.millis2Date(parm1.get_absTime());
                 Date date2 = TimeUtils.millis2Date(parm2.get_absTime());
                 // 对日期字段进行升序before，如果欲降序可采用after方法
-                if (flag){ // 降序
+                if (flag) { // 降序
                     if (date1.after(date2)) {
                         return 1;
                     }
                     return -1;
-                }else {// 升序
+                } else {// 升序
                     if (date1.before(date2)) {
                         return 1;
                     }
@@ -114,7 +120,7 @@ public class SearchResultPresenter extends BasePresenter<SearchResultContract.Mo
         });
     }
 
-    public void  comparatorScore(List<ImgSearchResponseEntity.DataBean> mBeanList,boolean flag){
+    public void comparatorScore(List<ImgSearchResponseEntity.DataBean> mBeanList, boolean flag) {
         Collections.sort(mBeanList, new Comparator<ImgSearchResponseEntity.DataBean>() {
             /**
              *
@@ -124,13 +130,31 @@ public class SearchResultPresenter extends BasePresenter<SearchResultContract.Mo
              *         equal, and > 0 if lhs is greater than rhs,比较数据大小时,这里比的是时间
              */
             public int compare(ImgSearchResponseEntity.DataBean parm1, ImgSearchResponseEntity.DataBean parm2) {
-                if (flag){//倒序
-                    return parm2.getScore()-parm1.getScore();
-                }else {// 正序排列
-                    return parm1.getScore()-parm2.getScore();
+                if (flag) {//倒序
+                    return parm2.getScore() - parm1.getScore();
+                } else {// 正序排列
+                    return parm1.getScore() - parm2.getScore();
                 }
             }
         });
+    }
+
+    /**
+     * 先删除数据 再插入数据
+     *
+     * @param entities
+     */
+    @SuppressLint("CheckResult")
+    public void instert(List<YtstCarAndPeopleEntity> entities) {
+        mDbHelper.deleteAllYtstData()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .compose(AndroidLifecycle.createLifecycleProvider((LifecycleOwner) mRootView).bindToLifecycle())
+                .subscribe(result -> {
+                    instertData(entities);
+                }, throwable -> {
+                    Log.e("instert Fail");
+                });
     }
 
     /**
@@ -145,19 +169,47 @@ public class SearchResultPresenter extends BasePresenter<SearchResultContract.Mo
                 .subscribe();
     }
 
-    /**
-     * 先删除数据 再插入数据
-     * @param entities
-     */
-    public void instert(List<YtstCarAndPeopleEntity> entities) {
-        mDbHelper.deleteAllYtstData().
-                subscribeOn(Schedulers.io()).
-                observeOn(AndroidSchedulers.mainThread()).
-                subscribe(result -> {
-                    instertData(entities);
-                }, throwable -> {
-                    Log.e("instert Fail");
-                });
+    // 数据添加到数据库里
+    public void addInsterData(ArrayList<ImgSearchResponseEntity.DataBean> list) {
+        List<YtstCarAndPeopleEntity> dataBean = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            YtstCarAndPeopleEntity entity = new YtstCarAndPeopleEntity();
+            entity.setGender(list.get(i).getGender());
+            entity.setTraitImg(list.get(i).getTraitImg());
+            entity.setLatitude(list.get(i).getLatitude());
+            entity.setSource(list.get(i).getSource());
+            entity.setDeviceId(list.get(i).getDeviceId());
+            entity.setDeviceName(list.get(i).getDeviceName());
+            entity.setTraitLocation(list.get(i).getTraitLocation());
+            entity.setSmile(list.get(i).getSmile());
+            entity.setRecordId(list.get(i).getRecordId());
+            entity.setSceneImg(list.get(i).getSceneImg());
+            entity.setEyeGlass(list.get(i).getEyeGlass());
+            entity.setStartTime(list.get(i).getStartTime());
+            entity.setSaveTime(list.get(i).getSaveTime());
+            entity.setPushTime(list.get(i).getPushTime());
+            entity.setMask(list.get(i).getMask());
+            entity.setLongitude(list.get(i).getLongitude());
+            entity.setSunGlass(list.get(i).getSunGlass());
+            entity.setAttractive(list.get(i).getAttractive());
+            entity.setExpression(list.get(i).getExpression());
+            entity.setConfidence(list.get(i).getConfidence());
+            entity.setNodeType(list.get(i).getNodeType());
+            entity.setAbsTime(list.get(i).getAbsTime());
+            entity.setCameraType(list.get(i).getCameraType());
+            entity.setLocation(list.get(i).getLocation());
+            entity.setEndTime(list.get(i).getEndTime());
+            entity.setAge(list.get(i).getAge());
+            entity.setType1(list.get(i).get_type());
+            entity.setRelation_record(list.get(i).getRelation_record());
+            entity.setRecordId1(list.get(i).get_recordId());
+            entity.setAbsTime1(list.get(i).get_absTime());
+            entity.setScore(list.get(i).getScore());
+            entity.setPlateNumber(list.get(i).getPlateNumber());
+            entity.setSelect(false);
+            dataBean.add(entity);
+        }
+        instert(dataBean);
     }
 
 }

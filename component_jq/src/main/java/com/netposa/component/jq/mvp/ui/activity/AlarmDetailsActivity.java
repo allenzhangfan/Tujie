@@ -7,7 +7,9 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -26,7 +28,6 @@ import com.netposa.common.entity.push.AlarmPeopleDetailResponseForExt;
 import com.netposa.common.log.Log;
 import com.netposa.common.utils.KeyboardUtils;
 import com.netposa.common.utils.TimeUtils;
-import com.netposa.common.utils.TujieImageUtils;
 import com.netposa.commonres.widget.CircleProgressView;
 import com.netposa.commonres.widget.Dialog.LottieDialogFragment;
 import com.netposa.commonres.widget.RoundImageView;
@@ -40,18 +41,20 @@ import com.netposa.component.jq.mvp.model.entity.ProcessAlarmResponseEntity;
 import com.netposa.component.jq.mvp.presenter.AlarmDetailsPresenter;
 import com.netposa.component.jq.mvp.ui.fragment.CarDeployFragment;
 import com.netposa.component.jq.mvp.ui.fragment.FaceDeployFragment;
+
 import java.util.ArrayList;
-import java.util.List;
+
 import javax.inject.Inject;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import butterknife.BindView;
 import butterknife.OnClick;
+
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 import static com.netposa.common.constant.GlobalConstants.KEY_IV_DETAIL;
-import static com.netposa.common.constant.GlobalConstants.KEY_JIN_QING;
 import static com.netposa.common.constant.GlobalConstants.KEY_JQ_ITEM;
 import static com.netposa.common.constant.GlobalConstants.KEY_MOTIONNAME_DETAIL;
 import static com.netposa.common.constant.GlobalConstants.KEY_POSITION;
@@ -136,6 +139,14 @@ public class AlarmDetailsActivity extends BaseActivity<AlarmDetailsPresenter> im
     TextView mTvNoContent;
     @BindView(R2.id.iv_no_content)
     ImageView mIvNoContent;
+    @BindView(R2.id.rl_deal_person)
+    RelativeLayout mRlDealPerson;
+    @BindView(R2.id.common_devider)
+    View mCommonDevider;
+    @BindView(R2.id.tv_car_brand)
+    TextView mTvCarBrand;
+    @BindView(R2.id.tv_car_type)
+    TextView mTvCarType;
 
     @Inject
     ImageLoader mImageLoader;
@@ -209,6 +220,8 @@ public class AlarmDetailsActivity extends BaseActivity<AlarmDetailsPresenter> im
             mTvTipsMsg.setVisibility(View.VISIBLE);
             mTipsMsg.setVisibility(View.GONE);
             mLlConfirm.setVisibility(View.GONE);
+            mCommonDevider.setVisibility(View.VISIBLE);
+            mRlDealPerson.setVisibility(View.VISIBLE);
             mTvDetailTypeCar.setText(getString(R.string.valid));
             mTvDetailTypeCar.setTextColor(ContextCompat.getColor(this, R.color.color_2CCE9A));
             mTvDetailTypeCar.setBackground(ContextCompat.getDrawable(this, R.drawable.alarm_effective_bg));
@@ -219,6 +232,8 @@ public class AlarmDetailsActivity extends BaseActivity<AlarmDetailsPresenter> im
             mTvTipsMsg.setVisibility(View.VISIBLE);
             mTipsMsg.setVisibility(View.GONE);
             mLlConfirm.setVisibility(View.GONE);
+            mCommonDevider.setVisibility(View.VISIBLE);
+            mRlDealPerson.setVisibility(View.VISIBLE);
             mTvDetailTypeCar.setText(getString(R.string.invalid));
             mTvDetailTypeCar.setTextColor(ContextCompat.getColor(this, R.color.color_C0C5D1));
             mTvDetailTypeCar.setBackground(ContextCompat.getDrawable(this, R.drawable.alarm_uneffect_bg));
@@ -229,6 +244,8 @@ public class AlarmDetailsActivity extends BaseActivity<AlarmDetailsPresenter> im
             mTvTipsMsg.setVisibility(View.GONE);
             mTipsMsg.setVisibility(View.VISIBLE);
             mLlConfirm.setVisibility(View.VISIBLE);
+            mCommonDevider.setVisibility(View.GONE);
+            mRlDealPerson.setVisibility(View.GONE);
             mTvDetailTypeCar.setText(getString(R.string.suspending));
             mTvDetailTypeCar.setTextColor(ContextCompat.getColor(this, R.color.color_FF503A));
             mTvDetailTypeCar.setBackground(ContextCompat.getDrawable(this, R.drawable.alarm_undeal_bg));
@@ -261,7 +278,7 @@ public class AlarmDetailsActivity extends BaseActivity<AlarmDetailsPresenter> im
 
     @Override
     public void getProcessAlarmInfoSuccess(ProcessAlarmResponseEntity entity) {
-
+        showMessage(getString(R.string.deal_suc));
         killMyself();
     }
 
@@ -315,6 +332,7 @@ public class AlarmDetailsActivity extends BaseActivity<AlarmDetailsPresenter> im
         showIv(entity);
         if (itemHandleType != TYPE_SUSPENDING) {
             mTvTipsMsg.setText(entity.getNote()); //备注
+            mDealPerson.setText(entity.getUserName()); // 处理人
         }
     }
 
@@ -328,14 +346,16 @@ public class AlarmDetailsActivity extends BaseActivity<AlarmDetailsPresenter> im
             mTargetImage = carTemp.getImageURLs();
         }
         mCarCaptureTime.setText(TimeUtils.millis2String(entity.getAlarmTime()));
-        mDealPerson.setText(entity.getUserName()); // 处理人
         mControlCarType.setText(entity.getTaskName()); // 布控任务名称
         mCameraAddress.setText(entity.getAlarmAddress()); //摄像机名称
+        mTvCarBrand.setText(entity.getVehicleBrand());
+        mTvCarType.setText(entity.getVehicleType());
         mLongitude = entity.getLongitude();
         mLatitude = entity.getLatitude();
         showIv(entity);
         if (itemHandleType != TYPE_SUSPENDING) {
             mTvTipsMsg.setText(entity.getNote()); //备注
+            mDealPerson.setText(entity.getUserName()); // 处理人
         }
     }
 
@@ -351,8 +371,8 @@ public class AlarmDetailsActivity extends BaseActivity<AlarmDetailsPresenter> im
 
     @OnClick({R2.id.head_left_iv,
             R2.id.control_car_type,
-            R2.id.camera_address,
-            R2.id.camera_addr,
+            R2.id.rl_camera_address,
+            R2.id.rl_camera_addr,
             R2.id.capture_lib_name,
             R2.id.btn_no,
             R2.id.btn_yes,
@@ -369,9 +389,9 @@ public class AlarmDetailsActivity extends BaseActivity<AlarmDetailsPresenter> im
             Intent intent = new Intent(this, ControlTaskDetailActivity.class);
             intent.putExtra(KEY_DETAILS, mAlarmDetailForIdResponseEntity);
             launchActivity(intent);
-        } else if (i == R.id.camera_address) {
+        } else if (i == R.id.rl_camera_address) {
             goSingleCameraLocationActivity(mLongitude, mLatitude);
-        } else if (i == R.id.camera_addr) {
+        } else if (i == R.id.rl_camera_addr) {
             goSingleCameraLocationActivity(mLongitude, mLatitude);
         } else if (i == R.id.btn_no) {
             setValid(TYPE_INVALID);
@@ -379,46 +399,20 @@ public class AlarmDetailsActivity extends BaseActivity<AlarmDetailsPresenter> im
             setValid(TYPE_VALID);
         } else if (i == R.id.ll_capture) {
             if (mAlarmDetailForIdResponseEntity != null) {
-                String url = null;
-                //根据url 画框
-                List<String> list = new ArrayList<>();
-                String str = mAlarmDetailForIdResponseEntity.getPosition();
-                if (!TextUtils.isEmpty(str)) {
-                    str = str.replace(".", ",");
-                    list.add(str);
-                    if (itemType == TYPE_FACE_DEPLOY) {
-                        mUrl = TujieImageUtils.circleTarget(mAlarmDetailForIdResponseEntity.getSceneImg(), list);
-                    } else if (itemType == TYPE_CAR_DEPLOY) {
-                        mUrl = TujieImageUtils.circleTarget(mAlarmDetailForIdResponseEntity.getImageUrl(), list);
-                    }
-                } else {
-                    if (itemType == TYPE_FACE_DEPLOY) {
-                        mUrl = mAlarmDetailForIdResponseEntity.getSceneImg();
-                    } else if (itemType == TYPE_CAR_DEPLOY) {
-                        mUrl = mAlarmDetailForIdResponseEntity.getImageUrl();
-                    }
-                }
                 if (itemType == TYPE_FACE_DEPLOY) {
-                    ARouter.getInstance().build(RouterHub.PIC_SINGLE_PIC_PREVIEW_ACTIVITY)
-                            .withString(KEY_IV_DETAIL, mUrl)
-                            .withString(KEY_MOTIONNAME_DETAIL, mAlarmDetailForIdResponseEntity.getAlarmAddress())
-                            .withString(KEY_TYPE_DETAIL, GlobalConstants.FACE_TYPE)
-                            .withString(KEY_TITLE, getString(R.string.capture_image))
-                            .withString(KEY_JIN_QING, TAG)
-                            .withString(KEY_POSITION, mAlarmDetailForIdResponseEntity.getPosition())
-                            .withLong(KEY_TIME_DETAIL, mAlarmDetailForIdResponseEntity.getAlarmTime())
-                            .navigation(this);
-                } else {
-                    ARouter.getInstance().build(RouterHub.PIC_SINGLE_PIC_PREVIEW_ACTIVITY)
-                            .withString(KEY_IV_DETAIL, mUrl)
-                            .withString(KEY_MOTIONNAME_DETAIL, mAlarmDetailForIdResponseEntity.getAlarmAddress())
-                            .withString(KEY_TYPE_DETAIL, GlobalConstants.VEHICLE_TYPE)
-                            .withString(KEY_TITLE, getString(R.string.capture_image))
-                            .withString(KEY_JIN_QING, TAG)
-                            .withString(KEY_POSITION, mAlarmDetailForIdResponseEntity.getPosition())
-                            .withLong(KEY_TIME_DETAIL, mAlarmDetailForIdResponseEntity.getAlarmTime())
-                            .navigation(this);
+                    mUrl = mAlarmDetailForIdResponseEntity.getSceneImg();
+                } else if (itemType == TYPE_CAR_DEPLOY) {
+                    mUrl = mAlarmDetailForIdResponseEntity.getImageUrl();
                 }
+                String typeDetail = itemType == TYPE_FACE_DEPLOY ? GlobalConstants.FACE_TYPE : GlobalConstants.VEHICLE_TYPE;
+                ARouter.getInstance().build(RouterHub.PIC_SINGLE_PIC_PREVIEW_ACTIVITY)
+                        .withString(KEY_IV_DETAIL, mUrl)
+                        .withString(KEY_MOTIONNAME_DETAIL, mAlarmDetailForIdResponseEntity.getAlarmAddress())
+                        .withString(KEY_TYPE_DETAIL, typeDetail)
+                        .withString(KEY_TITLE, getString(R.string.capture_image))
+                        .withString(KEY_POSITION, mAlarmDetailForIdResponseEntity.getPosition())
+                        .withLong(KEY_TIME_DETAIL, mAlarmDetailForIdResponseEntity.getAlarmTime())
+                        .navigation(this);
             }
         }
     }

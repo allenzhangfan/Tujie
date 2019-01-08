@@ -39,6 +39,7 @@ import com.netposa.common.service.location.LocationService;
 import com.netposa.common.utils.KeyboardUtils;
 import com.netposa.common.utils.SizeUtils;
 import com.netposa.common.utils.SystemUtil;
+import com.netposa.commonres.widget.Dialog.LottieDialogFragment;
 import com.netposa.component.room.entity.SpjkCollectionDeviceEntity;
 import com.netposa.component.spjk.R;
 import com.netposa.component.spjk.R2;
@@ -53,6 +54,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.inject.Inject;
 
@@ -91,8 +94,6 @@ public class SpjkActivity extends BaseActivity<SpjkPresenter> implements SpjkCon
     ImageView mIvCamera;
     @BindView(R2.id.tv_location_gereral)
     TextView mTvLocationGeneral;
-    @BindView(R2.id.tv_location_detail)
-    TextView mTvLocationDetail;
     @BindView(R2.id.iv_follow)
     ImageView mIvFollow;
     @BindView(R2.id.tv_follow)
@@ -110,6 +111,8 @@ public class SpjkActivity extends BaseActivity<SpjkPresenter> implements SpjkCon
 
     @Inject
     SystemUtil mSystemUtil;
+    @Inject
+    LottieDialogFragment mLoadingDialogFragment;
 
     /**************************MAPBOX**************************/
     //IntRange函数限定参数范围
@@ -122,6 +125,8 @@ public class SpjkActivity extends BaseActivity<SpjkPresenter> implements SpjkCon
     List<Map<LatLng, OneKilometerCamerasResponseEntity>> mCamerasAttrCache = null;
     //一公里范围圈内获取到的camera
     List<OneKilometerCamerasResponseEntity> mCamerasCache;
+    boolean mHasGetLocation = false;//已经获取到定位的标志，一般是GPS先获取到，不排除amap提前获取到
+    boolean mHasShowLayer = false;//已经展示一公里范围圈
     //代码设置陀螺仪、logo等icon的显示与否
     //mapboxMap.getUiSettings().setCompassEnabled(false);
     //mapboxMap.getUiSettings().setLogoEnabled(false);
@@ -165,6 +170,7 @@ public class SpjkActivity extends BaseActivity<SpjkPresenter> implements SpjkCon
                 .init();
         //绑定到butterknife
         ButterKnife.bind(this);
+        startLocationComponent();
         if (null != savedInstanceState) {
             mActiveCameraId = savedInstanceState.getString(RESUME_CAMERA_ID);
         }
@@ -172,7 +178,20 @@ public class SpjkActivity extends BaseActivity<SpjkPresenter> implements SpjkCon
         mMapView.setStyleUrl("asset://gaode-vector-bright-local.json");
         mMapView.onCreate(savedInstanceState);
         mMapView.getMapAsync(this);
+        showLoading("");
+        //5秒后不管成功失败都隐藏加载框
+        new Timer()
+                .schedule(
+                        new TimerTask() {
+                            public void run() {
+                                if (null == mCurrentLatlng && mLoadingDialogFragment.isVisible()) {
+                                    hideLoading();
+                                    showMessage(getString(R.string.please_retry_location_since_failed));
+                                }
+                            }
 
+                        },
+                        5000);
         doLocation();
         mTVtTitle.setText(R.string.spjk);
         mBottomSheetBehavior = BottomSheetBehavior.from(mLlBottomSheet);
@@ -281,6 +300,7 @@ public class SpjkActivity extends BaseActivity<SpjkPresenter> implements SpjkCon
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        stopLocationComponent();
         if (mMapboxMap != null) {
             mMapboxMap.removeOnMapClickListener(this);
         }
@@ -326,12 +346,12 @@ public class SpjkActivity extends BaseActivity<SpjkPresenter> implements SpjkCon
 
     @Override
     public void showLoading(String message) {
-
+        mLoadingDialogFragment.show(getSupportFragmentManager(), "LoadingDialog");
     }
 
     @Override
     public void hideLoading() {
-
+        mLoadingDialogFragment.dismissAllowingStateLoss();
     }
 
     @Override
@@ -359,7 +379,7 @@ public class SpjkActivity extends BaseActivity<SpjkPresenter> implements SpjkCon
             R2.id.iv_collection,
             R2.id.tv_notice,
             R2.id.iv_device_list,
-            R2.id.iv_follow,
+            R2.id.rl_collect_device,
             R2.id.ll_camera_info})
     public void onViewClick(View view) {
         int id = view.getId();
@@ -386,7 +406,7 @@ public class SpjkActivity extends BaseActivity<SpjkPresenter> implements SpjkCon
             launchActivity(new Intent(this, SpjkSearchActivity.class));
         } else if (id == R.id.iv_device_list) {
             launchActivity(new Intent(this, DevicelistActivity.class));
-        } else if (id == R.id.iv_follow) {
+        } else if (id == R.id.rl_collect_device) {
             mSpjkCollectionDeviceEntity = new SpjkCollectionDeviceEntity();
             mSpjkCollectionDeviceEntity.setCamerid(mActiveCameraId);
             mSpjkCollectionDeviceEntity.setCamername(mCarmeraName);
@@ -416,6 +436,37 @@ public class SpjkActivity extends BaseActivity<SpjkPresenter> implements SpjkCon
         }
     }
 
+    private void startLocationComponent() {
+        mLocationService = ARouter.getInstance().navigation(LocationService.class);
+        if (mLocationService != null) {
+            mLocationService.startService();
+        }
+        ensureGpsEnabled();
+    }
+
+    private void ensureGpsEnabled() {
+        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        assert locationManager != null;
+        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+                && !locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+            new AlertDialog.Builder(this)
+                    .setTitle(R.string.text_label_warm_tip)
+                    .setMessage(R.string.please_enable_location_service)
+                    .setPositiveButton(R.string.text_label_fine, (dialog, which) -> {
+                        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                    })
+                    .show();
+        }
+    }
+
+    private void stopLocationComponent() {
+        if (mLocationService != null) {
+            mLocationService.stopService();
+        }
+    }
+
     private void zoomInAndOut() {
         if (mCurrentLatlng != null && mMapboxMap != null) {
             Log.d(TAG, "start to zoom,currentLatlng：" + mCurrentLatlng);
@@ -439,9 +490,7 @@ public class SpjkActivity extends BaseActivity<SpjkPresenter> implements SpjkCon
         mDomeActive = iconFactory.fromResource(R.drawable.ic_dome_camera_active);
         mBoxActive = iconFactory.fromResource(R.drawable.ic_box_camera_active);
         mCurrentPointIcon = iconFactory.fromResource(R.drawable.ic_me_gps);
-        focusToCenterInMap(true);
-        //获取到系统的经纬度以后再上传至后台请求一公里范围内的摄像头
-        mPresenter.getNeighbouringDevice(getCircleGeometryPoints());
+        focusToCenterInMap();
     }
 
     /**
@@ -480,10 +529,23 @@ public class SpjkActivity extends BaseActivity<SpjkPresenter> implements SpjkCon
         Log.i(TAG, "onMapReady add center Marker:" + mMapboxMap.getMarkers());
     }
 
+    //由于定位的过程和地图加载的过程都是异步不可控，因此就存在三种情况:
+    //1.定位已获取到，地图没加载好;2.定位没获取到,地图已经加载好;3.定位和地图同事加载好
+    private void focusToCenterInMap() {
+        Log.d(TAG, "mapboxMap:" + mMapboxMap + ",currentLatlng:" + mCurrentLatlng + ",hasShowLayer:" + mHasShowLayer);
+        if (mMapboxMap != null && mCurrentLatlng != null && !mHasShowLayer) {
+            hideLoading();
+            focusToCenterInMap(true);
+            mHasShowLayer = true;
+        }
+    }
+
     private List<Point> getCircleGeometryPoints() {
         if (mCurrentLatlng != null) {
+            Log.i(TAG, "getCircleGeometryPoints for new location");
             mCenterPoint = mCurrentLatlng;
         } else {
+            Log.i(TAG, "getCircleGeometryPoints for default location");
             mCenterPoint = new LatLng(DEFAULT_LATITUDE, DEFAULT_LONGITUDE);
         }
         //默认一公里范围圈
@@ -498,21 +560,27 @@ public class SpjkActivity extends BaseActivity<SpjkPresenter> implements SpjkCon
     }
 
     private void doLocation() {
+        Log.i(TAG, "start doLocation !");
         mLocationService = ARouter.getInstance().navigation(LocationService.class);
         mLocationService.addLocationListenerBoundLifecycle(new LocationService.LocationListener() {
             @Override
             public void onLocationChanged(@NonNull IntegratedLocation location) {
                 if (location != null) {
-                    mCurrentLatlng = new LatLng(location.getLatitude(), location.getLongitude());
-                    Log.i(TAG, "doLocation success for " + location.getLocateMethod()
-                            + " !!\ncurrentLatlng: " + mCurrentLatlng
-                            + "\naddress:" + location.getAddress());
+                    if (!mHasGetLocation) {//amap和gps都会回调这里，谁先获取到谁就回调
+                        mCurrentLatlng = new LatLng(location.getLatitude(), location.getLongitude());
+                        Log.i(TAG, "doLocation success for " + location.getLocateMethod()
+                                + " !!\ncurrentLatlng: " + mCurrentLatlng
+                                + "\naddress:" + location.getAddress());
+                        //获取到系统的经纬度以后再上传至后台请求一公里范围内的摄像头
+                        mPresenter.getNeighbouringDevice(getCircleGeometryPoints());
+                        focusToCenterInMap();
+                        mHasGetLocation = true;
+                    }
                 } else {
                     Log.e(TAG, "doLocation failed !!");
                 }
             }
         }, this);
-        mLocationService.requestOnceLocation();
     }
 
     @Override
@@ -638,16 +706,10 @@ public class SpjkActivity extends BaseActivity<SpjkPresenter> implements SpjkCon
         mPresenter.checkDevice(mActiveCameraId);
         mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         mCarmeraName = camera.getName();
-        String address = camera.getAddress();
         if (cameraType == CAMERA_QIANG_JI) {
             mIvCamera.setImageResource(R.drawable.ic_box_camera_circle);
         } else {
             mIvCamera.setImageResource(R.drawable.ic_dome_camera_circle);
-        }
-        if (TextUtils.isEmpty(address)) {
-            mTvLocationDetail.setVisibility(View.GONE);
-        } else {
-            mTvLocationDetail.setText(address);
         }
         mTvLocationGeneral.setText(mCarmeraName);
     }

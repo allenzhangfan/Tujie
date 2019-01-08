@@ -18,6 +18,7 @@
         android:textSize="@dimen/text_size_14sp" />
 
     <TextView
+        android:id="@+id/tv_plate_type"
         style="@style/CommonTextItem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

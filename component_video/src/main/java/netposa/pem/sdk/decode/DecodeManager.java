@@ -1,6 +1,6 @@
 package netposa.pem.sdk.decode;
 
-import android.util.Log;
+import com.netposa.common.log.Log;
 
 import com.netposa.ffmpeg.decoder.h264;
 import com.netposa.ffmpeg.decoder.idrinfo;
@@ -38,7 +38,15 @@ public class DecodeManager {
     /**
      * 解码器状态
      **/
-    public boolean isOpen = false;
+    private boolean mIsOpen;
+
+    public boolean isOpen() {
+        return mIsOpen;
+    }
+
+    public void setOpen(boolean open) {
+        mIsOpen = open;
+    }
 
     public DecodeManager(PemSdkListener listener) {
         this.mIsFirstFlag = true;
@@ -53,19 +61,19 @@ public class DecodeManager {
         if (mSupportHardDecode) {
             mCurrentDeceodeMode = HardMode;
             mHardDecoder = new HardDecoder(mListener, mVideoWidth, mVideoHeight);
-            isOpen = true;
+            mIsOpen = true;
         } else {
             mCurrentDeceodeMode = FFmegMode;
             try {
                 initFFmpegDecode();
                 if (mFFkit.m_h264.open() == 0) {
-                    isOpen = true;
+                    mIsOpen = true;
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        Log.i(TAG, "decoder manager state:" + isOpen);
+        Log.i(TAG, "initDecoder decodeManger isOpen:" + mIsOpen);
     }
 
     /**
@@ -124,8 +132,8 @@ public class DecodeManager {
             mIsFirstFlag = false;
             mListener.getOpenState(true);
         }
+        //实时视频返回再继续播放可能会解码失败(此处有bug)
         mFFkit.m_h264.decode(bytes, len);
-
     }
 
     /**
@@ -161,7 +169,7 @@ public class DecodeManager {
     public void closeDecode() {
         mIsFirstFlag = true;
         mIsvideosizeChange = false;
-        isOpen = false;
+        mIsOpen = false;
         switch (mCurrentDeceodeMode) {
             case HardMode:
                 mHardDecoder.stopDecode();

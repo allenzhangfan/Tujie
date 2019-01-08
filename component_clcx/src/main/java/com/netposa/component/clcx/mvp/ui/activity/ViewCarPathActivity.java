@@ -152,15 +152,15 @@ public class ViewCarPathActivity extends BaseActivity<ViewCarPathPresenter> impl
         mPicPath = data.getStringExtra(KEY_PIC_PATH);
         mEntity = data.getParcelableExtra(KEY_VEHICLE_TRACK);
         mTrackEnity = data.getParcelableExtra(KEY_TRACK_ENTITY);
-        mPosition=data.getStringExtra(KEY_POSITION);
+        mPosition = data.getStringExtra(KEY_POSITION);
     }
 
     @Override
     public void getListSuccese(VehicleTrackResponseEntity entity) {
         int size = entity.getList().size();
         if (null != entity && size > 0) {
-            if (size > 5) {
-                mListBeans = entity.getList().subList(0, 5);
+            if (size > 10) {
+                mListBeans = entity.getList().subList(0, 10);
             } else {
                 mListBeans = entity.getList();
             }
@@ -355,25 +355,20 @@ public class ViewCarPathActivity extends BaseActivity<ViewCarPathPresenter> impl
             String picUrl = null;
             long time = 0;
             String titleName = null;
-            List<String> list = new ArrayList<>();
-            //根据url 画框
             if (mEntity != null) {
-                String str = mDetail.getLocation();
-                if (!TextUtils.isEmpty(str)) {
-                    str = str.replace(".", ",");
-                    list.add(str);
-                    picUrl = TujieImageUtils.circleTarget(mDetail.getSceneImg(), list);
-                } else {
+                if (mDetail != null) {
                     picUrl = mDetail.getSceneImg();
+                    time = mDetail.getPassTime();
+                    titleName = mDetail.getMonitorName();
+                } else {
+                    showMessage(getString(R.string.no_position));
+                    return;
                 }
-                time = mDetail.getPassTime();
-                titleName = mDetail.getMonitorName();
             } else {// 以图搜图传过来的参数处理
                 String str = mTrackEnity.getLocation();
                 if (!TextUtils.isEmpty(str)) {
                     str = str.replace(".", ",");
-                    list.add(str);
-                    picUrl = TujieImageUtils.circleTarget(mTrackEnity.getSceneImg(), list);
+                    picUrl = mTrackEnity.getSceneImg();
                     titleName = mTrackEnity.getTitleName();
                     time = mTrackEnity.getStartTime();
                     mPosition=str;

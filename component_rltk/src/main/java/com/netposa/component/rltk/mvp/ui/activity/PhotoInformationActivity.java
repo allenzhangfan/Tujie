@@ -92,7 +92,7 @@ public class PhotoInformationActivity extends BaseActivity<PhotoInformationPrese
     private String mRecordId;
     private FaceDetailResponseEntity mFaceDetailEntity;
     private String mPosition;
-    private String mImg; //画框图
+    private String mImg;
 
 
     @Override
@@ -149,13 +149,17 @@ public class PhotoInformationActivity extends BaseActivity<PhotoInformationPrese
         Log.d(TAG, sessionKey);
         String dataKey = entity.getDataKey();
         String datatype = entity.getDataType();
-        ARouter.getInstance().build(RouterHub.YTST_SELECT_TARGET_ACTIVITY)
-                .withString(KEY_SEESION, sessionKey)
-                .withString(KEY_PICPATH, imgPath)
-                .withString(KEY_DATA_KEY, dataKey)
-                .withString(KEY_DATA_TYPE, datatype)
-                .withString(KEY_POSITION, mPosition)
-                .navigation(this);
+        if (datatype.equals(FACE_TYPE)) {
+            ARouter.getInstance().build(RouterHub.YTST_SELECT_TARGET_ACTIVITY)
+                    .withString(KEY_SEESION, sessionKey)
+                    .withString(KEY_PICPATH, imgPath)
+                    .withString(KEY_DATA_KEY, dataKey)
+                    .withString(KEY_DATA_TYPE, datatype)
+                    .withString(KEY_POSITION, mPosition)
+                    .navigation(this);
+        } else {
+            showMessage(getString(R.string.no_tag));
+        }
     }
 
     @Override
@@ -171,13 +175,7 @@ public class PhotoInformationActivity extends BaseActivity<PhotoInformationPrese
         showPersonIv(entity);
         ShowPersonInfo(entity);
         mPosition = mFaceDetailEntity.getLocation().replace('.', ',');
-        if (!TextUtils.isEmpty(mPosition)) {
-            List<String> list = new ArrayList<>();
-            list.add(mPosition);
-            mImg = TujieImageUtils.circleTarget(mFaceDetailEntity.getSceneImg(), list);
-        } else {
-            mImg = mFaceDetailEntity.getSceneImg();
-        }
+        mImg = mFaceDetailEntity.getSceneImg();
     }
 
     private void showPersonIv(FaceDetailResponseEntity mEntity) {

@@ -39,11 +39,5 @@ public class PictureSearchModel extends BaseModel implements PictureSearchContra
         this.mApplication = null;
     }
 
-    @Override
-    public Observable<HttpResponseEntity<UploadPicResponseEntity>> uploadImage(MultipartBody.Part file) {
-        return mRepositoryManager.obtainRetrofitService(YtstService.class)
-                .uploadImage(file)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-    }
+
 }

@@ -7,7 +7,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.loadmore.LoadMoreView;
 import com.jess.arms.base.BaseActivity;
@@ -24,6 +23,7 @@ import com.netposa.component.clcx.mvp.model.entity.QueryCarSearchResponseEntity;
 import com.netposa.component.clcx.mvp.presenter.QueryResultPresenter;
 import com.netposa.component.clcx.mvp.ui.adapter.QueryResultAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -39,11 +39,19 @@ import butterknife.OnClick;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 import static com.netposa.common.constant.GlobalConstants.PAGE_SIZE_DEFAULT;
 import static com.netposa.component.clcx.app.ClcxConstants.KEY_CAR_DETAIL;
+import static com.netposa.component.clcx.app.ClcxConstants.KEY_CURRENT_PAGE;
 import static com.netposa.component.clcx.app.ClcxConstants.KEY_DICTIONARY_TYPE_END_TIME;
 import static com.netposa.component.clcx.app.ClcxConstants.KEY_DICTIONARY_TYPE_START_TIME;
+import static com.netposa.component.clcx.app.ClcxConstants.KEY_END_TIME;
+import static com.netposa.component.clcx.app.ClcxConstants.KEY_PAGE_SIZE;
 import static com.netposa.component.clcx.app.ClcxConstants.KEY_PIC_PATH;
+import static com.netposa.component.clcx.app.ClcxConstants.KEY_PLATE_COLORS;
+import static com.netposa.component.clcx.app.ClcxConstants.KEY_PLATE_NUMBER;
+import static com.netposa.component.clcx.app.ClcxConstants.KEY_PLATE_TYPES;
 import static com.netposa.component.clcx.app.ClcxConstants.KEY_POSITION;
-import static com.netposa.component.clcx.app.ClcxConstants.KEY_SINGLE_RESULT;
+import static com.netposa.component.clcx.app.ClcxConstants.KEY_START_TIME;
+import static com.netposa.component.clcx.app.ClcxConstants.KEY_VEHICLE_COLORS;
+import static com.netposa.component.clcx.app.ClcxConstants.KEY_VEHICLE_TYPES;
 
 public class QueryResultActivity extends BaseActivity<QueryResultPresenter> implements QueryResultContract.View, SwipeRefreshLayout.OnRefreshListener,
         BaseQuickAdapter.RequestLoadMoreListener {
@@ -60,10 +68,12 @@ public class QueryResultActivity extends BaseActivity<QueryResultPresenter> impl
     RecyclerView mRvContent;
     @BindView(R2.id.srfl)
     SwipeRefreshLayout mSrfl;
-    @BindView(R2.id.iv_nocontent)
-    ImageView mIvNocontent;
     @BindView(R2.id.cl_no_content)
     ConstraintLayout mClNoContent;
+    @BindView(R2.id.iv_no_content)
+    ImageView mIvNoContent;
+    @BindView(R2.id.tv_no_content)
+    TextView mTvNoCOntent;
 
     @Inject
     RecyclerView.LayoutManager mLayoutManager;
@@ -77,9 +87,12 @@ public class QueryResultActivity extends BaseActivity<QueryResultPresenter> impl
     LoadMoreView mLoadMoreView;
     @Inject
     List<QueryCarSearchResponseEntity> mBeanList;
+    @Inject
+    QueryCarSearchEntity mRequestEntity;
 
-    private QueryCarSearchEntity mEntity;
     private int mCurrentPage = 1;
+    private String mRecordId;
+    private long mAbsTime;
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -100,9 +113,31 @@ public class QueryResultActivity extends BaseActivity<QueryResultPresenter> impl
     public void initView(@Nullable Bundle savedInstanceState) {
         Intent data = getIntent();
         if (data == null) {
+            Log.e(TAG,"intent data is null !");
             return;
         }
-        mEntity = data.getParcelableExtra(KEY_SINGLE_RESULT);
+        mTvNoCOntent.setText(R.string.no_query_car);
+        mIvNoContent.setImageResource(R.drawable.ic_no_content);
+        long startTime = data.getLongExtra(KEY_START_TIME, 0);
+        long endTime = data.getLongExtra(KEY_END_TIME, 0);
+        int currentPage = data.getIntExtra(KEY_CURRENT_PAGE, 0);
+        int pageSize = data.getIntExtra(KEY_PAGE_SIZE, 0);
+        String plateNumber = data.getStringExtra(KEY_PLATE_NUMBER);
+        ArrayList<String> plate_color_list = data.getStringArrayListExtra(KEY_PLATE_COLORS);
+        ArrayList<String> plate_type_list = data.getStringArrayListExtra(KEY_PLATE_TYPES);
+        ArrayList<String> car_color_list = data.getStringArrayListExtra(KEY_VEHICLE_COLORS);
+        ArrayList<String> car_type_list = data.getStringArrayListExtra(KEY_VEHICLE_TYPES);
+
+        mRequestEntity.setStartTime(startTime);
+        mRequestEntity.setEndTime(endTime);
+        mRequestEntity.setCurrentPage(currentPage);
+        mRequestEntity.setPageSize(pageSize);
+        mRequestEntity.setPlateNumber(plateNumber);
+        mRequestEntity.setPlateColors(plate_color_list);
+        mRequestEntity.setPlateTypes(plate_type_list);
+        mRequestEntity.setVehicleColors(car_color_list);
+        mRequestEntity.setVehicleTypes(car_type_list);
+
         mTitleTv.setText(R.string.clcx_title);
         mRvContent.setLayoutManager(mLayoutManager);
         mRvContent.setItemAnimator(mItemAnimator);
@@ -120,8 +155,8 @@ public class QueryResultActivity extends BaseActivity<QueryResultPresenter> impl
             QueryCarSearchResponseEntity item = (QueryCarSearchResponseEntity) adapter.getItem(position);
             Intent intent = new Intent(this, CarRecordActivity.class);
             intent.putExtra(KEY_CAR_DETAIL, item.getRecordId());
-            intent.putExtra(KEY_DICTIONARY_TYPE_START_TIME, mEntity.getStartTime());
-            intent.putExtra(KEY_DICTIONARY_TYPE_END_TIME, mEntity.getEndTime());
+            intent.putExtra(KEY_DICTIONARY_TYPE_START_TIME, mRequestEntity.getStartTime());
+            intent.putExtra(KEY_DICTIONARY_TYPE_END_TIME, mRequestEntity.getEndTime());
             intent.putExtra(KEY_POSITION,item.getLocation());
             intent.putExtra(KEY_PIC_PATH, item.getSceneImg());
             launchActivity(intent);
@@ -131,9 +166,11 @@ public class QueryResultActivity extends BaseActivity<QueryResultPresenter> impl
         mRvContent.postDelayed(() -> {
             mSrfl.setRefreshing(true);
             mCurrentPage = 1;
-            mEntity.setPageSize(PAGE_SIZE_DEFAULT);//固定20条数据
-            mEntity.setCurrentPage(mCurrentPage);
-            mPresenter.getResultList(mEntity);
+            mRequestEntity.setLastPassTime(null);
+            mRequestEntity.setLastPassId(null);
+            mRequestEntity.setPageSize(PAGE_SIZE_DEFAULT);//固定20条数据
+            mRequestEntity.setCurrentPage(mCurrentPage);
+            mPresenter.getResultList(mRequestEntity);
         }, 100);
     }
 
@@ -149,6 +186,8 @@ public class QueryResultActivity extends BaseActivity<QueryResultPresenter> impl
             } else {
                 mSrfl.setEnabled(true);
             }
+            mRecordId = videoList.get(videoList.size() - 1).getRecordId();
+            mAbsTime = videoList.get(videoList.size() - 1).getAbsTime();
             mBeanList.addAll(videoList);
             mAdapter.notifyDataSetChanged();
             if (videoList.size() < PAGE_SIZE_DEFAULT) {
@@ -176,16 +215,20 @@ public class QueryResultActivity extends BaseActivity<QueryResultPresenter> impl
     @Override
     public void onRefresh() {
         mCurrentPage = 1;
-        mEntity.setCurrentPage(mCurrentPage);
-        mPresenter.getResultList(mEntity);
+        mRequestEntity.setLastPassTime(null);
+        mRequestEntity.setLastPassId(null);
+        mRequestEntity.setCurrentPage(mCurrentPage);
+        mPresenter.getResultList(mRequestEntity);
         Log.i(TAG, "onRefresh:" + mCurrentPage);
     }
 
     @Override
     public void onLoadMoreRequested() {
         mCurrentPage++;
-        mEntity.setCurrentPage(mCurrentPage);
-        mPresenter.getResultList(mEntity);
+        mRequestEntity.setLastPassId(mRecordId);
+        mRequestEntity.setLastPassTime(mAbsTime);
+        mRequestEntity.setCurrentPage(mCurrentPage);
+        mPresenter.getResultList(mRequestEntity);
         Log.i(TAG, "onLoadMoreRequested:" + mCurrentPage);
     }
 
@@ -237,6 +280,5 @@ public class QueryResultActivity extends BaseActivity<QueryResultPresenter> impl
         if (id == R.id.head_left_iv) {
             killMyself();
         }
-
     }
 }

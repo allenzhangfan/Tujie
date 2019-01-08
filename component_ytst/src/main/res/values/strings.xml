@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">component_ytst</string>
     <string name="choose_aim">请选择目标</string>
+    <string name="choose_num">最多选择10</string>
 </resources>

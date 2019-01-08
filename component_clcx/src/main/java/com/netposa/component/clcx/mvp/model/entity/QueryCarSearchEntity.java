@@ -1,14 +1,8 @@
 package com.netposa.component.clcx.mvp.model.entity;
 
-import android.os.Parcel;
-import android.os.Parcelable;
+import java.util.ArrayList;
 
-import java.util.List;
-
-import androidx.annotation.Keep;
-
-@Keep
-public class QueryCarSearchEntity implements Parcelable {
+public class QueryCarSearchEntity {
 
     /**
      * currentPage : 1
@@ -27,10 +21,15 @@ public class QueryCarSearchEntity implements Parcelable {
     private int pageSize;
     private String plateNumber;
     private long startTime;
-    private List<String> plateColors;
-    private List<String> plateTypes;
-    private List<String> vehicleColors;
-    private List<String> vehicleTypes;
+    private ArrayList<String> plateColors;
+    private ArrayList<String> plateTypes;
+    private ArrayList<String> vehicleColors;
+    private ArrayList<String> vehicleTypes;
+    private String lastPassId;
+    private Long lastPassTime;
+
+    public QueryCarSearchEntity() {
+    }
 
     public int getCurrentPage() {
         return currentPage;
@@ -72,80 +71,69 @@ public class QueryCarSearchEntity implements Parcelable {
         this.startTime = startTime;
     }
 
-    public List<?> getPlateColors() {
+    public ArrayList<String> getPlateColors() {
         return plateColors;
     }
 
-    public void setPlateColors(List<String> plateColors) {
+    public void setPlateColors(ArrayList<String> plateColors) {
         this.plateColors = plateColors;
     }
 
-    public List<String> getPlateTypes() {
+    public ArrayList<String> getPlateTypes() {
         return plateTypes;
     }
 
-    public void setPlateTypes(List<String> plateTypes) {
+    public void setPlateTypes(ArrayList<String> plateTypes) {
         this.plateTypes = plateTypes;
     }
 
-    public List<String> getVehicleColors() {
+    public ArrayList<String> getVehicleColors() {
         return vehicleColors;
     }
 
-    public void setVehicleColors(List<String> vehicleColors) {
+    public void setVehicleColors(ArrayList<String> vehicleColors) {
         this.vehicleColors = vehicleColors;
     }
 
-    public List<?> getVehicleTypes() {
+    public ArrayList<String> getVehicleTypes() {
         return vehicleTypes;
     }
 
-    public void setVehicleTypes(List<String> vehicleTypes) {
+    public void setVehicleTypes(ArrayList<String> vehicleTypes) {
         this.vehicleTypes = vehicleTypes;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
+    public String getLastPassId() {
+        return lastPassId;
+    }
+
+    public void setLastPassId(String lastPassId) {
+        this.lastPassId = lastPassId;
+    }
+
+    public Long getLastPassTime() {
+        return lastPassTime;
+    }
+
+    public void setLastPassTime(Long lastPassTime) {
+        this.lastPassTime = lastPassTime;
     }
 
     @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(this.currentPage);
-        dest.writeLong(this.endTime);
-        dest.writeInt(this.pageSize);
-        dest.writeString(this.plateNumber);
-        dest.writeLong(this.startTime);
-        dest.writeStringList(this.plateColors);
-        dest.writeStringList(this.plateTypes);
-        dest.writeStringList(this.vehicleColors);
-        dest.writeStringList(this.vehicleTypes);
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("QueryCarSearchEntity{");
+        sb.append("currentPage=").append(currentPage);
+        sb.append(", endTime=").append(endTime);
+        sb.append(", pageSize=").append(pageSize);
+        sb.append(", plateNumber='").append(plateNumber).append('\'');
+        sb.append(", startTime=").append(startTime);
+        sb.append(", plateColors=").append(plateColors);
+        sb.append(", plateTypes=").append(plateTypes);
+        sb.append(", vehicleColors=").append(vehicleColors);
+        sb.append(", vehicleTypes=").append(vehicleTypes);
+        sb.append(", lastPassId='").append(lastPassId).append('\'');
+        sb.append(", lastPassTime=").append(lastPassTime);
+        sb.append('}');
+        return sb.toString();
     }
-
-    public QueryCarSearchEntity() {
-    }
-
-    protected QueryCarSearchEntity(Parcel in) {
-        this.currentPage = in.readInt();
-        this.endTime = in.readLong();
-        this.pageSize = in.readInt();
-        this.plateNumber = in.readString();
-        this.startTime = in.readLong();
-        this.plateColors = in.createStringArrayList();
-        this.plateTypes = in.createStringArrayList();
-        this.vehicleColors = in.createStringArrayList();
-        this.vehicleTypes = in.createStringArrayList();
-    }
-
-    public static final Creator<QueryCarSearchEntity> CREATOR = new Creator<QueryCarSearchEntity>() {
-        @Override
-        public QueryCarSearchEntity createFromParcel(Parcel source) {
-            return new QueryCarSearchEntity(source);
-        }
-
-        @Override
-        public QueryCarSearchEntity[] newArray(int size) {
-            return new QueryCarSearchEntity[size];
-        }
-    };
 }

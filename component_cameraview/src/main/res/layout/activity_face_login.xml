@@ -49,11 +49,11 @@
                     android:id="@+id/camera_view_image"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    app:aspectRatio="4:3"
+                    android:layout_alignParentStart="true"
                     android:adjustViewBounds="true"
+                    app:aspectRatio="4:3"
                     app:autoFocus="true"
-                    app:flash="auto"
-                    android:layout_alignParentStart="true" />
+                    app:flash="auto" />
 
                 <com.netposa.commonres.widget.CameraFrameView
                     android:id="@+id/camera_frame_view"
@@ -111,7 +111,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="@android:color/transparent"
-                    android:src="@drawable/ic_takepic_shooting" />
+                    android:src="@drawable/ic_shoot_pic" />
 
                 <ImageButton
                     android:id="@+id/change_camera"

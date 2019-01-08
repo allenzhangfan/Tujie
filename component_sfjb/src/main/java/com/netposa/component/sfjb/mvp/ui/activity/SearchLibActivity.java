@@ -78,12 +78,14 @@ public class SearchLibActivity extends BaseActivity<SearchLibPresenter> implemen
     RecyclerView mRvContentSearchResult;
     @BindView(R2.id.srfl)
     SwipeRefreshLayout mSrfl;
-    @BindView(R2.id.iv_nocontent)
-    ImageView mIvNocontent;
     @BindView(R2.id.cl_no_content)
     ConstraintLayout mClNoContent;
     @BindView(R2.id.btn_sure)
     MaterialButton mBtn_sure;
+    @BindView(R2.id.iv_no_content)
+    ImageView mIvNoContent;
+    @BindView(R2.id.tv_no_content)
+    TextView mTvNoCOntent;
 
     @Inject
     @Named("SearchSfjbHistory")
@@ -139,6 +141,8 @@ public class SearchLibActivity extends BaseActivity<SearchLibPresenter> implemen
             Log.e(TAG, "intent data is null,please check !");
             return;
         }
+        mTvNoCOntent.setText(R.string.no_search_result);
+        mIvNoContent.setImageResource(R.drawable.ic_no_follow);
         mOrgId = data.getStringExtra(KEY_TO_LIB_SEARCH);
         mFeature = data.getStringExtra(KEY_FEATUR);
         //搜索历史recyclerview

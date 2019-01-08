@@ -1,7 +1,9 @@
 package com.netposa.component.sfjb.mvp.model.entity;
 
 import java.util.List;
+import androidx.annotation.Keep;
 
+@Keep
 public class FaceCompareResponseEntity {
 
         private int currentPage;
@@ -114,6 +116,15 @@ public class FaceCompareResponseEntity {
             private String libName;
             private List<?> photoInfos;
             private List<PhotoInfoExtsBean> photoInfoExts;
+            private boolean select;
+
+            public boolean isSelect() {
+                return select;
+            }
+
+            public void setSelect(boolean select) {
+                this.select = select;
+            }
 
             public String getPersonId() {
                 return personId;

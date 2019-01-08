@@ -2,13 +2,10 @@ package com.netposa.component.spjk.mvp.model.entity;
 
 import java.util.List;
 
-import androidx.annotation.Keep;
-
 /**
  * Author：yeguoqiang
  * Created time：2018/11/12 21:09
  */
-@Keep
 public class HistoryVideoResponseEntity {
 
     private List<VideoListEntity> videoList;

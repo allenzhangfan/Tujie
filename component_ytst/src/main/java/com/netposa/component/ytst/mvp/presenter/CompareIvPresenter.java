@@ -1,6 +1,5 @@
 package com.netposa.component.ytst.mvp.presenter;
 
-import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
 
@@ -22,16 +21,6 @@ import com.netposa.common.entity.FeatureByPathRequestEntity;
 import com.netposa.common.entity.FeatureByPathResponseEntity;
 import com.netposa.common.log.Log;
 import com.netposa.common.utils.NetworkUtils;
-import com.netposa.component.room.DbHelper;
-import com.netposa.component.room.entity.MarkerTypeEntity;
-import com.netposa.component.room.entity.MoveDirectionEntity;
-import com.netposa.component.room.entity.MoveSpeedEntity;
-import com.netposa.component.room.entity.PeccancyTypeEntity;
-import com.netposa.component.room.entity.PlateColorEntity;
-import com.netposa.component.room.entity.SpecialCarEntity;
-import com.netposa.component.room.entity.VehicleBrandEntity;
-import com.netposa.component.room.entity.VehicleSubBrandEntity;
-import com.netposa.component.room.entity.VehicleTypeEntity;
 import com.netposa.component.ytst.R;
 import com.netposa.component.ytst.mvp.contract.CompareIvContract;
 import com.netposa.component.ytst.mvp.model.entity.CarDetailRequestEntity;
@@ -92,7 +81,7 @@ public class CompareIvPresenter extends BasePresenter<CompareIvContract.Model, C
                     if (mRootView != null) mRootView.hideLoading();
                 })
                 .compose(AndroidLifecycle.createLifecycleProvider((LifecycleOwner) mRootView).bindToLifecycle())
-                .subscribe(new ErrorHandleSubscriber<List<CarDetailResponseEntity>> (mErrorHandler) {
+                .subscribe(new ErrorHandleSubscriber<List<CarDetailResponseEntity>>(mErrorHandler) {
                     @Override
                     public void onNext(List<CarDetailResponseEntity> responseEntity) {
                         Log.d("getDetailVehicleInfo：", responseEntity.toString());

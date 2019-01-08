@@ -75,35 +75,4 @@ public class PictureSearchPresenter extends BasePresenter<PictureSearchContract.
         cursor.close();
     }
 
-    /**
-     * 图片上传
-     * @param part
-     */
-    public void uploadImage(MultipartBody.Part part) {
-        mModel.uploadImage(part)
-                .subscribeOn(Schedulers.io())
-//                .retryWhen(new RetryWithDelay(1, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
-                .doOnSubscribe(disposable -> {
-//                    mRootView.showLoading("");//显示下拉刷新的进度条
-                }).subscribeOn(AndroidSchedulers.mainThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doFinally(() -> {
-                    mRootView.hideLoading();//隐藏下拉刷新的进度条
-                })
-                .compose(AndroidLifecycle.createLifecycleProvider((LifecycleOwner) mRootView).bindToLifecycle())
-                .subscribe(new ErrorHandleSubscriber<HttpResponseEntity<UploadPicResponseEntity>>(mErrorHandler) {
-                    @Override
-                    public void onNext(HttpResponseEntity<UploadPicResponseEntity> entity) {
-                        Log.i(TAG, "UploadResponseEntity :" + entity);
-                        mRootView.uploadImageSuccess(entity);
-                    }
-
-                    @Override
-                    public void onError(Throwable t) {
-                        super.onError(t);
-                        Log.i(TAG, "UploadResponseEntity Failed");
-                        mRootView.uploadImageFail();
-                    }
-                });
-    }
 }

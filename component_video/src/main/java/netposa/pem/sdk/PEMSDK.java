@@ -1,6 +1,6 @@
 package netposa.pem.sdk;
 
-import android.util.Log;
+import com.netposa.common.log.Log;
 
 public class PEMSDK {
 

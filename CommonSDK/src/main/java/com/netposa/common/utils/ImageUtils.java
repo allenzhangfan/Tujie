@@ -2064,7 +2064,6 @@ public final class ImageUtils {
             fos.flush();
             fos.close();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
             return null;
         }

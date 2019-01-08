@@ -2,13 +2,10 @@ package com.netposa.component.rltk.mvp.model.entity;
 
 import java.util.List;
 
-import androidx.annotation.Keep;
-
 /**
  * Author：yeguoqiang
  * Created time：2018/12/3 14:14
  */
-@Keep
 public class FaceLibraryRequestEntity {
     /**
      * currentPage : 1
@@ -29,6 +26,7 @@ public class FaceLibraryRequestEntity {
     private long startTime;
     private List<String> deviceList;
     private List<String> orgList;
+    private String requestId;
 
     public int getCurrentPage() {
         return currentPage;
@@ -92,5 +90,13 @@ public class FaceLibraryRequestEntity {
 
     public void setOrgList(List<String> orgList) {
         this.orgList = orgList;
+    }
+
+    public String getRequestId() {
+        return requestId;
+    }
+
+    public void setRequestId(String requestId) {
+        this.requestId = requestId;
     }
 }

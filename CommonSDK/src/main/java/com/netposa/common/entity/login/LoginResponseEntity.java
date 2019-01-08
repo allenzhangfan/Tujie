@@ -2,14 +2,11 @@ package com.netposa.common.entity.login;
 
 import com.netposa.common.modle.BaseBean;
 
-import androidx.annotation.Keep;
-
 /**
  * Author：yeguoqiang
  * Created time：2018/11/1 11:20
  */
 
-@Keep
 public class LoginResponseEntity extends BaseBean {
 
     /**
@@ -220,5 +217,39 @@ public class LoginResponseEntity extends BaseBean {
         public void setStatus(String status) {
             this.status = status;
         }
+
+        @Override
+        public String toString() {
+            final StringBuilder sb = new StringBuilder("UserEntity{");
+            sb.append("id='").append(id).append('\'');
+            sb.append(", idCardNumber='").append(idCardNumber).append('\'');
+            sb.append(", gender=").append(gender);
+            sb.append(", admin=").append(admin);
+            sb.append(", phoneNo='").append(phoneNo).append('\'');
+            sb.append(", userOrg='").append(userOrg).append('\'');
+            sb.append(", orgName='").append(orgName).append('\'');
+            sb.append(", loginName='").append(loginName).append('\'');
+            sb.append(", name='").append(name).append('\'');
+            sb.append(", registerTime=").append(registerTime);
+            sb.append(", policeNo='").append(policeNo).append('\'');
+            sb.append(", status='").append(status).append('\'');
+            sb.append('}');
+            return sb.toString();
+        }
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("LoginResponseEntity{");
+        sb.append("videoOuterIp='").append(videoOuterIp).append('\'');
+        sb.append(", tokenId='").append(tokenId).append('\'');
+        sb.append(", pictureOuterIp='").append(pictureOuterIp).append('\'');
+        sb.append(", mqttOuterIp='").append(mqttOuterIp).append('\'');
+        sb.append(", mqttInnerIp='").append(mqttInnerIp).append('\'');
+        sb.append(", videoInnerIp='").append(videoInnerIp).append('\'');
+        sb.append(", pictureInnerIp='").append(pictureInnerIp).append('\'');
+        sb.append(", user=").append(user);
+        sb.append('}');
+        return sb.toString();
     }
 }

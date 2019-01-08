@@ -14,7 +14,7 @@
     <string name="title_name">标题</string>
     <string name="name">姓名</string>
     <string name="user_name">用户名</string>
-    <string name="person_id">身份证号</string>
+    <string name="person_id">证件号</string>
     <string name="person_birth_place">籍贯</string>
     <string name="person_address">居住地</string>
     <string name="long_time_disappear">长期未出现</string>
@@ -89,6 +89,7 @@
     <string name="text_label_warm_tip">温馨提示</string>
     <string name="text_label_fine">好的</string>
     <string name="please_enable_location_service">为了达到更好的定位效果，请先进入设置中开启定位服务</string>
+    <string name="please_retry_location_since_failed">定位失败,请退出此界面刷新重试!</string>
 
     <!--空白及缺省内容-->
     <string name="search_result_of_nothing_for_relations">没有查询到相关内容</string>
@@ -143,6 +144,7 @@
     <string name="receive_no_message_deploy_face">未收到人脸布控消息</string>
     <string name="receive_no_message_deploy_car">未收到车辆布控消息</string>
     <string name="no_detail_content">未查询到警情详情</string>
+    <string name="deal_suc">处理成功</string>
 
     <!--工作台-->
     <string name="workbench">工作台</string>
@@ -153,6 +155,7 @@
     <string name="rltk">人脸图库</string>
     <string name="please_input_device_name">请输入设备名称</string>
     <string name="list_item_chose">列表选择</string>
+    <string name="compare_iv">比对图片</string>
 
     <!--身份鉴别-->
     <string name="sfjb_chose_compairlib">选择比对库</string>
@@ -205,6 +208,7 @@
     <string name="neighbouring_devices">周边设备</string>
     <string name="no_neighbouring_devices">该范围内没有设备</string>
     <string name="map_not_ready">地图还未加载成功，请重试!</string>
+    <string name="no_search_result">未搜索到结果</string>
 
     <!--车辆查询 -->
     <string name="plate_number">车牌号码</string>
@@ -253,6 +257,9 @@
     <string name="twenty_four_hours">24小时</string>
     <string name="three_days">3天</string>
     <string name="seven_days">7天</string>
+    <string name="no_query_car">未查询到相关车辆</string>
+    <string name="has_choose">已选择</string>
+    <string name="no_position">暂未获取点位信息</string>
 
     <!--人脸图库 -->
     <string name="rltk_choce_device">选择设备</string>
@@ -273,10 +280,14 @@
     <string name="guiji_analysis">轨迹分析</string>
     <string name="not_discern">没有识别出图片中的目标</string>
     <string name="update_failed">上传失败</string>
+    <string name="no_device_choose">暂无设备可选</string>
+    <string name="lib_no_data">图库中无数据</string>
+    <string name="please_choose_iv">请选择图片</string>
 
     <!--图片详情-->
     <string name="no_tag">图片没有特征</string>
     <string name="no_recognized">未识别出特征,请重新拍照</string>
     <string name="take_pic_face">请选择人体进行拍照</string>
     <string name="take_pic_car">请选择车牌进行拍照</string>
+    <string name="show_pic">图片预览</string>
 </resources>

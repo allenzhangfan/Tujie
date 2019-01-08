@@ -79,6 +79,11 @@ public class SpjkSearchActivity extends BaseActivity<SpjkSearchPresenter> implem
     SwipeRefreshLayout mSrfl;
     @BindView(R2.id.cl_no_content)
     ConstraintLayout mClNoContent;
+    @BindView(R2.id.iv_no_content)
+    ImageView mIvNoContent;
+    @BindView(R2.id.tv_no_content)
+    TextView mTvNoCOntent;
+
     @Inject
     @Named("SearchSpjkHistory")
     RecyclerView.LayoutManager mSearchHistoryLayoutManager;
@@ -126,6 +131,8 @@ public class SpjkSearchActivity extends BaseActivity<SpjkSearchPresenter> implem
 
     @Override
     public void initView(@Nullable Bundle savedInstanceState) {
+        mTvNoCOntent.setText(R.string.no_search_result);
+        mIvNoContent.setImageResource(R.drawable.ic_no_follow);
         //搜索历史recyclerview
         mRvContentKeywords.setLayoutManager(mSearchHistoryLayoutManager);
         mRvContentKeywords.setItemAnimator(mSearchHistoryItemAnimator);

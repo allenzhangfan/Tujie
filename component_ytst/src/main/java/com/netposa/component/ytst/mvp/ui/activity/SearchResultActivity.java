@@ -8,12 +8,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.recyclerview.widget.RecyclerView;
-import butterknife.BindView;
-import butterknife.OnClick;
+
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.http.imageloader.ImageLoader;
@@ -23,7 +18,7 @@ import com.netposa.common.log.Log;
 import com.netposa.common.utils.TujieImageUtils;
 import com.netposa.commonres.widget.Dialog.LottieDialogFragment;
 import com.netposa.commonres.widget.RoundImageView;
-import com.netposa.component.room.entity.YtstCarAndPeopleEntity;
+import com.netposa.component.ytst.R;
 import com.netposa.component.ytst.R2;
 import com.netposa.component.ytst.di.component.DaggerSearchResultComponent;
 import com.netposa.component.ytst.di.module.SearchResultModule;
@@ -31,11 +26,20 @@ import com.netposa.component.ytst.mvp.contract.SearchResultContract;
 import com.netposa.component.ytst.mvp.model.entity.ImgSearchRequestEntity;
 import com.netposa.component.ytst.mvp.model.entity.ImgSearchResponseEntity;
 import com.netposa.component.ytst.mvp.presenter.SearchResultPresenter;
-import com.netposa.component.ytst.R;
 import com.netposa.component.ytst.mvp.ui.adapter.SearchResultAdapter;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.inject.Inject;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.RecyclerView;
+import butterknife.BindView;
+import butterknife.OnClick;
+
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 import static com.netposa.common.constant.GlobalConstants.KEY_POSITION;
 import static com.netposa.component.ytst.app.YtstConstants.KEY_IMGSEARCH;
@@ -165,7 +169,7 @@ public class SearchResultActivity extends BaseActivity<SearchResultPresenter> im
     public void onViewClicked(View view) {
         int id = view.getId();
         if (id == R.id.head_left_iv) {
-            killMyself();
+           killMyself();
         } else if (id == R.id.tv_time_sort) {
             //按时间排序
             setDrawableRight(true, mTimeSort);
@@ -246,53 +250,10 @@ public class SearchResultActivity extends BaseActivity<SearchResultPresenter> im
                 mBeanList.add(bean);
             }
             mAdapter.notifyDataSetChanged();
-            addInsterData(mBeanList);
+           mPresenter.addInsterData(mBeanList);
         } else {
             showNoDataPage(true);
         }
-    }
-
-    // 数据添加到数据库里
-    private void addInsterData(ArrayList<ImgSearchResponseEntity.DataBean> list) {
-        List<YtstCarAndPeopleEntity> dataBean = new ArrayList<>();
-        for (int i = 0; i < list.size(); i++) {
-            YtstCarAndPeopleEntity entity = new YtstCarAndPeopleEntity();
-            entity.setGender(list.get(i).getGender());
-            entity.setTraitImg(list.get(i).getTraitImg());
-            entity.setLatitude(list.get(i).getLatitude());
-            entity.setSource(list.get(i).getSource());
-            entity.setDeviceId(list.get(i).getDeviceId());
-            entity.setDeviceName(list.get(i).getDeviceName());
-            entity.setTraitLocation(list.get(i).getTraitLocation());
-            entity.setSmile(list.get(i).getSmile());
-            entity.setRecordId(list.get(i).getRecordId());
-            entity.setSceneImg(list.get(i).getSceneImg());
-            entity.setEyeGlass(list.get(i).getEyeGlass());
-            entity.setStartTime(list.get(i).getStartTime());
-            entity.setSaveTime(list.get(i).getSaveTime());
-            entity.setPushTime(list.get(i).getPushTime());
-            entity.setMask(list.get(i).getMask());
-            entity.setLongitude(list.get(i).getLongitude());
-            entity.setSunGlass(list.get(i).getSunGlass());
-            entity.setAttractive(list.get(i).getAttractive());
-            entity.setExpression(list.get(i).getExpression());
-            entity.setConfidence(list.get(i).getConfidence());
-            entity.setNodeType(list.get(i).getNodeType());
-            entity.setAbsTime(list.get(i).getAbsTime());
-            entity.setCameraType(list.get(i).getCameraType());
-            entity.setLocation(list.get(i).getLocation());
-            entity.setEndTime(list.get(i).getEndTime());
-            entity.setAge(list.get(i).getAge());
-            entity.setType1(list.get(i).get_type());
-            entity.setRelation_record(list.get(i).getRelation_record());
-            entity.setRecordId1(list.get(i).get_recordId());
-            entity.setAbsTime1(list.get(i).get_absTime());
-            entity.setScore(list.get(i).getScore());
-            entity.setPlateNumber(list.get(i).getPlateNumber());
-            entity.setSelect(false);
-            dataBean.add(entity);
-        }
-        mPresenter.instert(dataBean);
     }
 
     @Override

@@ -7,16 +7,13 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
-import com.alibaba.android.arouter.launcher.ARouter;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
@@ -46,25 +43,20 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 import butterknife.BindView;
 
-import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 import static com.netposa.common.constant.GlobalConstants.REQUEST_CODE_JQ;
-import static com.netposa.common.constant.GlobalConstants.REQUEST_CODE_RLTK;
 
 /**
  * Author：yeguoqiang
  * Created time：2018/10/26 12:57
  */
 
-@Keep
 @Route(path = RouterHub.APP_HOME_ACTIVITY)
 public class HomeActivity extends BaseActivity<HomePresenter> implements HomeContract.View {
 
@@ -165,7 +157,6 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeCon
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        startLocationComponent();
         //one pixel proguard
         mSinglePixelUtil = SinglePixelUtil.getInstance(this);
         mScreenReceiver = new SreenBroadcastReceiver();
@@ -181,7 +172,6 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeCon
     protected void onDestroy() {
         mViewPager.removeOnPageChangeListener(mOnPageChangeListener);
         super.onDestroy();
-        stopLocationComponent();
         if (mScreenReceiver != null) {
             //与SinglePixelUtil解绑
             this.unregisterReceiver(mScreenReceiver);
@@ -206,7 +196,7 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeCon
             String path = entity.getRelativePath();
             String rePath = path.substring(1, path.length());
             mTruePath = UrlConstant.sBaseUrl + rePath;
-            Log.i(TAG, mTruePath);
+            Log.i(TAG, "getUpdateJsonSuc url:" + mTruePath);
             if (mCurrentVersion < updateVersion) {
                 if (mCurrentVersion < minVersion) {
                     showUpdateDialog(true, description, mTruePath);
@@ -245,37 +235,6 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeCon
     @Override
     public void getUpdateJsonFail() {
 
-    }
-
-    private void startLocationComponent() {
-        mLocationService = ARouter.getInstance().navigation(LocationService.class);
-        if (mLocationService != null) {
-            mLocationService.startService();
-        }
-        ensureGpsEnabled();
-    }
-
-    private void ensureGpsEnabled() {
-        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-        assert locationManager != null;
-        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
-                && !locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-            new AlertDialog.Builder(this)
-                    .setTitle(R.string.text_label_warm_tip)
-                    .setMessage(R.string.please_enable_location_service)
-                    .setPositiveButton(R.string.text_label_fine, (dialog, which) -> {
-                        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(intent);
-                    })
-                    .show();
-        }
-    }
-
-    private void stopLocationComponent() {
-        if (mLocationService != null) {
-            mLocationService.stopService();
-        }
     }
 
     //记录用户首次点击返回键的时间

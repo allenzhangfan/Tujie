@@ -1,8 +1,5 @@
 package com.netposa.component.clcx.mvp.model.entity;
 
-import androidx.annotation.Keep;
-
-@Keep
 public class QueryCarSearchResponseEntity {
     /**
      * recordId : bd2669f8-2b76-41a4-abfb-379fc5e037b3

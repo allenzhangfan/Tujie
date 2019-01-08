@@ -25,6 +25,8 @@
 
             <include layout="@layout/car_number_layout" />
 
+            <include layout="@layout/collect_time_layout" />
+
             <include layout="@layout/plate_color_layout" />
 
             <include layout="@layout/car_color_layout" />
@@ -33,7 +35,7 @@
 
             <include layout="@layout/car_type_layout" />
 
-            <include layout="@layout/collect_time_layout" />
+            <include layout="@layout/btn_search_layout" />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

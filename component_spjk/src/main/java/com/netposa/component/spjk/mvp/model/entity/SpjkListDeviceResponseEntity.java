@@ -1,14 +1,8 @@
 package com.netposa.component.spjk.mvp.model.entity;
 
 import com.netposa.common.modle.BaseBean;
-
-import org.apache.commons.lang3.builder.ToStringBuilder;
-
 import java.util.List;
 
-import androidx.annotation.Keep;
-
-@Keep
 public class SpjkListDeviceResponseEntity extends BaseBean {
     private List<DeviceTreeListBean> deviceTreeList;
 

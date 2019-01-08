@@ -48,6 +48,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:visibility="gone"
         android:id="@+id/ly_all_chose"
         android:layout_width="match_parent"
         android:layout_height="@dimen/size_48dp"
@@ -100,6 +101,7 @@
     </LinearLayout>
 
     <com.google.android.material.button.MaterialButton
+        android:visibility="gone"
         android:id="@+id/bt_compare"
         style="@style/MaterialTextButton.Search"
         android:layout_width="match_parent"

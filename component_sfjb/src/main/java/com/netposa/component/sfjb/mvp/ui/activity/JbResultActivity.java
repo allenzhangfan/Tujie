@@ -116,7 +116,6 @@ public class JbResultActivity extends BaseActivity<JbResultPresenter> implements
     }
 
     private void showPersonIv() {
-
         mImageLoader.loadImage(this, ImageConfigImpl
                 .builder()
                 .cacheStrategy(0)

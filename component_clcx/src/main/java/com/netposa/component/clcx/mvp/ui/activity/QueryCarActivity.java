@@ -1,19 +1,15 @@
 package com.netposa.component.clcx.mvp.ui.activity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import butterknife.BindView;
 import butterknife.OnClick;
-
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.google.android.material.button.MaterialButton;
 import com.jess.arms.base.BaseActivity;
@@ -33,25 +29,26 @@ import com.netposa.component.clcx.mvp.model.entity.QueryCarSearchEntity;
 import com.netposa.component.clcx.mvp.presenter.QueryCarPresenter;
 import com.netposa.component.clcx.R;
 import com.netposa.component.clcx.mvp.ui.widget.BottomSheetDialogFragment;
-
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
-
 import javax.inject.Inject;
-
-import static android.view.inputmethod.InputMethodManager.RESULT_UNCHANGED_SHOWN;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 import static com.netposa.common.core.RouterHub.CLCX_QUERY_CAR_ACTIVITY;
 import static com.netposa.common.utils.TimeUtils.FORMAT_ONE;
 import static com.netposa.commonres.widget.CaptureTimeHelper.START_TIME;
+import static com.netposa.component.clcx.app.ClcxConstants.KEY_CURRENT_PAGE;
+import static com.netposa.component.clcx.app.ClcxConstants.KEY_END_TIME;
 import static com.netposa.component.clcx.app.ClcxConstants.KEY_LIST_TYPE;
+import static com.netposa.component.clcx.app.ClcxConstants.KEY_PAGE_SIZE;
+import static com.netposa.component.clcx.app.ClcxConstants.KEY_PLATE_COLORS;
+import static com.netposa.component.clcx.app.ClcxConstants.KEY_PLATE_NUMBER;
+import static com.netposa.component.clcx.app.ClcxConstants.KEY_PLATE_TYPES;
 import static com.netposa.component.clcx.app.ClcxConstants.KEY_QUANBU;
-import static com.netposa.component.clcx.app.ClcxConstants.KEY_SINGLE_RESULT;
 import static com.netposa.component.clcx.app.ClcxConstants.KEY_SELECT_RESULT;
 import static com.netposa.component.clcx.app.ClcxConstants.KEY_SINGLE_TYPE;
+import static com.netposa.component.clcx.app.ClcxConstants.KEY_START_TIME;
+import static com.netposa.component.clcx.app.ClcxConstants.KEY_VEHICLE_COLORS;
+import static com.netposa.component.clcx.app.ClcxConstants.KEY_VEHICLE_TYPES;
 import static com.netposa.component.clcx.app.ClcxConstants.REQUESTCODE_CAR_PLATE;
 import static com.netposa.component.clcx.app.ClcxConstants.REQUESTCODE_CAR_TYPE;
 import static com.netposa.component.clcx.app.ClcxConstants.mType_car;
@@ -106,6 +103,10 @@ public class QueryCarActivity extends BaseActivity<QueryCarPresenter> implements
     ImageView mIvCarDarkRed;
     @BindView(R2.id.iv_car_black)
     ImageView mIvCarBlack;
+    @BindView(R2.id.tv_car_type)
+    TextView mTvCarType;
+    @BindView(R2.id.tv_plate_type)
+    TextView mTvPlateType;
 
     @Inject
     CaptureTimeHelper mCaptureTimeHelper;
@@ -123,10 +124,10 @@ public class QueryCarActivity extends BaseActivity<QueryCarPresenter> implements
     private String[] mPlateTypeValues = new String[]{"1", "2", "3", "13", "15", "16", "23", "26", "28", "101", "102", "103", "104", "200", "201", "99"};// 1;大型汽车号牌,2;小型汽车号牌，3；使馆汽车号牌，13；农用运输车号牌，15；挂车号牌，16；教练汽车号牌 ，23；警用汽车号牌，26；香港汽车号牌，28；武警汽车号牌，101；黑牌小汽车，102；个性化车牌，103；单排军牌，104；双排军牌，200；新能源小车，201；新能源大车，99；其他号牌
     private String[] mCarTypeValues = new String[]{"K33", "K96", "K95", "K94", "K93", "K21", "K11", "K31", "H21", "H11", "H31", "H41"};//k93;轿车，k96;面包车，k95;皮卡，k94;商务车，k93越野车,k21;中型普通客车，k11;大型普通客车，k31;小型普通客车，H21；中型普通货车，H11；重型普通货车，H31；轻型普通货车，H41；微型普通货车
     private QueryCarSearchEntity mEntity = new QueryCarSearchEntity();
-    private List<String> mPlate_color_list = new ArrayList<>(); //车牌颜色
-    private List<String> mCar_color_list = new ArrayList<>(); //车辆颜色
-    private List<String> mPlate_type_list = new ArrayList<>();// 车牌类型
-    private List<String> mCar_type_list = new ArrayList<>();//车辆类型
+    private ArrayList<String> mPlate_color_list = new ArrayList<>(); //车牌颜色
+    private ArrayList<String> mCar_color_list = new ArrayList<>(); //车辆颜色
+    private ArrayList<String> mPlate_type_list = new ArrayList<>();// 车牌类型
+    private ArrayList<String> mCar_type_list = new ArrayList<>();//车辆类型
     private String[] mPlateTypeSource; //车牌资源
     private String[] mCarTypeSource; //车辆资源
     private int mCurrentHour;
@@ -158,17 +159,17 @@ public class QueryCarActivity extends BaseActivity<QueryCarPresenter> implements
 
         //对于刚跳到一个新的界面就要弹出软键盘的情况上述代码可能由于界面为加载完全而无法弹出软键盘
         //此时应该适当的延迟弹出软键盘（保证界面的数据加载完成）
-        new Timer()
-                .schedule(
-                        new TimerTask() {
-                            public void run() {
-                                InputMethodManager inputManager =
-                                        (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                                inputManager.showSoftInput(mOkclSearch, RESULT_UNCHANGED_SHOWN);
-                            }
-
-                        },
-                        300);
+//        new Timer()
+//                .schedule(
+//                        new TimerTask() {
+//                            public void run() {
+//                                InputMethodManager inputManager =
+//                                        (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+//                                inputManager.showSoftInput(mOkclSearch, RESULT_UNCHANGED_SHOWN);
+//                            }
+//
+//                        },
+//                        300);
 
         mBottomSheetDialogFragment.setBottomSheetDialogListener(this);
         //底部弹出框高度
@@ -283,9 +284,20 @@ public class QueryCarActivity extends BaseActivity<QueryCarPresenter> implements
             killMyself();
         } else if (id == R.id.btn_search) {
             setCarSearchEntity();
+            Log.d(TAG,"search entity: "+mEntity.toString());
             Intent intent = new Intent(this, QueryResultActivity.class);
-            intent.putExtra(KEY_SINGLE_RESULT, mEntity);
+            intent.putExtra(KEY_CURRENT_PAGE,mEntity.getCurrentPage());
+            intent.putExtra(KEY_PAGE_SIZE,mEntity.getPageSize());
+            intent.putExtra(KEY_PLATE_NUMBER,mEntity.getPlateNumber());
+            intent.putStringArrayListExtra(KEY_PLATE_COLORS,mEntity.getPlateColors());
+            intent.putStringArrayListExtra(KEY_PLATE_TYPES,mEntity.getPlateTypes());
+            intent.putStringArrayListExtra(KEY_VEHICLE_COLORS,mEntity.getVehicleColors());
+            intent.putStringArrayListExtra(KEY_VEHICLE_TYPES,mEntity.getVehicleTypes());
+            intent.putExtra(KEY_START_TIME,mEntity.getStartTime());
+            intent.putExtra(KEY_END_TIME,mEntity.getEndTime());
             launchActivity(intent);
+            mCar_color_list.clear();
+            mPlate_color_list.clear();
         } else if (id == R.id.bt_begintime) {
             mCaptureTimeHelper.showStartDateDialog();
         } else if (id == R.id.bt_endtime) {
@@ -384,6 +396,7 @@ public class QueryCarActivity extends BaseActivity<QueryCarPresenter> implements
                 Log.i(TAG, "添加车牌颜色" + mPlateColorValues[i]);
             }
         }
+        mEntity.setPlateColors(mPlate_color_list);
         //车辆颜色选择
         for (int i = 0; i < mCarColorValues.length; i++) {
             if (mCarColorSelectStates[i + 1]) {
@@ -391,10 +404,14 @@ public class QueryCarActivity extends BaseActivity<QueryCarPresenter> implements
                 Log.i(TAG, "添加车辆颜色" + mCarColorValues[i]);
             }
         }
-        mEntity.setPlateColors(mCar_color_list);
-        mEntity.setPlateNumber(mTvPlateSelect.getText().toString() + mOkclSearch.getText().toString());
-        mCar_color_list.clear();
-        mPlate_color_list.clear();
+        mEntity.setVehicleColors(mCar_color_list);
+        String vehicel = mTvPlateSelect.getText().toString();
+        String carNum = mOkclSearch.getText().toString();
+        if (vehicel.equals(getString(R.string.all))) {
+            mEntity.setPlateNumber("" + carNum);
+        } else {
+            mEntity.setPlateNumber(vehicel + carNum);
+        }
     }
 
     private void goToTypeActivity(String mType) {
@@ -597,7 +614,7 @@ public class QueryCarActivity extends BaseActivity<QueryCarPresenter> implements
             case REQUESTCODE_CAR_TYPE: // 选择完 车辆类型的结果
                 mCarTypeList = data.getParcelableArrayListExtra(KEY_SELECT_RESULT);
                 mCar_type_list.clear();
-                List alist = new ArrayList();
+                ArrayList alist = new ArrayList();
                 for (int i = 0; i < mCarTypeList.size(); i++) {
                     boolean flag = mCarTypeList.get(i).isSelect;
                     if (flag) {
@@ -607,12 +624,18 @@ public class QueryCarActivity extends BaseActivity<QueryCarPresenter> implements
                 if (alist.contains(KEY_QUANBU)) {
                     alist.remove(0);
                 }
-                Log.d(TAG, alist + "--" + addCarTypeList(alist));
-                mEntity.setVehicleTypes(addCarTypeList(alist));
+                if (alist.size() > 0) {
+                    mTvCarType.setText(R.string.has_choose);
+                    mEntity.setVehicleTypes(addCarTypeList(alist));
+//                    Log.d(TAG, alist + "--" + addCarTypeList(alist));
+                } else {
+                    mTvCarType.setText(R.string.select_type);
+                }
                 break;
             case REQUESTCODE_CAR_PLATE:// 选择完 车牌的结果
                 mPlateTypeList = data.getParcelableArrayListExtra(KEY_SELECT_RESULT);
-                List result = new ArrayList();
+                mPlate_type_list.clear();
+                ArrayList result = new ArrayList();
                 for (int i = 0; i < mPlateTypeList.size(); i++) {
                     boolean flag = mPlateTypeList.get(i).isSelect;
                     if (flag) {
@@ -622,13 +645,18 @@ public class QueryCarActivity extends BaseActivity<QueryCarPresenter> implements
                 if (result.contains(KEY_QUANBU)) {
                     result.remove(0);
                 }
-                mPlate_type_list.clear();
-                mEntity.setPlateTypes(addPlateTypeList(result));
+                if (result.size() > 0) {
+                    mEntity.setPlateTypes(addPlateTypeList(result));
+//                    Log.d(TAG, result + "--" + addCarTypeList(result));
+                    mTvPlateType.setText(R.string.has_choose);
+                } else {
+                    mTvPlateType.setText(R.string.select_type);
+                }
                 break;
         }
     }
 
-    private List<String> addCarTypeList(List list) {
+    private ArrayList<String> addCarTypeList(ArrayList list) {
         for (int i = 0; i < list.size(); i++) {
             if (list.get(i).equals(mCarTypeSource[1])) {
                 mCar_type_list.add(mCarTypeValues[0]);
@@ -661,7 +689,7 @@ public class QueryCarActivity extends BaseActivity<QueryCarPresenter> implements
         return mCar_type_list;
     }
 
-    private List<String> addPlateTypeList(List list) {
+    private ArrayList<String> addPlateTypeList(ArrayList list) {
         for (int i = 0; i < list.size(); i++) {
             if (list.get(i).equals(mPlateTypeSource[1])) {
                 mPlate_type_list.add(mPlateTypeValues[0]);

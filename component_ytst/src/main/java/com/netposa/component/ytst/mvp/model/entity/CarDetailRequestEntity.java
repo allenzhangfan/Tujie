@@ -2,9 +2,6 @@ package com.netposa.component.ytst.mvp.model.entity;
 
 import java.util.List;
 
-import androidx.annotation.Keep;
-
-@Keep
 public class CarDetailRequestEntity {
     private List<String> recordId;
 
